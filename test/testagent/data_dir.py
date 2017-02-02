@@ -1,0 +1,45 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+"""
+Record the data directory path
+ex: root_path  
+"""
+import os
+import sys
+
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.join(_current_dir, "../")
+LOG_DIR = os.path.join(ROOT_DIR, "log/")
+TESTS_DIR = os.path.join(ROOT_DIR, "tests/")
+TESTS_CFG_DIR = os.path.join(TESTS_DIR, "cfg/")
+GENERAL_TESTS_DIR = os.path.join(TESTS_DIR, "general_tests/")
+GENERAL_TESTS_CFG_DIR = os.path.join(GENERAL_TESTS_DIR, "cfg/")
+L1_TESTS_DIR = os.path.join(TESTS_DIR, "L1_tests/")
+L1_TESTS_CFG_DIR = os.path.join(L1_TESTS_DIR, "cfg/")
+L2_TESTS_DIR = os.path.join(TESTS_DIR, "L2_tests/")
+L2_TESTS_CFG_DIR = os.path.join(L2_TESTS_DIR, "cfg/")
+##
+L3_TESTS_DIR = os.path.join(TESTS_DIR , "L3_tests/")
+L3_TESTS_CFG_DIR = os.path.join(L3_TESTS_DIR , "cfg/")
+##
+COMBINATION_TESTS_DIR = os.path.join(TESTS_DIR, "combination_tests/")
+LIBVIRT_PID_DIR = "/var/run/"
+VM_PID_DIR = "/var/run/libvirt/qemu/"
+MM_PID_DIR = "/var/run/master_monitor/"
+OS_TEST_DIR = "/var/FTVM_testing/"
+OS_PROCESS_DIR = os.path.join(OS_TEST_DIR, "process/")
+
+
+if __name__ == "__main__":
+  print ROOT_DIR,"\n"
+  print TESTS_DIR,"\n"
+  print TESTS_CFG_DIR,"\n"
+  print L1_TESTS_DIR,"\n"
+  print L1_TESTS_CFG_DIR,"\n"
+  print L2_TESTS_DIR,"\n"
+  print L2_TESTS_CFG_DIR,"\n"
+  print L3_TESTS_DIR+"\n"
+  print L3_TESTS_CFG_DIR + "\n"
+  print COMBINATION_TESTS_DIR,"\n"
+  print os.path.abspath(__file__)
+

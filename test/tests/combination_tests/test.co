@@ -1,0 +1,9 @@
+#combination test
+!0
+vm_start
+!1
+L1_ft_vm_crash
+!2
+L2_ft_vm_crash
+!co
+test2

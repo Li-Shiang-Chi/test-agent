@@ -1,0 +1,16 @@
+#test L1 FTVM more times
+!0
+!m
+ft_libvirt_crash
+vm_start
+!m!
+!1
+!m
+L1_vm_ftstart
+L1_ft_vm_crash
+L1_k_libv_vm_crash
+L1_k_libv_vm_7_crash
+L1_guestOS_crash
+!m!
+!0
+master_monitor_crash

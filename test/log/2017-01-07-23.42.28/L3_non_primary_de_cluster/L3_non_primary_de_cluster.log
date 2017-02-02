@@ -1,0 +1,6 @@
+test name: L3_non_primary_de_cluster
+12
+13
+14
+mmsh decluster test_c
+'node_file_path'

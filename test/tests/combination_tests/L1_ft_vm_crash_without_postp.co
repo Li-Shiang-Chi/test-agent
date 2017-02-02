@@ -1,0 +1,5 @@
+#test L1_ft_vm_crash without postprocess
+!1
+!m
+L1_ft_vm_crash
+!m!

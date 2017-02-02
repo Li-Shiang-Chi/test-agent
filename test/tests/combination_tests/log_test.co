@@ -1,0 +1,11 @@
+#test test_log n times
+!0
+!m
+test_log
+test_log
+!m!
+!1
+!m
+L1_ft_vm_crash
+L1_ft_vm_crash
+!m!
