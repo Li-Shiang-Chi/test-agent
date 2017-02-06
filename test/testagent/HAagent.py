@@ -13,16 +13,20 @@ import cmd_egrep
 
 """
     execute createcluster <cluster name> <node name> (ibmp) (shelf ip)
-
     :param cluster_name: host cluster name
     :param node_name: node name
     :param ibmp: ibmp
     :param shelf_ip: shelf_ip
     :return: succuess / fail
     """
-def create_cluster(cluster_name , node_name , ibmp , shelf_ip , parser , ssh=None):
-    cmd = cmd_HAagent.create_cluster_cmd(cluster_name, node_name, ibmp, shelf_ip)
-    print cmd
+def create_cluster(cluster_name = None , node_name = None , ibmp = None , shelf_ip = None , parser , ssh=None):
+    if cluster_name:
+        cmd = cmd_HAagent.create_cluster_cmd(cluster_name, node_name, ibmp, shelf_ip)
+    else:
+        cmd = cmd_HAagent.create_cluster_cmd(parser["Cluster_name"],
+                                             parser["HostOS_name"],
+                                             parser["HostOS_ipmb"],
+                                             parser["Shelf_ip"])
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
     """

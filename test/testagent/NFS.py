@@ -64,17 +64,13 @@ def clear_cluster_file(parser , ssh=None):
     cmd = cmd_nfs.clear_cluster_file(parser)
     return remote_exec(cmd , ssh) if ssh else local_exec(cmd ,parser)
 
-def clear_node_file(parser , ssh=None):
-    if ssh:
-        remote_exec(cmd_nfs.clear_primary_node_file(parser), ssh)
-        remote_exec(cmd_nfs.clear_backup_node_file(parser), ssh)
-    else:
-        local_exec(cmd_nfs.clear_primary_node_file(parser), parser)
-        local_exec(cmd_nfs.clear_backup_node_file(parser), parser)
+def clear_node_files(parser , ssh=None):
+    cmd = cmd_nfs.clear_node_files(parser)
+    return remote_exec(cmd , ssh) if ssh else local_exec(cmd ,parser)
         
 def reset(parser , ssh = None):
     clear_cluster_file(parser, ssh)
-    clear_node_file(parser, ssh)
+    clear_node_files(parser, ssh)
 
 def local_exec(cmd , parser):
     p = sub_process.get_sub_process(parser)

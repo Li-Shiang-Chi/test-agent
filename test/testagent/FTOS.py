@@ -6,7 +6,7 @@ import data_dir
 import shell_server
 import mmsh
 import os
-from testagent import TA_error
+import TA_error
 
 def HostOSIsRunning(parser):
 	"""
@@ -44,6 +44,16 @@ def SlaveOSIsRunning(parser):
 		if response == 0:
 			return True;
 	return False
+
+def wakeUpNode(networkMAC):
+	"""
+	use wake on lan to boot specific node
+	:param networkMAC : network card MAC address
+	"""
+	cmd = "wakeonlan %s" %  networkMAC
+	print cmd
+	status, error = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+	
 
 def get_OS_status(OS_name):
 	"""
