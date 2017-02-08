@@ -78,7 +78,6 @@ def postProcessHostOSReboot(parser , ssh):
 	:param parser: is a dict, get from Test config file
 	"""
 	cmd = "reboot"
-	print cmd
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	ssh.close(); 
 	
