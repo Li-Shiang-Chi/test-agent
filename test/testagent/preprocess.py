@@ -127,15 +127,15 @@ def preprocessSlaveMount(parser , ssh):
         raise TA_error.Preprocess_Error("slave os not mount to nfs")
     
 def preprocessHostOSMountNFS(parser , ssh = None):
-    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["hostOS_mount_nfs_folder"])
+    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
     
 def preprocessBackUpOSMountNFS(parser , ssh = None):
-    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["BackupOS_mount_nfs_folder"])
+    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
     
 def preprocessSlaveOSMountNFS(parser , ssh = None):
-    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["SlaveOS_mount_nfs_folder"])
+    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
        
 def preprocessIsHostOsMountNFS(parser , ssh = None):
