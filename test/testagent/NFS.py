@@ -8,6 +8,7 @@
 import cmd_nfs
 import sub_process
 import TA_error
+from testagent import TA_error
 
 
 def checkIsFileCleared(parser , ssh = None):
@@ -16,8 +17,6 @@ def checkIsFileCleared(parser , ssh = None):
         checkIsNodeFilesCleared(parser, ssh)
     else:
         raise TA_error.Preprocess_Error("not getting nfs shell server")
-        
-        
 def checkIsClusterFileCleared(parser , ssh = None):
     cmd = "ls %s" % parser["local_nfs_path"]
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
@@ -42,6 +41,8 @@ def clear_node_files(parser , ssh=None):
     return remote_exec(cmd , ssh) if ssh else local_exec(cmd ,parser)
         
 def reset(parser , ssh = None):
+    if not ssh :
+        raise TA_error.Shell_server_Error("not getting ssh")
     clear_cluster_file(parser, ssh)
     clear_node_files(parser, ssh)
 
