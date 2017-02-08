@@ -21,9 +21,10 @@ def run_postprocess(parser):
 	when test done , each node will do postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
+	postprocess_NFS(parser)
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
-	postprocess_NFS(parser)
+	#postprocess_Slave(parser)
     
 def postprocess_Host(parser):
 	"""
@@ -34,7 +35,7 @@ def postprocess_Host(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
 	
-	postProcessHostOSReboot(parser)
+	postProcessHostOSReboot(parser ,ssh)
 	ssh.close()
     
 def postprocess_Backup(parser):
@@ -45,7 +46,7 @@ def postprocess_Backup(parser):
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
-	postProcessBackupOSReboot(parser)
+	postProcessBackupOSReboot(parser ,ssh)
 	ssh.close()
     
 def postprocess_Slave(parser):
@@ -56,7 +57,7 @@ def postprocess_Slave(parser):
 	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
-	postProcessSlaveOSReboot(parser)
+	postProcessSlaveOSReboot(parser,ssh)
 	ssh.close()
  
     
@@ -71,41 +72,30 @@ def postprocess_NFS(parser):
 	postprocessResetNFS(parser, ssh)
 	
 	
-def postProcessHostOSReboot(parser):
+def postProcessHostOSReboot(parser , ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh 
+	cmd = "reboot"
+	print cmd
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
+	ssh.close(); 
 	
+def postProcessBackupOSReboot(parser ,ssh):
+	"""
+	when test case done , Host OS reboot
+	:param parser: is a dict, get from Test config file
+	"""
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	ssh.close(); 
 	
-def postProcessBackupOSReboot(parser):
+def postProcessSlaveOSReboot(parser ,ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                              , parser["BackupOS_usr"]
-                              , parser["BackupOS_pwd"]) #獲得ssh 
-	
-	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	ssh.close(); 
-	
-def postProcessSlaveOSReboot(parser):
-	"""
-	when test case done , Host OS reboot
-	:param parser: is a dict, get from Test config file
-	"""
-	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
-                              , parser["SlaveOS_usr"]
-                              , parser["SlaveOS_pwd"]) #獲得ssh 
-	
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	ssh.close();
