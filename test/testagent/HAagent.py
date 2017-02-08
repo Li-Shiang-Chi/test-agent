@@ -9,6 +9,7 @@
 import cmd_HAagent
 import sub_process
 import cmd_egrep
+import subprocess
 
 
 """
@@ -19,14 +20,8 @@ import cmd_egrep
     :param shelf_ip: shelf_ip
     :return: succuess / fail
     """
-def create_cluster(cluster_name = None , node_name = None , ibmp = None , shelf_ip = None , parser , ssh=None):
-    if cluster_name:
-        cmd = cmd_HAagent.create_cluster_cmd(cluster_name, node_name, ibmp, shelf_ip)
-    else:
-        cmd = cmd_HAagent.create_cluster_cmd(parser["Cluster_name"],
-                                             parser["HostOS_name"],
-                                             parser["HostOS_ipmb"],
-                                             parser["Shelf_ip"])
+def create_cluster(cluster_name , node_name , ibmp , shelf_ip , parser , ssh=None):
+    cmd = cmd_HAagent.create_cluster_cmd(cluster_name, node_name, ibmp, shelf_ip)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
     """
@@ -104,6 +99,10 @@ def exit(parser , ssh=None):
     :return: execute the command
     """
     
+def quick_create_cluster(parser , ssh = None):
+    cmd = "sudo %s" % parser["init_file_path"]
+    return remote_exec(cmd , ssh) if ssh else local_exec(cmd , ssh)
+    
 def run(parser , ssh = None):
     cmd = cmd_HAagent.run(parser)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
@@ -115,13 +114,15 @@ def kill(parser , ssh = None):
     kill_cmd = "sudo kill %s" % pid
     remote_exec(kill_cmd, ssh)
     
+    """
+    local side execute using ssh module
+    :param cmd: command
+    :return: execute the command
+    """
 
 def local_exec(cmd , parser):
-    p = sub_process.get_sub_process(parser)
-    cmd = cmd[len('HAagent'):] # remove HAagent string from cmd  
-    p.stdin.write(cmd)
+    p = subprocess.Popen(cmd.split() ,stdin=subprocess.PIPE , shell=False)
     return p.communicate()
-    
     """
     remote side execute using ssh module
     :param cmd: command

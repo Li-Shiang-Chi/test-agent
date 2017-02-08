@@ -12,7 +12,7 @@ input :(String) command : input command
 output :(list) command list
 """
 
-def compile_command(command):
+def cmd(command):
     return command.split()
 
 
@@ -23,5 +23,5 @@ input : command
 output : command + new line
 """
 
-def exec_command(command):
+def exec_cmd(command):
     return command+"\n"
