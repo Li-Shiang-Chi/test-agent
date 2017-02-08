@@ -412,8 +412,14 @@ def postprocess_hostOS_mount_nfs(parser):
 		ssh.close()
 
 if __name__ == '__main__':
+	#parser = {}
+	#parser["BackupOS_ip"] = "192.168.1.25"
+	#parser["BackupOS_usr"] = "user"
+	#parser["BackupOS_pwd"] = "pdclab!@#$"
+	#parser["vm_name"] = "T01"
+	
 	parser = {}
-	parser["BackupOS_ip"] = "192.168.1.25"
-	parser["BackupOS_usr"] = "user"
-	parser["BackupOS_pwd"] = "pdclab!@#$"
-	parser["vm_name"] = "T01"
+	parser["HostOS_ip"] = "192.168.1.100"
+	parser["HostOS_usr"] = "primary"
+	parser["HostOS_pwd"] = "root"
+	postProcessHostOSReboot(parser)

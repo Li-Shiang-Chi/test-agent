@@ -376,7 +376,6 @@ class Test(object):
       print_error(self.test_run_name,t_elapsed, "PROCESS") #資訊輸出至螢幕
       #print e.content
     except Exception, e:
-        print e.content
         self.test_logger.info(str(e))
     finally:
       try:
