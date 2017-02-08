@@ -7,7 +7,7 @@
 
 import cmd_nfs
 import sub_process
-from testagent import TA_error
+import TA_error
 
 
 def checkIsFileCleared(parser , ssh = None):
