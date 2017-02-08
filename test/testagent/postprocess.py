@@ -403,7 +403,7 @@ def postprocess_backupOS_ATCA_OS_running(parser):
 def postprocess_hostOS_mount_nfs(parser):
 
 	if parser["pos_hostOS_mount_nfs"] == "yes":
-		cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["hostOS_mount_nfs_folder"])
+		cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
 
 		ssh = shell_server.get_ssh(parser["HostOS_ip"]
 						, parser["HostOS_usr"]
