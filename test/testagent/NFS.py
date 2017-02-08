@@ -13,52 +13,25 @@ import TA_error
 def checkIsFileCleared(parser , ssh = None):
     if ssh:
         checkIsClusterFileCleared(parser, ssh)
-        checkIsPrimaryNodeFileCleared(parser, ssh)
-        checkIsBackupNodeFileCleared(parser, ssh)
-        #checkIsSlaveNodeFileCleared(parser, ssh)
+        checkIsNodeFilesCleared(parser, ssh)
     else:
         raise TA_error.Preprocess_Error("not getting nfs shell server")
         
         
 def checkIsClusterFileCleared(parser , ssh = None):
-    cmd = "cat %s" % parser["cluster_file_path"]
+    cmd = "ls %s" % parser["local_nfs_path"]
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-    if s_stdout != "":
-        raise TA_error.Preprocess_Error("nfs file not cleared")
+    if "clusterFile.txt" in s_stdout.read():
+        raise TA_error.Preprocess_Error("cluster file not cleared")
     else:
         return True
-def checkIsPrimaryNodeFileCleared(parser , ssh = None):
-    cmd = "ls %s" % parser["primary_node_file_path"]
+def checkIsNodeFilesCleared(parser , ssh = None):
+    cmd = "ls %s" % parser["node_files_path"]
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-    expected = "%s.txt" % parser["HostOS_ip"]
-    if s_stdout == expected: #file exist
-        cmd = "cat %s" % parser["primary_node_file_path"]
-        s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-        if s_stdout == "": #check file is cleared
-            return True
-        raise TA_error.Preprocess_Error("primary node file not cleared")
-    
-def checkIsBackupNodeFileCleared(parser , ssh = None):
-    cmd = "ls %s" % parser["backup_node_file_path"]
-    s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-    expected = "%s.txt" % parser["BackupOS_ip"]
-    if s_stdout == expected: #file exist
-        cmd = "cat %s" % parser["backup_node_file_path"]
-        s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-        if s_stdout == "": #check file is cleared
-            return True
-        raise TA_error.Preprocess_Error("backup node file not cleared")
-    
-def checkIsSlaveNodeFileCleared(parser , ssh = None):
-    cmd = "ls %s" % parser["slave_node_file_path"]
-    s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-    expected = "%s.txt" % parser["SlaveOS_ip"]
-    if s_stdout == expected: #file exist
-        cmd = "cat %s" % parser["slave_node_file_path"]
-        s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-        if s_stdout == "": #check file is cleared
-            return True
-        raise TA_error.Preprocess_Error("slave node file not cleared")
+    expected = ""
+    if s_stdout.read() == expected: #file not exist
+        return True
+    raise TA_error.Preprocess_Error("node files not cleared")
 
 def clear_cluster_file(parser , ssh=None):
     cmd = cmd_nfs.clear_cluster_file(parser)

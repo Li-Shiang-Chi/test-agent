@@ -27,7 +27,7 @@ def run_preprocess(parser):
     preprocess_Host(parser)
     preprocess_Backup(parser)
     #preprocess_Slave(parser)
-    preprocess_NFS(parser)
+    #preprocess_NFS(parser)
     
 def preprocess_Host(parser):
     """
