@@ -139,7 +139,7 @@ def preprocessSlaveOSMountNFS(parser , ssh = None):
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
        
 def preprocessIsHostOsMountNFS(parser , ssh = None):
-    cmd = "ls %s" % parser["hostOS_mount_nfs_folder"]
+    cmd = "ls %s" % parser["local_nfs_path"]
     
     t_start = time.time()
     
@@ -151,7 +151,7 @@ def preprocessIsHostOsMountNFS(parser , ssh = None):
     return False
 
 def preprocessIsBackupOsMountNFS(parser , ssh = None):
-    cmd = "ls %s" % parser["BackupOS_mount_nfs_folder"]
+    cmd = "ls %s" % parser["local_nfs_path"]
     
     t_start = time.time()
     
@@ -163,7 +163,7 @@ def preprocessIsBackupOsMountNFS(parser , ssh = None):
     return False
 
 def preprocessIsSlaveOsMountNFS(parser , ssh = None):
-    cmd = "ls %s" % parser["SlaveOS_mount_nfs_folder"]
+    cmd = "ls %s" % parser["local_nfs_path"]
     
     t_start = time.time()
     
