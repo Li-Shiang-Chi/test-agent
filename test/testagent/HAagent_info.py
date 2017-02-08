@@ -8,7 +8,7 @@
 import shell_server
 from testagent import cmd_HAagent
 from testagent import file
-from testagent import HAagent
+
 
 """
 check is cluster in HAagent
@@ -25,8 +25,8 @@ def is_cluster_exist(cluster_name , parser):
     
     overview = s_stdout.read()
     cluster_file_content = file.get_file_content(parser["cluster_file_path"])
-    primary_node_file_content = file.get_file_content(parser["primary_node_file_path"])
-    backup_node_file_content = file.get_file_content(parser["backup_node_file_path"])
+    primary_node_file_content = file.get_file_content("$s$s.txt" % parser["node_files_path"] , parser["HostOS_ip"])
+    backup_node_file_content = file.get_file_content("$s$s.txt" % parser["node_files_path"] , parser["BackupOS_ip"])
     
     ssh.close()
 
