@@ -17,4 +17,4 @@ def run_L3_create_cluster(parser):
     preprocess.run_preprocess(parser)
     process.exec_create_cluster(parser)
     Assert.detect_create_cluster(parser)
-    #postprocess.run_postprocess(parser)
+    postprocess.run_postprocess(parser)
