@@ -25,6 +25,7 @@ class Postprocess_Error(Exception):
     return content
 
 class Shell_server_Error(Exception):
+    content = None
     def __init__(self, content):
         self.content = content
     def __str__(self):
