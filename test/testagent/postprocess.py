@@ -423,4 +423,4 @@ if __name__ == '__main__':
 	parser["HostOS_ip"] = "192.168.1.100"
 	parser["HostOS_usr"] = "primary"
 	parser["HostOS_pwd"] = "root"
-	postProcessHostOSReboot(parser)
+	#postProcessHostOSReboot(parser)
