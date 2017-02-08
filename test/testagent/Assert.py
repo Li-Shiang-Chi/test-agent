@@ -451,7 +451,6 @@ def detect_create_cluster(parser):
 	
 	if success :
 		return True
-	
 	raise TA_error.Assert_Error("create cluster fail")
 	"""
 	duplicate cluster created or not
