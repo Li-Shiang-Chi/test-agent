@@ -25,16 +25,10 @@ def is_cluster_exist(cluster_name , parser):
     
     overview = s_stdout.read()
     cluster_file_content = file.get_file_content(parser["cluster_file_path"])
-    primary_node_file_content = file.get_file_content("%s%s.txt" % (parser["node_files_folder_path"] , parser["HostOS_ip"]))
-    backup_node_file_content = file.get_file_content("%s%s.txt" % (parser["node_files_folder_path"] , parser["BackupOS_ip"]))
-    
-    print cluster_file_content
-    print primary_node_file_content
-    print backup_node_file_content
     
     ssh.close()
 
-    if cluster_name in overview and cluster_file_content and primary_node_file_content and backup_node_file_content:
+    if cluster_name in overview and cluster_file_content:
         return True
     return False
 
