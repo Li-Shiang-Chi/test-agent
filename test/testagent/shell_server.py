@@ -20,7 +20,7 @@ def get_ssh(ip, usr, pwd, t_out=5):
 		ssh = paramiko.SSHClient() #獲取ssh物件
 		ssh.load_system_host_keys() #載入ssh key
 		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		#print "connecting %s@%s with passwd: %s" % (usr, ip, pwd)
+		print "connecting %s@%s with passwd: %s" % (usr, ip, pwd)
 		ssh.connect(ip, username=usr, password=pwd,timeout=t_out) #進行ssh連線
 		return ssh
 	except paramiko.BadHostKeyException, e:
