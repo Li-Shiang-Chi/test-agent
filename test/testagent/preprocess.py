@@ -36,6 +36,7 @@ def preprocess_Host(parser):
     """
     
     preprocessHostOS(parser)
+    print 'get host ssh'
     ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
@@ -49,6 +50,7 @@ def preprocess_Backup(parser):
     :param parser : is a dict , get from test config file
     """
     preprocessBackupOS(parser)
+    print 'get back ssh'
     ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
@@ -61,6 +63,7 @@ def preprocess_Slave(parser):
     :param parser : is a dict , get from test config file
     """
     preprocessSlaveOS(parser)
+    print 'get slave ssh'
     ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
@@ -69,6 +72,7 @@ def preprocess_Slave(parser):
 
 def preprocess_NFS(parser):
     preprocessNFSOS(parser)
+    print 'get nfs ssh'
     ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
