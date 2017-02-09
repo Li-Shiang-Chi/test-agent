@@ -22,7 +22,7 @@ def run_postprocess(parser):
 	:param parser: is a dict, get from Test config file
 	""" 
 	postprocess_NFS(parser)
-	postprocess_Host(parser)
+	#postprocess_Host(parser)
 	postprocess_Backup(parser)
 	#postprocess_Slave(parser)
     

@@ -16,7 +16,6 @@ def HostOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_hostOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["HostOS_ip"])
-		print response
 		if response == 0:
 			return True;
 	return False
