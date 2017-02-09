@@ -64,7 +64,6 @@ def postprocess_NFS(parser):
 	when test done , NFS postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	print 'postprocess nfs'
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
