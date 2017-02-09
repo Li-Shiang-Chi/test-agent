@@ -18,8 +18,10 @@ def HostOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_hostOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["HostOS_ip"])
+		print 'host os ping response %s' % response
 		if response == 0:
 			return True;
+		time.sleep(float(1))
 	return False
 
 def BackupOSIsRunning(parser):
@@ -31,9 +33,11 @@ def BackupOSIsRunning(parser):
 		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_backupOS_boot_time"] ) :
-		response = os.system("ping -c 1 " + parser["BackupOS_ip"])
-		if response == 0:
+		response = os.system("ping -c 1 %s" % parser["BackupOS_ip"])
+		print 'backup os ping response %s' % response
+		if response == 0: # node can ping
 			return True;
+		time.sleep(float(1))
 	return False
 
 def SlaveOSIsRunning(parser):
@@ -46,10 +50,61 @@ def SlaveOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_slaveOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["SlaveOS_ip"])
-		if response == 0:
+		if response == 0:	
 			return True;
+		time.sleep(float(1))
 	return False
 
+def NFSOSIsRunning(parser):
+	"""
+	use ping to check nfs os is running
+	:param parser : parser: is a dict, get from Test config file
+	"""
+	if("pre_wait_node_os_shutdown_time" in parser.keys()):
+		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
+	t_start = time.time()
+	while ( (time.time() - t_start) < parser["pre_backupOS_boot_time"] ) :
+		response = os.system("ping -c 1 %s" % parser["BackupOS_ip"])
+		print 'nfs os ping response %s' % response
+		if response == 0: # node can ping
+			return True;
+		time.sleep(float(1))
+	return False
+
+def HostOS_SSH_Is_Ready(parser):
+	t_start = time.time()
+	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["HostOS_ip"])
+		print 'host os ssh response %s' % ssh_response
+		if ssh_response == 0:
+			return True
+		time.sleep(float(1))
+	return False
+
+def BackupOS_SSH_Is_Ready(parser):
+	t_start = time.time()
+	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["BackupOS_ip"])
+		print 'backup os ssh response %s' % ssh_response
+		if ssh_response == 0:
+			return True
+		time.sleep(float(1))
+	return False
+def SlaveOS_SSH_Is_Ready(parser):
+	t_start = time.time()
+	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["SlaveOS_ip"])
+		if ssh_response == 0:
+			return True
+		time.sleep(float(1))
+	return False
+def NFSOS_SSH_Is_Ready(parser):
+	t_start = time.time()
+	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["NFS_ip"])
+		if ssh_response == 0:
+			return True
+		time.sleep(float(1))
 def wakeUpNode(networkMAC):
 	"""
 	use wake on lan to boot specific node

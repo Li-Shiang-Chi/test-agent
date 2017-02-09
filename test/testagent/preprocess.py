@@ -68,6 +68,7 @@ def preprocess_Slave(parser):
     ssh.close()
 
 def preprocess_NFS(parser):
+    preprocessNFSOS(parser)
     ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
@@ -78,11 +79,10 @@ def preprocessHostOS(parser):
     preprocess  , Host os part , check Host node is booted
     :param parser : is a dict , get from test config file
     """
-    print parser["test_times"]
     if FTOS.HostOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("host os not booted") # node not running raise Error
-    if "pre_wait_ssh_time" in parser.keys():
-        time.sleep(float(parser["pre_wait_ssh_time"]))
+    if FTOS.HostOS_SSH_Is_Ready(parser) == False:
+        raise TA_error.Preprocess_Error("host os ssh not ready")
 def preprocessHostMount(parser , ssh):
     """
     preprocess , check Host node is mounting to nfs
@@ -102,8 +102,8 @@ def preprocessBackupOS(parser):
 
     if FTOS.BackupOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
-    if "pre_wait_ssh_time" in parser.keys():
-        time.sleep(float(parser["pre_wait_ssh_time"]))
+    if FTOS.BackupOS_SSH_Is_Ready(parser) == False:
+        raise TA_error.Preprocess_Error("back up os ssh not ready")
 def preprocessBackupMount(parser , ssh):
     """
     preprocess , check backup node is mounting to nfs
@@ -121,8 +121,8 @@ def preprocessSlaveOS(parser):
 
     if FTOS.SlaveOSIsRunning(parser) == False:
         raise TA_error.Preprocess_Error("slave os not booted")
-    if "pre_wait_ssh_time" in parser.keys():
-        time.sleep(float(parser["pre_wait_ssh_time"]))
+    if FTOS.SlaveOS_SSH_Is_Ready(parser) == False:
+        raise TA_error.Preprocess_Error("slave os ssh not ready")
 def preprocessSlaveMount(parser , ssh):
     """
     preprocess , slave Host node is mounting to nfs
@@ -132,24 +132,27 @@ def preprocessSlaveMount(parser , ssh):
         preprocessSlaveOSMountNFS(parser , ssh)
     if preprocessIsSlaveOsMountNFS(parser , ssh) == False:
         raise TA_error.Preprocess_Error("slave os not mount to nfs")
-    
+
+def preprocessNFSOS(parser):
+    if FTOS.NFSOSIsRunning(parser) == False: # check node is running
+        raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
+    if FTOS.NFSOS_SSH_Is_Ready(parser) == False:
+        raise TA_error.Preprocess_Error("back up os ssh not ready")
 def preprocessHostOSMountNFS(parser , ssh = None):
-    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
+    cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
     
 def preprocessBackUpOSMountNFS(parser , ssh = None):
-    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
+    cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
     
 def preprocessSlaveOSMountNFS(parser , ssh = None):
-    cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
+    cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
        
 def preprocessIsHostOsMountNFS(parser , ssh = None):
-    cmd = "ls %s" % parser["local_nfs_path"]
-    
+    cmd = "ls %s" % parser["NFS_local_path"]
     t_start = time.time()
-    
     while (time.time() - t_start) < parser["pre_node_wait_mount_nfs_time"]: # use while loop to check , once mounted break the loop
         time.sleep(1) # check each sec
         s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
@@ -158,10 +161,8 @@ def preprocessIsHostOsMountNFS(parser , ssh = None):
     return False
 
 def preprocessIsBackupOsMountNFS(parser , ssh = None):
-    cmd = "ls %s" % parser["local_nfs_path"]
-    
+    cmd = "ls %s" % parser["NFS_local_path"]
     t_start = time.time()
-    
     while (time.time() - t_start) < parser["pre_node_wait_mount_nfs_time"]:
         time.sleep(1)
         s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
@@ -170,10 +171,8 @@ def preprocessIsBackupOsMountNFS(parser , ssh = None):
     return False
 
 def preprocessIsSlaveOsMountNFS(parser , ssh = None):
-    cmd = "ls %s" % parser["local_nfs_path"]
-    
+    cmd = "ls %s" % parser["NFS_local_path"]
     t_start = time.time()
-    
     while (time.time() - t_start) < parser["pre_node_wait_mount_nfs_time"]:
         time.sleep(1)
         s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
