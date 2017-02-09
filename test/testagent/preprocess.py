@@ -78,6 +78,7 @@ def preprocessHostOS(parser):
     preprocess  , Host os part , check Host node is booted
     :param parser : is a dict , get from test config file
     """
+    print parser["test_times"]
     if FTOS.HostOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("host os not booted") # node not running raise Error
     if "pre_wait_ssh_time" in parser.keys():
