@@ -16,8 +16,8 @@ def HostOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_hostOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["HostOS_ip"])
-		print response
 		if response == 0:
+			print response
 			return True;
 	return False
 
@@ -138,3 +138,9 @@ def is_login(host_name, ip, port, time=60):
                 #print "[%s][FTVM] VM %s:%s is logged in." % (st, vm_name, ip)
 		return True
 	return False
+
+def __init__():
+	parser = {}
+	parser["pre_hostOS_boot_time"] = "200"
+	parser["HostOS_ip"] = "192.168.1.100"
+	HostOSIsRunning(parser)
