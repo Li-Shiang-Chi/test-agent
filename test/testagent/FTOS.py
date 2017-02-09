@@ -14,7 +14,7 @@ def HostOSIsRunning(parser):
 	:param parser : parser: is a dict, get from Test config file
 	"""
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
-		time.sleep(parser["pre_wait_node_os_shutdown_time"])
+		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_hostOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["HostOS_ip"])
@@ -28,7 +28,7 @@ def BackupOSIsRunning(parser):
 	:param parser : parser: is a dict, get from Test config file
 	"""
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
-		time.sleep(parser["pre_wait_node_os_shutdown_time"])
+		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_backupOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["BackupOS_ip"])
@@ -42,7 +42,7 @@ def SlaveOSIsRunning(parser):
 	:param parser : parser: is a dict, get from Test config file
 	"""
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
-		time.sleep(parser["pre_wait_node_os_shutdown_time"])
+		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_slaveOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["SlaveOS_ip"])
