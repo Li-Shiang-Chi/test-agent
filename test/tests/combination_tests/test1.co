@@ -1,6 +1,8 @@
 #HAagent sprint1 unit test
 !3
-#L3_create_cluster
+!m
+L3_create_cluster
+!m!
 #L3_create_duplicate_cluster
 #L3_de_cluster
 #L3_de_outer_cluster
@@ -9,5 +11,5 @@
 #L3_add_outer_node
 #L3_rm_node
 #L3_overview
-L3_non_primary_de_cluster
+#L3_non_primary_de_cluster
 
