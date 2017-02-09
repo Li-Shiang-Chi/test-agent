@@ -13,7 +13,7 @@ def HostOSIsRunning(parser):
 	use ping to check host os is running
 	:param parser : parser: is a dict, get from Test config file
 	"""
-	if(parser["pre_wait_node_os_shutdown_time"] in parser.keys()):
+	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(parser["pre_wait_node_os_shutdown_time"])
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_hostOS_boot_time"] ) :
@@ -27,7 +27,7 @@ def BackupOSIsRunning(parser):
 	use ping to check backup os is running
 	:param parser : parser: is a dict, get from Test config file
 	"""
-	if(parser["pre_wait_node_os_shutdown_time"] in parser.keys()):
+	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(parser["pre_wait_node_os_shutdown_time"])
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_backupOS_boot_time"] ) :
@@ -41,7 +41,7 @@ def SlaveOSIsRunning(parser):
 	use ping to check slave os is running
 	:param parser : parser: is a dict, get from Test config file
 	"""
-	if(parser["pre_wait_node_os_shutdown_time"] in parser.keys()):
+	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(parser["pre_wait_node_os_shutdown_time"])
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_slaveOS_boot_time"] ) :
