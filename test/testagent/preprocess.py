@@ -35,10 +35,10 @@ def preprocess_Host(parser):
     :param parser : is a dict , get from test config file
     """
     
+    preprocessHostOS(parser)
     ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
-    preprocessHostOS(parser)
     preprocessHostMount(parser, ssh)
     
     ssh.close()
@@ -48,10 +48,10 @@ def preprocess_Backup(parser):
     when test case start backup node do some preprocess
     :param parser : is a dict , get from test config file
     """
+    preprocessBackupOS(parser)
     ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
-    preprocessBackupOS(parser)
     preprocessBackupMount(parser, ssh)
     ssh.close()
     

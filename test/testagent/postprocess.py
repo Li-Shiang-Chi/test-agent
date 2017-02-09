@@ -34,7 +34,6 @@ def postprocess_Host(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
 	postProcessHostOSReboot(parser ,ssh)
-	print "Host reboot"
 	ssh.close()
     
 def postprocess_Backup(parser):
@@ -46,7 +45,6 @@ def postprocess_Backup(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	postProcessBackupOSReboot(parser ,ssh)
-	print "Backup reboot"
 	ssh.close()
     
 def postprocess_Slave(parser):
@@ -71,7 +69,6 @@ def postprocess_NFS(parser):
                               , parser["HostOS_pwd"]) #獲得ssh
 	postprocessResetNFS(parser, ssh)
 	postProcessNFSOSReboot(parser , ssh)
-	print "NFS reboot"
 		
 def postProcessHostOSReboot(parser , ssh):
 	"""
