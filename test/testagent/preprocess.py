@@ -16,7 +16,7 @@ import subprocess
 import os
 import HAagent
 import NFS
-from testagent import sub_process
+from testagent import sub_process, FTOS
 
 
 """
@@ -36,13 +36,14 @@ def preprocess_Host(parser):
     """
     
     preprocessHostOS(parser)
-    print 'get host ssh'
-    ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh 
-    preprocessHostMount(parser, ssh)
-    
-    ssh.close()
+    if FTOS.HostOS_SSH_Is_Ready(parser):
+        ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                                  , parser["HostOS_usr"]
+                                  , parser["HostOS_pwd"]) #獲得ssh 
+        preprocessHostMount(parser, ssh)
+        ssh.close()
+    else:
+        raise TA_error.Preprocess_Error("host os ssh not ready")
     
 def preprocess_Backup(parser):
     """
@@ -50,29 +51,31 @@ def preprocess_Backup(parser):
     :param parser : is a dict , get from test config file
     """
     preprocessBackupOS(parser)
-    print 'get back ssh'
-    ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                              , parser["BackupOS_usr"]
-                              , parser["BackupOS_pwd"]) #獲得ssh 
-    preprocessBackupMount(parser, ssh)
-    ssh.close()
-    
+    if FTOS.BackupOS_SSH_Is_Ready(parser):
+        ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                                  , parser["BackupOS_usr"]
+                                  , parser["BackupOS_pwd"]) #獲得ssh 
+        preprocessBackupMount(parser, ssh)
+        ssh.close()
+    else:
+        raise TA_error.Preprocess_Error("backup os ssh not ready")
 def preprocess_Slave(parser):
     """
     when test case start slave node do some preprocess
     :param parser : is a dict , get from test config file
     """
     preprocessSlaveOS(parser)
-    print 'get slave ssh'
-    ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
-                              , parser["SlaveOS_usr"]
-                              , parser["SlaveOS_pwd"]) #獲得ssh 
-    preprocessSlaveMount(parser, ssh)
-    ssh.close()
+    if FTOS.SlaveOS_SSH_Is_Ready(parser):
+        ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                                  , parser["SlaveOS_usr"]
+                                  , parser["SlaveOS_pwd"]) #獲得ssh 
+        preprocessSlaveMount(parser, ssh)
+        ssh.close()
+    else:
+        raise TA_error.Preprocess_Error("slave os ssh not ready")
 
 def preprocess_NFS(parser):
     preprocessNFSOS(parser)
-    print 'get nfs ssh'
     ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
@@ -85,8 +88,6 @@ def preprocessHostOS(parser):
     """
     if FTOS.HostOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("host os not booted") # node not running raise Error
-    if FTOS.HostOS_SSH_Is_Ready(parser) == False:
-        raise TA_error.Preprocess_Error("host os ssh not ready")
 def preprocessHostMount(parser , ssh):
     """
     preprocess , check Host node is mounting to nfs
@@ -106,8 +107,6 @@ def preprocessBackupOS(parser):
 
     if FTOS.BackupOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
-    if FTOS.BackupOS_SSH_Is_Ready(parser) == False:
-        raise TA_error.Preprocess_Error("back up os ssh not ready")
 def preprocessBackupMount(parser , ssh):
     """
     preprocess , check backup node is mounting to nfs
@@ -125,8 +124,6 @@ def preprocessSlaveOS(parser):
 
     if FTOS.SlaveOSIsRunning(parser) == False:
         raise TA_error.Preprocess_Error("slave os not booted")
-    if FTOS.SlaveOS_SSH_Is_Ready(parser) == False:
-        raise TA_error.Preprocess_Error("slave os ssh not ready")
 def preprocessSlaveMount(parser , ssh):
     """
     preprocess , slave Host node is mounting to nfs
@@ -139,9 +136,7 @@ def preprocessSlaveMount(parser , ssh):
 
 def preprocessNFSOS(parser):
     if FTOS.NFSOSIsRunning(parser) == False: # check node is running
-        raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
-    if FTOS.NFSOS_SSH_Is_Ready(parser) == False:
-        raise TA_error.Preprocess_Error("back up os ssh not ready")
+        raise TA_error.Preprocess_Error("nfs os not booted") # node not running raise error
 def preprocessHostOSMountNFS(parser , ssh = None):
     cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)

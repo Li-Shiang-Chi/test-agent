@@ -72,6 +72,7 @@ def HostOS_SSH_Is_Ready(parser):
 	t_start = time.time()
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["HostOS_ip"])
+		print 'host os ssh response %s' % ssh_response 
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
@@ -82,6 +83,7 @@ def BackupOS_SSH_Is_Ready(parser):
 	t_start = time.time()
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["BackupOS_ip"])
+		print 'backup os ssh response %s' % ssh_response 
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
