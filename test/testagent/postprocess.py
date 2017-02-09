@@ -70,8 +70,8 @@ def postprocess_NFS(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	postprocessResetNFS(parser, ssh)
-	
-	
+	postProcessNFSOSReboot(parser , ssh)
+		
 def postProcessHostOSReboot(parser , ssh):
 	"""
 	when test case done , Host OS reboot
@@ -98,14 +98,11 @@ def postProcessSlaveOSReboot(parser ,ssh):
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	ssh.close();
-def postProcessNFSOSReboot(parser):
+def postProcessNFSOSReboot(parser , ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
-	ssh = shell_server.get_ssh(parser["nfs_ip"]
-                              , parser["nfs_usr"]
-                              , parser["nfs_pwd"]) #獲得ssh 
 	
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
