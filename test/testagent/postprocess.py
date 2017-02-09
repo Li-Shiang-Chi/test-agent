@@ -77,7 +77,6 @@ def postProcessHostOSReboot(parser , ssh):
 	"""
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	ssh.close(); 
 	
 def postProcessBackupOSReboot(parser ,ssh):
 	"""
@@ -85,8 +84,7 @@ def postProcessBackupOSReboot(parser ,ssh):
 	:param parser: is a dict, get from Test config file
 	"""
 	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	ssh.close(); 
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) 
 	
 def postProcessSlaveOSReboot(parser ,ssh):
 	"""
@@ -95,7 +93,6 @@ def postProcessSlaveOSReboot(parser ,ssh):
 	"""
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	ssh.close();
 def postProcessNFSOSReboot(parser , ssh):
 	"""
 	when test case done , Host OS reboot
@@ -103,8 +100,7 @@ def postProcessNFSOSReboot(parser , ssh):
 	"""
 	
 	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	ssh.close(); 	
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
      
 def postprocessResetNFS(parser,ssh):
 	"""

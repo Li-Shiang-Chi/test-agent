@@ -60,10 +60,10 @@ def preprocess_Slave(parser):
     when test case start slave node do some preprocess
     :param parser : is a dict , get from test config file
     """
+    preprocessSlaveOS(parser)
     ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
-    preprocessSlaveOS(parser)
     preprocessSlaveMount(parser, ssh)
     ssh.close()
 
