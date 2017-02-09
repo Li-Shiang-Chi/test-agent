@@ -80,6 +80,8 @@ def preprocessHostOS(parser):
     """
     if FTOS.HostOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("host os not booted") # node not running raise Error
+    if "pre_wait_ssh_time" in parser.keys():
+        time.sleep(float(parser["pre_wait_ssh_time"]))
 def preprocessHostMount(parser , ssh):
     """
     preprocess , check Host node is mounting to nfs
@@ -99,6 +101,8 @@ def preprocessBackupOS(parser):
 
     if FTOS.BackupOSIsRunning(parser) == False: # check node is running
         raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
+    if "pre_wait_ssh_time" in parser.keys():
+        time.sleep(float(parser["pre_wait_ssh_time"]))
 def preprocessBackupMount(parser , ssh):
     """
     preprocess , check backup node is mounting to nfs
@@ -116,6 +120,8 @@ def preprocessSlaveOS(parser):
 
     if FTOS.SlaveOSIsRunning(parser) == False:
         raise TA_error.Preprocess_Error("slave os not booted")
+    if "pre_wait_ssh_time" in parser.keys():
+        time.sleep(float(parser["pre_wait_ssh_time"]))
 def preprocessSlaveMount(parser , ssh):
     """
     preprocess , slave Host node is mounting to nfs
