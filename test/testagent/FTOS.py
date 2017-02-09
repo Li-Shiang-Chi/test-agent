@@ -75,6 +75,7 @@ def HostOS_SSH_Is_Ready(parser):
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
+		print "host ssh response %s" % ssh_response
 	return False
 
 def BackupOS_SSH_Is_Ready(parser):
@@ -84,6 +85,7 @@ def BackupOS_SSH_Is_Ready(parser):
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
+		print "backup ssh response %s" % ssh_response
 	return False
 def SlaveOS_SSH_Is_Ready(parser):
 	t_start = time.time()
@@ -100,6 +102,7 @@ def NFSOS_SSH_Is_Ready(parser):
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
+		print "nfs ssh response %s" % ssh_response
 def wakeUpNode(networkMAC):
 	"""
 	use wake on lan to boot specific node
