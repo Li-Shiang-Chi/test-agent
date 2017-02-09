@@ -18,7 +18,6 @@ def HostOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_hostOS_boot_time"] ) :
 		response = os.system("ping -c 1 " + parser["HostOS_ip"])
-		print 'host os ping response %s' % response
 		if response == 0:
 			return True;
 		time.sleep(float(1))
@@ -34,7 +33,6 @@ def BackupOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_backupOS_boot_time"] ) :
 		response = os.system("ping -c 1 %s" % parser["BackupOS_ip"])
-		print 'backup os ping response %s' % response
 		if response == 0: # node can ping
 			return True;
 		time.sleep(float(1))
@@ -65,7 +63,6 @@ def NFSOSIsRunning(parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < parser["pre_backupOS_boot_time"] ) :
 		response = os.system("ping -c 1 %s" % parser["BackupOS_ip"])
-		print 'nfs os ping response %s' % response
 		if response == 0: # node can ping
 			return True;
 		time.sleep(float(1))
@@ -75,7 +72,6 @@ def HostOS_SSH_Is_Ready(parser):
 	t_start = time.time()
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["HostOS_ip"])
-		print 'host os ssh response %s' % ssh_response
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
@@ -85,7 +81,6 @@ def BackupOS_SSH_Is_Ready(parser):
 	t_start = time.time()
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["BackupOS_ip"])
-		print 'backup os ssh response %s' % ssh_response
 		if ssh_response == 0:
 			return True
 		time.sleep(float(1))
