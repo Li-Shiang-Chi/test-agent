@@ -74,9 +74,9 @@ def HostOS_SSH_Is_Ready(parser):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["HostOS_ip"])
 		print 'host os ssh response %s' % ssh_response 
 		if ssh_response == 0:
+			time.sleep(float(2))
 			return True
 		time.sleep(float(1))
-		print "host ssh response %s" % ssh_response
 	return False
 
 def BackupOS_SSH_Is_Ready(parser):
@@ -85,15 +85,16 @@ def BackupOS_SSH_Is_Ready(parser):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["BackupOS_ip"])
 		print 'backup os ssh response %s' % ssh_response 
 		if ssh_response == 0:
+			time.sleep(float(2))
 			return True
 		time.sleep(float(1))
-		print "backup ssh response %s" % ssh_response
 	return False
 def SlaveOS_SSH_Is_Ready(parser):
 	t_start = time.time()
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["SlaveOS_ip"])
 		if ssh_response == 0:
+			time.sleep(float(2))
 			return True
 		time.sleep(float(1))
 	return False
@@ -102,6 +103,7 @@ def NFSOS_SSH_Is_Ready(parser):
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["NFS_ip"])
 		if ssh_response == 0:
+			time.sleep(float(2))
 			return True
 		time.sleep(float(1))
 		print "nfs ssh response %s" % ssh_response
