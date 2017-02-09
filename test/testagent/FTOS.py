@@ -138,8 +138,7 @@ def is_login(host_name, ip, port, time=60):
                 #print "[%s][FTVM] VM %s:%s is logged in." % (st, vm_name, ip)
 		return True
 	return False
-
-def __init__():
+if __name__ == "__main__":
 	parser = {}
 	parser["pre_hostOS_boot_time"] = "200"
 	parser["HostOS_ip"] = "192.168.1.100"
