@@ -8,6 +8,7 @@
 import shell_server
 from testagent import cmd_HAagent
 from testagent import file
+import json
 
 
 """
@@ -15,6 +16,9 @@ check is cluster in HAagent
 :param cluster_name : cluster name
 :param parser is a dict get from base.configure
 """
+
+def is_backup_success(parser):
+    
 
 def is_cluster_exist(cluster_name , parser):
     ssh = shell_server.get_ssh(parser["NFS_ip"],
@@ -54,4 +58,12 @@ def is_node_exists(cluster_name , node_name , parser):
     if node_name in overview and cluster_file_content:
         return True
     return False
+
+def get_node_role(ip , parser):
+    
+if __name__ = "__main__":
+    cluster_file_content = file.get_file_content(parser["cluster_file_path"])
+    jsonString = json.loads(cluster_file_content)
+    print jsonString["primary"]["role"]
+     
     

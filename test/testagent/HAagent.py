@@ -46,6 +46,20 @@ def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     cmd = cmd_HAagent.add_node_cmd(cluster_name, node_name, node_ip, ibmp)
     print cmd
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
+
+def add_backup_node(parser):
+    add_node(parser["Cluster_name"] ,
+             parser["BackupOS_name"], 
+             parser["BackupOS_ip"], 
+             parser["BackupOS_ipmb"], 
+             parser)
+def add_slave_node(parser):
+    add_node(parser["Cluster_name"] ,
+             parser["SlaveOS_name"], 
+             parser["SlaveOS_ip"], 
+             parser["SlaveOS_ipmb"], 
+             parser)
+    
     """
     execute rmnode <cluster name> <node name>
 
@@ -103,9 +117,6 @@ def quick_create_cluster(parser , ssh = None):
     cmd = "sudo %s" % parser["init_file_path"]
     return remote_exec(cmd , ssh) if ssh else local_exec(cmd , ssh)
     
-def run(parser , ssh = None):
-    cmd = cmd_HAagent.run(parser)
-    return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     
 def kill(parser , ssh = None):
     cmd = cmd_egrep.get_process_id("CommandHandler.py")
@@ -115,7 +126,7 @@ def kill(parser , ssh = None):
     remote_exec(kill_cmd, ssh)
     
     """
-    local side execute using ssh module
+    local side execute using subprocess module
     :param cmd: command
     :return: execute the command
     """

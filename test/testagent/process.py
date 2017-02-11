@@ -380,8 +380,10 @@ def exec_add_node(parser):
 	
 	HAagent.create_cluster("test_c", "node1", "9999", "9999", parser, ssh) 
 	time.sleep(1)
-	HAagent.add_node("test_c", "test_n", "127.0.0.1", "9999", parser, ssh)
-	time.sleep(1) 
+	HAagent.add_backup_node(parser) #add backup node
+	time.sleep(float(parser["pro_wait_add_node_time"])) 
+	#HAagent.add_slave_node(parser) #add slave node
+	#time.sleep(float(parser["pro_wait_add_node_time"])) 
 	ssh.close()
 	
 	"""
@@ -448,7 +450,7 @@ def exec_overview(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999", parser, ssh)
+	HAagent.quick_create_cluster(parser, ssh)
 	time.sleep(1)
 	ssh.close()
     
