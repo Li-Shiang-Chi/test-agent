@@ -36,7 +36,7 @@ def preprocess_Host(parser):
     """
     
     preprocessHostOS(parser)
-    if FTOS.HostOS_SSH_Is_Ready(parser):
+    if FTOS.HostOS_SSH_Is_Ready(parser): # check ssh is ready
         ssh = shell_server.get_ssh(parser["HostOS_ip"]
                                   , parser["HostOS_usr"]
                                   , parser["HostOS_pwd"]) #獲得ssh 
@@ -51,7 +51,7 @@ def preprocess_Backup(parser):
     :param parser : is a dict , get from test config file
     """
     preprocessBackupOS(parser)
-    if FTOS.BackupOS_SSH_Is_Ready(parser):
+    if FTOS.BackupOS_SSH_Is_Ready(parser): # check ssh is ready
         ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                                   , parser["BackupOS_usr"]
                                   , parser["BackupOS_pwd"]) #獲得ssh 
@@ -65,7 +65,7 @@ def preprocess_Slave(parser):
     :param parser : is a dict , get from test config file
     """
     preprocessSlaveOS(parser)
-    if FTOS.SlaveOS_SSH_Is_Ready(parser):
+    if FTOS.SlaveOS_SSH_Is_Ready(parser): # check ssh is ready
         ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                                   , parser["SlaveOS_usr"]
                                   , parser["SlaveOS_pwd"]) #獲得ssh 
@@ -76,10 +76,14 @@ def preprocess_Slave(parser):
 
 def preprocess_NFS(parser):
     preprocessNFSOS(parser)
-    ssh = shell_server.get_ssh(parser["NFS_ip"]
+    if FTOS.NFSOS_SSH_Is_Ready(parser):
+        ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
-    ssh.close()
+        ssh.close()
+    else:
+        raise TA_error.Preprocess_Error("nfs os ssh not ready")
+    
     
 def preprocessHostOS(parser):
     """

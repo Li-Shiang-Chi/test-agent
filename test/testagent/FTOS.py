@@ -7,6 +7,7 @@ import shell_server
 import mmsh
 import os
 import TA_error
+from _ast import Try
 
 def HostOSIsRunning(parser):
 	"""
@@ -50,7 +51,7 @@ def SlaveOSIsRunning(parser):
 		response = os.system("ping -c 1 " + parser["SlaveOS_ip"])
 		if response == 0:	
 			return True;
-		time.sleep(float(1))
+		time.sleep(float(1)) #every second check one time
 	return False
 
 def NFSOSIsRunning(parser):
@@ -65,48 +66,94 @@ def NFSOSIsRunning(parser):
 		response = os.system("ping -c 1 %s" % parser["BackupOS_ip"])
 		if response == 0: # node can ping
 			return True;
-		time.sleep(float(1))
+		time.sleep(float(1)) #every second check one time
 	return False
 
 def HostOS_SSH_Is_Ready(parser):
+	"""
+	use netcat check ssh port (22) is open
+	and check the ssh daemon is running
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	t_start = time.time()
-	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+	while( (time.time() - t_start) < parser["pre_wait_ssh_port_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["HostOS_ip"])
-		print 'host os ssh response %s' % ssh_response 
-		if ssh_response == 0:
-			time.sleep(float(2))
+		if ssh_response == 0: #ssh port 22 is open
+			time.sleep(float(parser["pre_wait_ssh_ready_time"])) #wait ssh daemon ready
+			try:
+				ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                                  , parser["HostOS_usr"]
+                                  , parser["HostOS_pwd"]) #獲得ssh 
+			except Exception:
+				return False # ssh not ready
+			ssh.close()
 			return True
-		time.sleep(float(1))
+		time.sleep(float(1)) #every second check one time
 	return False
 
 def BackupOS_SSH_Is_Ready(parser):
+	"""
+	use netcat check ssh port (22) is open
+	and check the ssh daemon is running
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	t_start = time.time()
-	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+	while( (time.time() - t_start) < parser["pre_wait_ssh_port_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["BackupOS_ip"])
-		print 'backup os ssh response %s' % ssh_response 
-		if ssh_response == 0:
-			time.sleep(float(2))
+		if ssh_response == 0: #ssh port 22 is open
+			time.sleep(float(parser["pre_wait_ssh_ready_time"])) #wait ssh daemon ready
+			try:
+				ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                                  , parser["BackupOS_usr"]
+                                  , parser["BackupOS_pwd"]) #獲得ssh 
+			except Exception:
+				return False # ssh not ready
+			ssh.close()
 			return True
-		time.sleep(float(1))
+		time.sleep(float(1)) #every second check one time
 	return False
 def SlaveOS_SSH_Is_Ready(parser):
+	"""
+	use netcat check ssh port (22) is open
+	and check the ssh daemon is running
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	t_start = time.time()
-	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
+	while( (time.time() - t_start) < parser["pre_wait_ssh_port_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["SlaveOS_ip"])
-		if ssh_response == 0:
-			time.sleep(float(2))
+		if ssh_response == 0: #ssh port 22 is open
+			time.sleep(float(parser["pre_wait_ssh_ready_time"])) #wait ssh daemon ready
+			try:
+				ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                                  , parser["SlaveOS_usr"]
+                                  , parser["SlaveOS_pwd"]) #獲得ssh 
+			except Exception as e:
+				return False # ssh not ready
+			ssh.close()
 			return True
-		time.sleep(float(1))
+		time.sleep(float(1)) #every second check one time
 	return False
 def NFSOS_SSH_Is_Ready(parser):
-	t_start = time.time()
+	"""
+	use netcat check ssh port (22) is open
+	and check the ssh daemon is running
+	:param parser : parser: is a dict, get from Test config file
+	"""
+	t_start = time.time() 
 	while( (time.time() - t_start) < parser["pre_wait_ssh_time"]):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % parser["NFS_ip"])
-		if ssh_response == 0:
-			time.sleep(float(2))
+		if ssh_response == 0: #ssh port 22 is open
+			time.sleep(float(parser["pre_wait_ssh_ready_time"])) #wait ssh daemon ready
+			try:
+				ssh = shell_server.get_ssh(parser["NFS_ip"]
+                                  , parser["NFS_usr"]
+                                  , parser["NFS_pwd"]) #獲得ssh 
+			except Exception:
+				return False # ssh not ready
+			ssh.close()
 			return True
-		time.sleep(float(1))
-		print "nfs ssh response %s" % ssh_response
+		time.sleep(float(1)) #every second check one time
+	return False
 def wakeUpNode(networkMAC):
 	"""
 	use wake on lan to boot specific node
