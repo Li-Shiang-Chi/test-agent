@@ -16,7 +16,7 @@ def nodeOSIsRunning(ip,parser):
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
 	t_start = time.time()
-	while ( (time.time() - t_start) < parser["pre_node_boot_time"] ) :
+	while ( (time.time() - t_start) < parser["pre_wait_node_boot_time"] ) :
 		response = os.system("ping -c 1 %s >/dev/null" % ip)
 		if response == 0:
 			return True;
