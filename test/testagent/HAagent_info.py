@@ -18,7 +18,7 @@ check is cluster in HAagent
 """
 
 def is_backup_success(parser):
-    
+    return False
 
 def is_cluster_exist(cluster_name , parser):
     ssh = shell_server.get_ssh(parser["NFS_ip"],
@@ -60,9 +60,10 @@ def is_node_exists(cluster_name , node_name , parser):
     return False
 
 def get_node_role(ip , parser):
-    
-if __name__ = "__main__":
-    cluster_file_content = file.get_file_content(parser["cluster_file_path"])
+    return False
+
+if  __name__ == '__main__':
+    cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")
     jsonString = json.loads(cluster_file_content)
     print jsonString["primary"]["role"]
      
