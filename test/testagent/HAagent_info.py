@@ -65,6 +65,6 @@ def get_node_role(ip , parser):
 if  __name__ == '__main__':
     cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")
     jsonString = json.loads(cluster_file_content)
-    print jsonString["nodes"]["primary"]["role"]
+    print jsonString["nodes"]
      
     
