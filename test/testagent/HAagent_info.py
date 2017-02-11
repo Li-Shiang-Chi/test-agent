@@ -6,8 +6,8 @@
 '''
 
 import shell_server
-from testagent import cmd_HAagent
-from testagent import file
+import cmd_HAagent
+import file
 import json
 
 
