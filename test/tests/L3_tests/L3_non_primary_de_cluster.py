@@ -10,12 +10,10 @@
 from testagent import preprocess
 from testagent import process
 from testagent import Assert
-from testagent import postprocess
 
 
 def run_L3_non_primary_de_cluster(parser):
     preprocess.run_preprocess(parser)
     process.exec_non_primary_de_cluster(parser)
     Assert.detect_non_primary_de_cluster(parser)
-    postprocess.run_postprocess(parser)
     

@@ -10,10 +10,8 @@
 from testagent import preprocess
 from testagent import process
 from testagent import Assert
-from testagent import postprocess
 
 def run_L3_add_node(parser):
     preprocess.run_preprocess(parser)
     process.exec_add_node(parser)
     Assert.detect_add_node(parser)
-    postprocess.run_postprocess(parser)

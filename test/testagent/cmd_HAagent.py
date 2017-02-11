@@ -28,9 +28,6 @@ def overview_cmd():
 def exit_cmd():
     return "mmsh exit"
 
-def run(parser):
-    return "sudo python %s" % parser["command_handler_path"]
-
 if __name__ == "__main__":
     print create_cluster_cmd("123", "234")
     print de_cluster_cmd("123")
