@@ -7,7 +7,6 @@ import shell_server
 import mmsh
 import os
 import TA_error
-from _ast import Try
 
 def HostOSIsRunning(parser):
 	"""
