@@ -44,10 +44,10 @@ def de_cluster(cluster_name , parser , ssh=None):
     """
 def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     cmd = cmd_HAagent.add_node_cmd(cluster_name, node_name, node_ip, ibmp)
-    print cmd
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
 def add_backup_node(parser , ssh):
+    print "add backup node"
     add_node(parser["Cluster_name"] ,
              parser["BackupOS_name"], 
              parser["BackupOS_ip"], 
@@ -132,7 +132,6 @@ def local_exec(cmd , parser):
     :return: execute the command
     """
 def remote_exec(cmd , ssh=None):
-    print cmd
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
     stdout = s_stdout.read()
     print stdout

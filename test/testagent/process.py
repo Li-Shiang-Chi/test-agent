@@ -365,7 +365,8 @@ def exec_add_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
+	#HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
+	ssh.exec_command("sudo createcluster test_c primary 85 127.0.0.1")
 	time.sleep(3)
 	HAagent.add_backup_node(parser , ssh) # add backup node
 	time.sleep(float(parser["pro_wait_add_node_time"])) 
