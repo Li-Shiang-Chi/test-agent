@@ -455,4 +455,4 @@ if __name__ == '__main__':
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.add_node("test_c", "backup", "192.168.1.101", 86, parser, ssh)
+	HAagent.add_backup_node(parser, ssh)
