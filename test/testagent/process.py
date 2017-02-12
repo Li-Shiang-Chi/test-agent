@@ -367,9 +367,9 @@ def exec_add_node(parser):
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(3)
 	HAagent.add_backup_node(parser, ssh)
-	#time.sleep(float(parser["pro_wait_add_node_time"]))
+	time.sleep(float(parser["pro_wait_add_node_time"]))
 	
-	#ssh.close()
+	ssh.close()
 	
 	"""
 	HAagent add duplicate node to cluster
