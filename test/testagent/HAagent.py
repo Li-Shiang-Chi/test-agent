@@ -54,7 +54,7 @@ def add_backup_node(parser , ssh):
              parser["BackupOS_ipmb"], 
              parser, ssh)
 def add_slave_node(parser , ssh):
-    add_node(parser["Cluster_name"] ,
+    add_node(parser["Cluster_name"],
              parser["SlaveOS_name"], 
              parser["SlaveOS_ip"], 
              parser["SlaveOS_ipmb"], 
