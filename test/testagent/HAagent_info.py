@@ -96,6 +96,8 @@ def is_node_exists(cluster_name , node_name , parser):
     overview = s_stdout.read()
     cluster_file_content = file.get_file_content(parser["cluster_file_path"])
     
+    print overview
+    
     ssh.close()
     
     if node_name in overview and cluster_file_content:
