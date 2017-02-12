@@ -457,6 +457,6 @@ if __name__ == '__main__':
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
-	#time.sleep(3)
+	time.sleep(3)
 	HAagent.add_backup_node(parser, ssh)
-	#time.sleep(5)
+	time.sleep(5)
