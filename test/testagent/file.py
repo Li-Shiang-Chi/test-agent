@@ -7,6 +7,7 @@
 '''
 
 import os
+from pip.__main__ import path
 
 """
 delete file in specific path
@@ -48,6 +49,16 @@ def get_file_content (path) :
     else:
         return False
 
+"""
+get remote file content(String) in specific path
+input :(String) path : file path
+       (ssh) ssh : shell server
+output :(String) file content
+"""
+def get_remote_file_content(path , ssh):
+    cmd = "cat %s" % path
+    s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd)
+    return s_stdout.read()
 """
 check file is existing
 input :(String) path : file path

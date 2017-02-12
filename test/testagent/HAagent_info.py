@@ -9,6 +9,7 @@ import shell_server
 import cmd_HAagent
 import file
 import json
+from tkinter.tix import Shell
 
 
 
@@ -90,14 +91,18 @@ check is node in HAagent
 """
 
 def is_node_exists(cluster_name , node_name , parser):
-    ssh = shell_server.get_ssh(parser["NFS_ip"],
-                               parser["NFS_usr"] , 
-                               parser["NFS_pwd"]) # get ssh object
+    ssh = shell_server.get_ssh(parser["HostOS_ip"],
+                               parser["HostOS_usr"], 
+                               parser["HostOS_pwd"]) # get ssh object
     cmd = cmd_HAagent.overview_cmd()
     s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd)
     
-    overview = s_stdout.read()
-    cluster_file_content = file.get_file_content(parser["cluster_file_path"])
+    overview = s_stdout.read() # get overview in host terminal
+    
+    ssh = shell_server.get_ssh(parser["NFS_ip"],
+                               parser["NFS_usr"], 
+                               parser["NFS_pwd"])
+    cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] ,ssh) # get cluster file content in nfs
     
     print overview
     print cluster_file_content
@@ -109,8 +114,13 @@ def is_node_exists(cluster_name , node_name , parser):
     return False
 
 def get_node_role(name , parser):
-    cluster_file_content = file.get_file_content(parser["cluster_file_path"])
+    ssh = shell_server.get_ssh(parser["NFS_ip"],
+                               parser["NFS_usr"], 
+                               parser["NFS_pwd"])
+    
+    cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] , ssh) # get cluster file content in nfs
     res = json.load(cluster_file_content)["nodes"][name]["role"] # get role 
+    print res
     return res # return role
 
 if  __name__ == '__main__':
