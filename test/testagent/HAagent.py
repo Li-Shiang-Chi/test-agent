@@ -48,7 +48,7 @@ def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
 def add_backup_node(parser , ssh):
-    add_node(parser["Cluster_name"] ,
+    add_node(parser["Cluster_name"],
              parser["BackupOS_name"], 
              parser["BackupOS_ip"], 
              parser["BackupOS_ipmb"], 
