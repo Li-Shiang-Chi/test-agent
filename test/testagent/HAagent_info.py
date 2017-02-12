@@ -20,6 +20,9 @@ def is_add_primary_success(parser):
     is_exists = is_node_exists(parser["Cluster_name"], parser["HostOS_name"], parser) 
     role = get_node_role(parser["HostOS_name"], parser)
     
+    print is_exists
+    print role
+    
     print "primary node is exists %s" % is_exists
     print "primary role %s (expeceted 0)" % role
     
@@ -97,6 +100,7 @@ def is_node_exists(cluster_name , node_name , parser):
     cluster_file_content = file.get_file_content(parser["cluster_file_path"])
     
     print overview
+    print cluster_file_content
     
     ssh.close()
     
