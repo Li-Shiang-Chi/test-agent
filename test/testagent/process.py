@@ -460,3 +460,5 @@ if __name__ == '__main__':
 	time.sleep(3)
 	HAagent.add_backup_node(parser, ssh)
 	time.sleep(5)
+	
+	ssh.close()
