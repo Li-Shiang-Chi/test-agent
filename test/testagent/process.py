@@ -442,6 +442,7 @@ def exec_overview(parser):
     
 if __name__ == '__main__':
 	parser = dict()
+	parser["HostOS_name"] = "primary"
 	parser["HostOS_ip"] = "192.168.1.100"
 	parser["HostOS_usr"] = "primary"
 	parser["HostOS_pwd"] = "root"
