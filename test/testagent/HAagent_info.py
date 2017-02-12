@@ -117,10 +117,11 @@ def get_node_role(name , parser):
                                parser["NFS_pwd"])
     
     cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] , ssh) # get cluster file content in nfs
-    res = json.loads(cluster_file_content) 
-    print res["nodes"][name]["role"]
-    return res["nodes"][name]["role"] # return role
-
+    try:
+        res = json.loads(cluster_file_content)["nodes"][name]["role"]
+        return res # return role
+    except KeyError:
+        return "Key not found"
 if  __name__ == '__main__':
     cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")
     jsonString = json.loads(cluster_file_content)
