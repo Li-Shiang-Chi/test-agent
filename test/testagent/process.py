@@ -451,6 +451,7 @@ if __name__ == '__main__':
 	parser["BackupOS_ip"] = "192.168.1.101"
 	parser["BackupOS_name"] = "backup"
 	parser["BackupOS_ipmb"] = "86"
+	parser["Shelf_ip"] = "127.0.0.1"
 	
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
