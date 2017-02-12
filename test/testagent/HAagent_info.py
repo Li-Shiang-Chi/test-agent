@@ -104,6 +104,7 @@ def is_node_exists(cluster_name , node_name , parser):
     
     print overview
     print cluster_file_content
+    print "aaa"
     
     ssh.close()
     
@@ -118,9 +119,7 @@ def get_node_role(name , parser):
     
     cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] , ssh) # get cluster file content in nfs
     res = json.load(cluster_file_content)["nodes"][name]["role"] # get role 
-    print "aaa"
     print res
-    print "bbb"
     return res # return role
 
 if  __name__ == '__main__':
