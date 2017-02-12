@@ -451,7 +451,7 @@ if __name__ == '__main__':
 	parser["BackupOS_name"] = "backup"
 	parser["BackupOS_ipmb"] = "86"
 	parser["Shelf_ip"] = "127.0.0.1"
-	parser["pro_wait_add_node_time"] = 5
+	parser["pro_wait_add_node_time"] = "5"
 	
 	exec_add_node(parser)
 	
