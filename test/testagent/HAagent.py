@@ -44,6 +44,7 @@ def de_cluster(cluster_name , parser , ssh=None):
     """
 def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     cmd = cmd_HAagent.add_node_cmd(cluster_name, node_name, node_ip, ibmp)
+    print cmd
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
 def add_backup_node(parser , ssh):
