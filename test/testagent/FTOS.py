@@ -33,6 +33,7 @@ def nodeSSHIsReady(ip,user,pwd,parser):
 	"""
 	t_start = time.time()
 	while( (time.time() - t_start) < parser["pre_wait_ssh_port_time"]):
+		print (time.time() - t_start)
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % ip)
 		print "check %s ssh" % ip
 		if ssh_response == 0: #ssh port 22 is open
