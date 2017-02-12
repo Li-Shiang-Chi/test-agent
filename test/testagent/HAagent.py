@@ -133,6 +133,5 @@ def local_exec(cmd , parser):
 def remote_exec(cmd , ssh=None):
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
     stdout = s_stdout.read()
-    print stdout
-    print s_stderr.read()
+    print stdout()
     return stdout.rstrip()
