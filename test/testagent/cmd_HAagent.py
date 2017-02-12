@@ -11,7 +11,7 @@ def de_cluster_cmd (cluster_name):
     return "mmsh decluster %s" % cluster_name
 
 def add_node_cmd (cluster_name , node_name , node_ip=None , ibmp=None):
-    return "mmsh addnode %s %s %s %s > ./a.out" % (cluster_name , node_name , node_ip , ibmp)
+    return "mmsh addnode %s %s %s %s" % (cluster_name , node_name , node_ip , ibmp)
 
 def rm_node_cmd (cluster_name , node_name):
     return "mmsh rmnode %s %s" % (cluster_name , node_name)
