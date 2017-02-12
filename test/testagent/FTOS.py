@@ -16,7 +16,7 @@ def nodeOSIsRunning(ip,parser):
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
 	t_start = time.time()
-	while ( (time.time() - t_start) < parser["pre_wait_node_boot_time"] ) :
+	while ( (time.time() - t_start) < float(parser["pre_wait_node_boot_time"])) :
 		response = os.system("ping -c 1 %s >/dev/null" % ip)
 		print "ping %s" % ip
 		if response == 0:
@@ -32,8 +32,7 @@ def nodeSSHIsReady(ip,user,pwd,parser):
 	:param parser : parser: is a dict, get from Test config file
 	"""
 	t_start = time.time()
-	while( (time.time() - t_start) < parser["pre_wait_ssh_port_time"]):
-		print (time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])
+	while( (time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % ip)
 		print "check %s ssh" % ip
 		if ssh_response == 0: #ssh port 22 is open
