@@ -7,7 +7,6 @@
 '''
 
 import os
-from pip.__main__ import path
 
 """
 delete file in specific path

@@ -9,8 +9,6 @@ import shell_server
 import cmd_HAagent
 import file
 import json
-from tkinter.tix import Shell
-
 
 
 def is_add_primary_success(parser):
