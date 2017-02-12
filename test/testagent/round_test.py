@@ -386,7 +386,7 @@ class Test(object):
           restore_output()
           print_pass(self.test_run_name,t_elapsed)
           redirect_output(self.test_logger)
-        postprocess.run_postprocess(self.parser)
+        #postprocess.run_postprocess(self.parser)
       except TA_error.Postprocess_Error, e:
         #print "postprocess error"
         global n_tests_post_error
