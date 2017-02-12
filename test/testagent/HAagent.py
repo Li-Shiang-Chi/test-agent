@@ -47,7 +47,6 @@ def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
 def add_backup_node(parser , ssh):
-    print "add backup node"
     add_node(parser["Cluster_name"] ,
              parser["BackupOS_name"], 
              parser["BackupOS_ip"], 
@@ -135,4 +134,5 @@ def remote_exec(cmd , ssh=None):
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
     stdout = s_stdout.read()
     print stdout
+    print s_stderr.read()
     return stdout.rstrip()
