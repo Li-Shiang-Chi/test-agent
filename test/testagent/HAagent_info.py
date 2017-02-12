@@ -117,10 +117,9 @@ def get_node_role(name , parser):
                                parser["NFS_pwd"])
     
     cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] , ssh) # get cluster file content in nfs
-    print cluster_file_content
-    res = json.load(cluster_file_content)["nodes"][name]["role"] # get role 
-    print res
-    return res # return role
+    res = json.load(cluster_file_content) 
+    print res["nodes"][name]["role"]
+    return res["nodes"][name]["role"] # return role
 
 if  __name__ == '__main__':
     cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")
