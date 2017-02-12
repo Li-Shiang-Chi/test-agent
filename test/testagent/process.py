@@ -443,6 +443,12 @@ def exec_overview(parser):
     
 if __name__ == '__main__':
 	parser = dict()
-	parser["HostOS_ip"] = "140.115.53.132"
-	parser["HostOS_network_interface"] = "br0"
-	exec_L1_hostOS_network_isolation(parser)
+	parser["HostOS_ip"] = "192.168.1.100"
+	parser["HostOS_usr"] = "primary"
+	parser["HostOS_pwd"] = "root"
+	
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh
+	
+	print HAagent.add_node("test_c", "backup", "192.168.1.101", 86, parser, ssh)
