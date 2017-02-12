@@ -9,6 +9,7 @@
 import cmd_HAagent
 import cmd_egrep
 import subprocess
+import cmd
 
 
 """
@@ -43,7 +44,9 @@ def de_cluster(cluster_name , parser , ssh=None):
     """
 def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     cmd = cmd_HAagent.add_node_cmd(cluster_name, node_name, node_ip, ibmp)
-    return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
+    print cmd
+    print remote_exec(cmd, ssh)
+    #return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
 def add_backup_node(parser , ssh):
     add_node(parser["Cluster_name"] ,
@@ -114,14 +117,6 @@ def exit(parser , ssh=None):
 def quick_create_cluster(parser , ssh = None):
     cmd = "sudo %s" % parser["init_file_path"]
     return remote_exec(cmd , ssh) if ssh else local_exec(cmd , ssh)
-    
-    
-def kill(parser , ssh = None):
-    cmd = cmd_egrep.get_process_id("CommandHandler.py")
-    pid = remote_exec(cmd, ssh)
-    
-    kill_cmd = "sudo kill %s" % pid
-    remote_exec(kill_cmd, ssh)
     
     """
     local side execute using subprocess module
