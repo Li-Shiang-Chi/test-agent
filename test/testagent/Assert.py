@@ -564,7 +564,7 @@ def detect_add_duplicate_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	out = HAagent.add_node("test_c", "test_n", "127.0.0.1", "9999", parser, ssh)
+	out = HAagent.add_node(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ip"] , parser["HostOS_ipmb"], parser, ssh)
 	print out
 	success = (HAagent_terminal.Node_name_repeat in out)
 	ssh.close()

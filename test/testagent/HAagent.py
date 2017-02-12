@@ -47,18 +47,18 @@ def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
     print cmd
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
-def add_backup_node(parser):
+def add_backup_node(parser , ssh):
     print add_node(parser["Cluster_name"] ,
              parser["BackupOS_name"], 
              parser["BackupOS_ip"], 
              parser["BackupOS_ipmb"], 
-             parser)
-def add_slave_node(parser):
-    print add_node(parser["Cluster_name"] ,
+             parser, ssh)
+def add_slave_node(parser , ssh):
+    add_node(parser["Cluster_name"] ,
              parser["SlaveOS_name"], 
              parser["SlaveOS_ip"], 
              parser["SlaveOS_ipmb"], 
-             parser)
+             parser,ssh)
     
     """
     execute rmnode <cluster name> <node name>

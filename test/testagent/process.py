@@ -367,9 +367,9 @@ def exec_add_node(parser):
 	
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(1)
-	HAagent.add_backup_node(parser) #add backup node
+	HAagent.add_backup_node(parser , ssh) # add backup node
 	time.sleep(float(parser["pro_wait_add_node_time"])) 
-	#HAagent.add_slave_node(parser) #add slave node
+	#HAagent.add_slave_node(parser , ssh) #add slave node
 	#time.sleep(float(parser["pro_wait_add_node_time"])) 
 	ssh.close()
 	
