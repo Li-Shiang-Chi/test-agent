@@ -450,6 +450,10 @@ if __name__ == '__main__':
 	parser["HostOS_ip"] = "192.168.1.100"
 	parser["HostOS_usr"] = "primary"
 	parser["HostOS_pwd"] = "root"
+	parser["Cluster_name"] = "test_c"
+	parser["BackupOS_ip"] = "192.168.1.101"
+	parser["BackupOS_name"] = "backup"
+	parser["BackupOS_ipmb"] = "86"
 	
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
