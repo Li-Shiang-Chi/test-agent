@@ -366,11 +366,11 @@ def exec_add_node(parser):
                               , parser["HostOS_pwd"]) #獲得ssh
 	
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
-	time.sleep(1)
-	HAagent.add_backup_node(parser , ssh) # add backup node
-	time.sleep(float(parser["pro_wait_add_node_time"])) 
+	time.sleep(3)
+	#HAagent.add_backup_node(parser , ssh) # add backup node
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("mmsh addnode test_c backup 192.168.1.101 86")
 	print s_stdout.read()
+	time.sleep(float(parser["pro_wait_add_node_time"])) 
 	#HAagent.add_slave_node(parser , ssh) #add slave node
 	#time.sleep(float(parser["pro_wait_add_node_time"])) 
 	ssh.close()
