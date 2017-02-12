@@ -117,7 +117,7 @@ def get_node_role(name , parser):
                                parser["NFS_pwd"])
     
     cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] , ssh) # get cluster file content in nfs
-    res = json.load(cluster_file_content) 
+    res = json.loads(cluster_file_content) 
     print res["nodes"][name]["role"]
     return res["nodes"][name]["role"] # return role
 
