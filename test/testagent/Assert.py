@@ -538,15 +538,20 @@ def detect_add_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
+
+	primary_success = HAagent_info.is_add_primary_success(parser)
+	backup_success = HAagent_info.is_add_backup_success(parser)
+	#slave_success = HAagent_info.is_add_slave_success(parser)
 	
-	cluster = "test_c"
-	node = "test_n"
-	success = HAagent_info.is_node_exists(cluster, node, parser)
 	ssh.close()
 	
-	if success:
-		return True
-	raise TA_error.Assert_Error("add node fail")
+	if not primary_success:
+		raise TA_error.Assert_Error("primary add node fail")
+	if not backup_success:
+		raise TA_error.Assert_Error("backup add node fail")
+	#if not slave_success:
+	#	raise TA_error.Assert_Error("slave add node fail")
+	return True
 	
 	"""
 	detect add duplicate node to cluster or not
@@ -560,12 +565,13 @@ def detect_add_duplicate_node(parser):
                               , parser["HostOS_pwd"]) #獲得ssh
 	
 	out = HAagent.add_node("test_c", "test_n", "127.0.0.1", "9999", parser, ssh)
+	print out
 	success = (HAagent_terminal.Node_name_repeat in out)
 	ssh.close()
 
 	if success:
 		return True
-	raise TA_error.Assert_Error("add node fail")
+	raise TA_error.Assert_Error("add duplicate node fail")
 	"""
 	detect add outer node to cluster or not
 	:param parser: config

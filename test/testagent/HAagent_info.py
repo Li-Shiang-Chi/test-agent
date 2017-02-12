@@ -11,16 +11,59 @@ import file
 import json
 
 
-"""
-check is cluster in HAagent
-:param cluster_name : cluster name
-:param parser is a dict get from base.configure
-"""
 
-def is_backup_success(parser):
+def is_add_primary_success(parser):
+    """
+    check is primary node add in cluster
+    :param parser is a dict get from base.configure
+    """
+    is_exists = is_node_exists(parser["Cluster_name"], parser["HostOS_name"], parser) 
+    role = get_node_role(parser["HostOS_name"], parser)
+    
+    print "primary node is exists %s" % is_exists
+    print "primary role %s (expeceted 0)" % role
+    
+    if is_exists and role == 0: # if node exists and the role equals 0(primary)
+        return True
+    return False
+
+def is_add_backup_success(parser):
+    """
+    check is backup node add in cluster
+    :param parser is a dict get from base.configure
+    """
+    is_exists = is_node_exists(parser["Cluster_name"], parser["BackupOS_name"], parser) 
+    role = get_node_role(parser["BackupOS_name"], parser)
+    
+    print "backup node is exists %s" % is_exists
+    print "backup role %s (expeceted 1)" % role
+    
+    if is_exists and role == 1: # if node exists and the role equals 1(backup)
+        return True
+    return False
+
+
+def is_add_slave_success(parser):
+    """
+    check is slave node add in cluster
+    :param parser is a dict get from base.configure
+    """
+    is_exists = is_node_exists(parser["Cluster_name"], parser["SlaveOS_name"], parser) 
+    role = get_node_role(parser["SlaveOS_name"], parser)
+    
+    print "slave node is exists %s" % is_exists
+    print "slave role %s (expeceted 2)" % role
+    
+    if is_exists and role == 2: # if node exists and the role equals 2(slave)
+        return True
     return False
 
 def is_cluster_exist(cluster_name , parser):
+    """
+    check is cluster in HAagent
+    :param cluster_name : cluster name
+    :param parser is a dict get from base.configure
+    """
     ssh = shell_server.get_ssh(parser["NFS_ip"],
                                parser["NFS_usr"] , 
                                parser["NFS_pwd"]) # get ssh object
@@ -59,8 +102,10 @@ def is_node_exists(cluster_name , node_name , parser):
         return True
     return False
 
-def get_node_role(ip , parser):
-    return False
+def get_node_role(name , parser):
+    cluster_file_content = file.get_file_content(parser["cluster_file_path"])
+    res = json.load(cluster_file_content)["nodes"][name]["role"] # get role 
+    return res # return role
 
 if  __name__ == '__main__':
     cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")

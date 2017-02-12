@@ -293,7 +293,7 @@ def exec_create_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999" , parser , ssh) 
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	ssh.close()
 	
 	"""
@@ -306,7 +306,7 @@ def exec_create_duplicate_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999" , parser , ssh) 
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	ssh.close()
 	
 	"""
@@ -319,8 +319,8 @@ def exec_de_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999", parser , ssh)
-	HAagent.de_cluster("test_c", parser, ssh)
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
+	HAagent.de_cluster(parser["Cluster_name"], parser, ssh)
 	ssh.close()
 	
 	"""
@@ -334,7 +334,7 @@ def exec_de_outer_cluster(parser):
                               , parser["HostOS_pwd"]) #獲得ssh
 	
 	HAagent.create_cluster("test_b", "test_n", "9999", "9999", parser, ssh)
-	HAagent.de_cluster("test_c", parser, ssh)
+	HAagent.de_cluster(parser["Cluster_name"], parser, ssh)
 	ssh.close()
 	
 	"""
@@ -346,30 +346,17 @@ def exec_non_primary_de_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
-	
-	cluster = "test_c"
-	
-	HAagent.create_cluster(cluster, 
-						parser["HostOS_name"], 
-						parser["HostOS_ip"], 
-						parser["HostOS_ipmb"], 
-						parser, ssh)
-	
-	HAagent.add_node(cluster, 
-					parser["BackupOS_name"], 
-					parser["BackupOS_ip"] , 
-					parser["BackupOS_ipmb"], 
-					parser, ssh)
-	
+
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
+	HAagent.add_backup_node(parser)
 	time.sleep(float(1))
+	
 	ssh.close()
-	
-	
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh
 	
-	HAagent.de_cluster(cluster, parser, ssh)
+	HAagent.de_cluster(parser["Cluster_name"], parser, ssh)
 	
 	ssh.close()
 	
@@ -378,7 +365,7 @@ def exec_add_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster("test_c", "node1", "9999", "9999", parser, ssh) 
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(1)
 	HAagent.add_backup_node(parser) #add backup node
 	time.sleep(float(parser["pro_wait_add_node_time"])) 
@@ -396,7 +383,7 @@ def exec_add_duplicate_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999", parser, ssh) 
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh) 
 	time.sleep(1)
 	ssh.close()
 	
@@ -410,7 +397,7 @@ def exec_add_outer_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999", parser, ssh) 
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(1)
 	ssh.close()
 	
@@ -424,9 +411,9 @@ def exec_de_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.create_cluster("test_c", "test_n", "9999", "9999", parser, ssh) 
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(1)
-	HAagent.rm_node("test_c", "test_n", parser, ssh)
+	HAagent.rm_node(parser["Cluster_name"], parser["HostOS_name"], parser, ssh)
 	time.sleep(1)
 	ssh.close()
 	
