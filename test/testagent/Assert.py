@@ -592,11 +592,24 @@ def detect_add_outer_node(parser):
 	raise TA_error.Assert_Error("add node fail")
 
 	"""
+	detect use non-primary node add node success or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+def detect_non_primary_node_add_node(parser):
+	
+	success = HAagent_info.is_node_exists(parser["Cluster_name"], parser["SlaveOS_name"], parser)
+	
+	if not success:
+		return True
+	raise TA_error.Assert_Error("non primary node add node fail")
+	
+
+	"""
 	detect remove node or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-
 def detect_de_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
@@ -604,9 +617,25 @@ def detect_de_node(parser):
 	
 	success = HAagent_info.is_node_exists("test_c", "test_n", parser)
 	
+	
+	ssh.close()
 	if success:
 		raise TA_error.Assert_Error("de node fail")
 	return True
+
+	"""
+	detect remove node or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+def detect_non_primary_de_node(parser):
+	success = HAagent_info.is_node_exists(parser["Cluster_name"], parser["HostOS_name"], parser)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("non primary de node fail")
+
+
 
 	"""
 	detect overview function is ok or not

@@ -77,7 +77,7 @@ output : (String) absolute path
 
 """    
 def abs_path(relpath):
-    base_dir = os.path.dirname(__file__)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     path_name = os.path.join(base_dir , relpath)
     if (relpath == None): return os.path.abspath(base_dir)
     return os.path.abspath(path_name)

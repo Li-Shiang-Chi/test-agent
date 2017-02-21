@@ -346,17 +346,18 @@ def exec_non_primary_de_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 
+	# create cluster
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	HAagent.add_backup_node(parser , ssh)
 	time.sleep(float(1))
-	
 	ssh.close()
+	
+	
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh
-	
+	#use backup node to decluster
 	HAagent.de_cluster(parser["Cluster_name"], parser, ssh)
-	
 	ssh.close()
 	
 def exec_add_node(parser):
@@ -378,6 +379,27 @@ def exec_add_node(parser):
 	backup.close()
 	
 	"""
+	HAagnet non primary add node to cluster
+	:param parser: is a dict, get from Test config file
+	"""	
+def exec_non_primary_add_node(parser):
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh
+	#use primary node create cluster
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
+	HAagent.add_backup_node(parser, ssh)
+	time.sleep(float(parser["pro_wait_add_node_time"]))
+	#use backup node to add node
+	backup = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+	HAagent.add_node(parser["Cluster_name"], parser["SlaveOS_name"], parser["SlaveOS_ip"], parser["SlaveOS_ipmb"], parser, backup)
+	backup.close()
+	
+	
+	
+	"""
 	HAagent add duplicate node to cluster
 	:param parser: is a dict, get from Test config file
 	"""
@@ -388,7 +410,6 @@ def exec_add_duplicate_node(parser):
                               , parser["HostOS_pwd"]) #獲得ssh
 	
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh) 
-	time.sleep(1)
 	ssh.close()
 	
 	"""
@@ -431,6 +452,27 @@ def exec_de_outer_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	ssh.close()
+	
+	"""
+	use non-primary node remove node 
+	:param parser: is a dict, get from Test config file
+	"""
+def exec_non_primary_de_node(parser):
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh
+	#use primary node create cluster
+	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
+	HAagent.add_backup_node(parser, ssh)
+	time.sleep(float(parser["pro_wait_add_node_time"]))
+	#use backup node to remove node
+	backup = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+	HAagent.rm_node(parser["Cluster_name"], parser["HostOS_name"], parser, backup)
+	backup.close()
+	
+	
 	"""
 	HAagent overview
 	:param parser: is a dict, get from Test config file

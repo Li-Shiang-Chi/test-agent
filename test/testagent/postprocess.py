@@ -30,33 +30,21 @@ def postprocess_Host(parser):
 	when test done , primary postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh 
-	postProcessHostOSReboot(parser ,ssh)
-	ssh.close()
+	postProcessHostOSReboot(parser)
     
 def postprocess_Backup(parser):
 	"""
 	when test done , Backup postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                              , parser["BackupOS_usr"]
-                              , parser["BackupOS_pwd"]) #獲得ssh 
-	postProcessBackupOSReboot(parser ,ssh)
-	ssh.close()
+	postProcessBackupOSReboot(parser)
     
 def postprocess_Slave(parser):
 	"""
 	when test done , Slave postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
-                              , parser["SlaveOS_usr"]
-                              , parser["SlaveOS_pwd"]) #獲得ssh 
-	postProcessSlaveOSReboot(parser,ssh)
-	ssh.close()
+	postProcessSlaveOSReboot(parser)
  
     
 def postprocess_NFS(parser):
@@ -64,43 +52,62 @@ def postprocess_NFS(parser):
 	when test done , NFS postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
-	postprocessResetNFS(parser, ssh)
-	postProcessNFSOSReboot(parser , ssh)
+	postprocessResetNFS(parser)
+	postProcessNFSOSReboot(parser)
 		
 def postProcessHostOSReboot(parser , ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh 
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
+	
+	ssh.close()
 	
 def postProcessBackupOSReboot(parser ,ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
+	
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh 
+	
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) 
+	
+	ssh.close()
 	
 def postProcessSlaveOSReboot(parser ,ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
+	
+	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                              , parser["SlaveOS_usr"]
+                              , parser["SlaveOS_pwd"]) #獲得ssh 
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
+	
+	ssh.close()
 def postProcessNFSOSReboot(parser , ssh):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
 	
+	ssh = shell_server.get_ssh(parser["NFS_ip"]
+                              , parser["NFS_usr"]
+                              , parser["NFS_pwd"]) #獲得ssh
 	cmd = "reboot"
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
+	ssh.close()
      
 def postprocessResetNFS(parser,ssh):
 	"""
@@ -109,7 +116,12 @@ def postprocessResetNFS(parser,ssh):
 	:param parser: is a dict, get from Test config file
 	:param ssh : shell server
 	""" 
+	ssh = shell_server.get_ssh(parser["NFS_ip"]
+                              , parser["NFS_usr"]
+                              , parser["NFS_pwd"]) #獲得ssh
+	
 	NFS.reset(parser, ssh)
+	ssh.close()
 	
 def postprocess(parser):
 	"""
