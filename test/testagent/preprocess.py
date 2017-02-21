@@ -89,7 +89,7 @@ def preprocessBackupOS(parser):
         raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
     if not FTOS.nodeSSHIsReady(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser): # check ssh is ready
         raise TA_error.Preprocess_Error("backup os ssh not ready")
-def preprocessBackupMount(parser , ssh):
+def preprocessBackupMount(parser):
     """
     preprocess , check backup node is mounting to nfs
     :param parser : is a dict , get from test config file
@@ -113,7 +113,7 @@ def preprocessSlaveOS(parser):
         raise TA_error.Preprocess_Error("slave os not booted")
     if not FTOS.nodeSSHIsReady(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser): # check ssh is ready
         raise TA_error.Preprocess_Error("slave os ssh not ready")
-def preprocessSlaveMount(parser , ssh):
+def preprocessSlaveMount(parser):
     """
     preprocess , slave Host node is mounting to nfs
     :param parser : is a dict , get from test config file
