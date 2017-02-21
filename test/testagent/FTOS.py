@@ -8,6 +8,16 @@ import mmsh
 import os
 import TA_error
 
+
+def nodeIsReady(ip,user,pwd,parser):
+	if nodeOSIsRunning(ip, parser) == False:
+		print "error : %s OS not ready" % user
+		return False
+	if nodeSSHIsReady(ip, user, pwd, parser) == False:
+		print "error : %s ssh not ready" % user
+		return False
+	return True
+	
 def nodeOSIsRunning(ip,parser):
 	"""
 	use ping to check host os is running

@@ -636,7 +636,6 @@ def detect_non_primary_de_node(parser):
 	raise TA_error.Assert_Error("non primary de node fail")
 
 
-
 	"""
 	detect overview function is ok or not
 	:param parser: config

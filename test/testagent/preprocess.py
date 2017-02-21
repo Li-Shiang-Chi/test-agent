@@ -59,10 +59,9 @@ def preprocess_HostOS(parser):
     preprocess  , Host os part , check Host node is booted
     :param parser : is a dict , get from test config file
     """
-    if FTOS.nodeOSIsRunning(parser["HostOS_ip"], parser) == False: # check node is running
-        raise TA_error.Preprocess_Error("host os not booted") # node not running raise Error
-    if not FTOS.nodeSSHIsReady(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser): # check ssh is ready
-        raise TA_error.Preprocess_Error("host os ssh not ready")
+    if FTOS.nodeIsReady(parser["HostOS_ip"], parser["HostOS_name"], parser["HostOS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("Host OS not ready")
+    
 def preprocessHostMount(parser):
     """
     preprocess , check Host node is mounting to nfs
@@ -84,11 +83,9 @@ def preprocessBackupOS(parser):
     preprocess  , Host os part , check backup node is booted
     :param parser : is a dict , get from test config file
     """
-
-    if FTOS.nodeOSIsRunning(parser["BackupOS_ip"], parser) == False: # check node is running
-        raise TA_error.Preprocess_Error("backup os not booted") # node not running raise error
-    if not FTOS.nodeSSHIsReady(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser): # check ssh is ready
-        raise TA_error.Preprocess_Error("backup os ssh not ready")
+    if FTOS.nodeIsReady(parser["BackupOS_ip"], parser["BackupOS_name"], parser["BackupOS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("Backup OS not ready")
+    
 def preprocessBackupMount(parser):
     """
     preprocess , check backup node is mounting to nfs
@@ -108,11 +105,8 @@ def preprocessSlaveOS(parser):
     preprocess  , Host os part , check slave node is booted
     :param parser : is a dict , get from test config file
     """
-
-    if FTOS.nodeOSIsRunning(parser["SlaveOS_ip"], parser) == False:
-        raise TA_error.Preprocess_Error("slave os not booted")
-    if not FTOS.nodeSSHIsReady(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser): # check ssh is ready
-        raise TA_error.Preprocess_Error("slave os ssh not ready")
+    if FTOS.nodeIsReady(parser["SlaveOS_ip"], parser["SlaveOS_name"], parser["SlaveOS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("Slave OS not ready")
 def preprocessSlaveMount(parser):
     """
     preprocess , slave Host node is mounting to nfs

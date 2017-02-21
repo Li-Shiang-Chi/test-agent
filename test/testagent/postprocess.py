@@ -24,27 +24,28 @@ def run_postprocess(parser):
 	#postprocess_Host(parser)
 	postprocess_Backup(parser)
 	#postprocess_Slave(parser)
+	
     
 def postprocess_Host(parser):
 	"""
 	when test done , primary postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	postProcessHostOSReboot(parser)
+	postprocess_Host_OS(parser)
     
 def postprocess_Backup(parser):
 	"""
 	when test done , Backup postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	postProcessBackupOSReboot(parser)
+	postprocess_Backup_OS(parser)
     
 def postprocess_Slave(parser):
 	"""
 	when test done , Slave postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	postProcessSlaveOSReboot(parser)
+	postprocess_Slave_OS(parser)
  
     
 def postprocess_NFS(parser):
@@ -52,14 +53,51 @@ def postprocess_NFS(parser):
 	when test done , NFS postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	postprocessResetNFS(parser)
-	postProcessNFSOSReboot(parser)
-		
-def postProcessHostOSReboot(parser):
+	postprocess_NFS_OS(parser)
+	
+def postprocess_Host_OS(parser):
+	"""
+	post process host os part
+	:param parser: is a dict, get from Test config file
+	"""
+	if FTOS.nodeIsReady(parser["HostOS_ip"], parser["HostOS_name"], parser["HostOS_pwd"], parser) == False:
+		raise TA_error.Postprocess_Error("Host OS not ready")
+	postprocess_Host_OS_reboot(parser)
+	
+def postprocess_Backup_OS(parser):
+	"""
+	post process backup os part
+	:param parser: is a dict, get from Test config file
+	"""
+	if FTOS.nodeIsReady(parser["BackupOS_ip"], parser["BackupOS_name"], parser["BackupOS_pwd"], parser) == False:
+		raise TA_error.Postprocess_Error("Backup OS not ready")
+	postprocess_Backup_OS_reboot(parser)
+	
+def postprocess_Slave_OS(parser):
+	"""
+	post process slave os part
+	:param parser: is a dict, get from Test config file
+	"""
+	if FTOS.nodeIsReady(parser["SlaveOS_ip"], parser["SlaveOS_name"], parser["SlaveOS_pwd"], parser) == False:
+		raise TA_error.Postprocess_Error("Slave OS not ready")
+	postprocess_Slave_OS_reboot(parser)
+	
+def postprocess_NFS_OS(parser):
+	"""
+	post process nfs os part
+	:param parser: is a dict, get from Test config file
+	"""
+	if FTOS.nodeIsReady(parser["NFS_ip"], parser["NFS_name"], parser["NFS_pwd"], parser) == False:
+		raise TA_error.Postprocess_Error("NFS OS not ready")
+	postprocess_NFS_reset(parser)
+	postprocess_NFS_OS_reboot(parser)
+	
+def postprocess_Host_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
 	"""
+	
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
@@ -68,7 +106,7 @@ def postProcessHostOSReboot(parser):
 	
 	ssh.close()
 	
-def postProcessBackupOSReboot(parser):
+def postprocess_Backup_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -83,7 +121,7 @@ def postProcessBackupOSReboot(parser):
 	
 	ssh.close()
 	
-def postProcessSlaveOSReboot(parser):
+def postprocess_Slave_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -96,7 +134,7 @@ def postProcessSlaveOSReboot(parser):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	
 	ssh.close()
-def postProcessNFSOSReboot(parser):
+def postprocess_NFS_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -109,7 +147,7 @@ def postProcessNFSOSReboot(parser):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
 	ssh.close()
      
-def postprocessResetNFS(parser):
+def postprocess_NFS_reset(parser):
 	"""
 	when test done , clear nfs file
 
