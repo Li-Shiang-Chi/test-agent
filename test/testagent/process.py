@@ -368,9 +368,7 @@ def exec_add_node(parser):
 	backup = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh
-	
-	backup.exec_command("sudo chmod -R 777 /var/ha/images/") 
-	
+		
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	HAagent.add_backup_node(parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))

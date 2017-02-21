@@ -55,7 +55,7 @@ def postprocess_NFS(parser):
 	postprocessResetNFS(parser)
 	postProcessNFSOSReboot(parser)
 		
-def postProcessHostOSReboot(parser , ssh):
+def postProcessHostOSReboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -68,7 +68,7 @@ def postProcessHostOSReboot(parser , ssh):
 	
 	ssh.close()
 	
-def postProcessBackupOSReboot(parser ,ssh):
+def postProcessBackupOSReboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -83,7 +83,7 @@ def postProcessBackupOSReboot(parser ,ssh):
 	
 	ssh.close()
 	
-def postProcessSlaveOSReboot(parser ,ssh):
+def postProcessSlaveOSReboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -96,7 +96,7 @@ def postProcessSlaveOSReboot(parser ,ssh):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	
 	ssh.close()
-def postProcessNFSOSReboot(parser , ssh):
+def postProcessNFSOSReboot(parser):
 	"""
 	when test case done , Host OS reboot
 	:param parser: is a dict, get from Test config file
@@ -109,7 +109,7 @@ def postProcessNFSOSReboot(parser , ssh):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
 	ssh.close()
      
-def postprocessResetNFS(parser,ssh):
+def postprocessResetNFS(parser):
 	"""
 	when test done , clear nfs file
 
