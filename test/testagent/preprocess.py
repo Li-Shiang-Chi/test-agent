@@ -59,7 +59,7 @@ def preprocess_HostOS(parser):
     preprocess  , Host os part , check Host node is booted
     :param parser : is a dict , get from test config file
     """
-    if FTOS.nodeIsReady(parser["HostOS_ip"], parser["HostOS_name"], parser["HostOS_pwd"], parser) == False:
+    if FTOS.nodeIsReady(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Host OS not ready")
     
 def preprocessHostMount(parser):
@@ -83,7 +83,7 @@ def preprocessBackupOS(parser):
     preprocess  , Host os part , check backup node is booted
     :param parser : is a dict , get from test config file
     """
-    if FTOS.nodeIsReady(parser["BackupOS_ip"], parser["BackupOS_name"], parser["BackupOS_pwd"], parser) == False:
+    if FTOS.nodeIsReady(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Backup OS not ready")
     
 def preprocessBackupMount(parser):
@@ -105,7 +105,7 @@ def preprocessSlaveOS(parser):
     preprocess  , Host os part , check slave node is booted
     :param parser : is a dict , get from test config file
     """
-    if FTOS.nodeIsReady(parser["SlaveOS_ip"], parser["SlaveOS_name"], parser["SlaveOS_pwd"], parser) == False:
+    if FTOS.nodeIsReady(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Slave OS not ready")
 def preprocessSlaveMount(parser):
     """
