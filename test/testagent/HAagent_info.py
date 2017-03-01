@@ -66,15 +66,15 @@ def is_cluster_exist(cluster_name , parser):
     ssh = shell_server.get_ssh(parser["NFS_ip"],
                                parser["NFS_usr"] , 
                                parser["NFS_pwd"]) # get ssh object
-    cmd = cmd_HAagent.overview_cmd()
-    s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd)
+    #cmd = cmd_HAagent.overview_cmd()
+    #s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd)
     
-    overview = s_stdout.read()
+    #overview = s_stdout.read()
     cluster_file_content = file.get_file_content(parser["cluster_file_path"])
     
     ssh.close()
 
-    if cluster_name in overview and cluster_file_content:
+    if cluster_name in cluster_file_content:
         return True
     return False
 

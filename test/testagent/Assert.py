@@ -445,7 +445,7 @@ def detect_create_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	cluster = "test_c"
+	cluster = parser["Cluster_name"]
 	success =  HAagent_info.is_cluster_exist(cluster, parser)
 	ssh.close()	
 	
@@ -480,7 +480,7 @@ def detect_de_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	cluster = "test_c"
+	cluster = parser["Cluster_name"]
 	
 	success = HAagent_info.is_cluster_exist(cluster, parser)
 	ssh.close()
@@ -497,12 +497,7 @@ def detect_de_cluster(parser):
 
 
 def detect_non_primary_de_cluster(parser):
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                              , parser["BackupOS_usr"]
-                              , parser["BackupOS_pwd"]) #獲得ssh
-	
-	
-	cluster = "test_c"
+	cluster = parser["Cluster_name"]
 	
 	success = HAagent_info.is_cluster_exist(cluster, parser)
 	
@@ -520,7 +515,7 @@ def detect_de_outer_cluster(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	cluster = "test_b"
+	cluster = "test_c"
 	success = HAagent_info.is_cluster_exist(cluster, parser)
 	ssh.close()	
 	
@@ -563,7 +558,7 @@ def detect_add_duplicate_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
-	
+	#add the same node and return stdoutput
 	out = HAagent.add_node(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ip"] , parser["HostOS_ipmb"], parser, ssh)
 	print out
 	success = (HAagent_terminal.Node_name_repeat in out)
@@ -583,13 +578,14 @@ def detect_add_outer_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	out = HAagent.add_node("test_b", "test_n", "127.0.0.1", "9999", parser, ssh)
+	#add node in non exist cluster
+	out = HAagent.add_node("test_b", parser["BackupOS_name"], parser["BackupOS_ip"], parser["BackupOS_ipmb"], parser, ssh)
 	success = (HAagent_terminal.Not_in_cluster in out)
 	ssh.close()
 
 	if success:
 		return True
-	raise TA_error.Assert_Error("add node fail")
+	raise TA_error.Assert_Error("add outer node fail")
 
 	"""
 	detect use non-primary node add node success or not
@@ -611,17 +607,12 @@ def detect_non_primary_node_add_node(parser):
 	:return: True/raise exception
 	"""
 def detect_de_node(parser):
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
-	
 	success = HAagent_info.is_node_exists("test_c", "test_n", parser)
 	
+	if not success:
+		return True
+	raise TA_error.Assert_Error("de node fail")
 	
-	ssh.close()
-	if success:
-		raise TA_error.Assert_Error("de node fail")
-	return True
 
 	"""
 	detect remove node or not
@@ -641,7 +632,6 @@ def detect_non_primary_de_node(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-
 def detect_overview(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
