@@ -45,7 +45,7 @@ def nodeSSHIsReady(ip,user,pwd,parser):
 	while( (time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
 		ssh_response = os.system("nc -z %s 22 >/dev/null" % ip)
 		print "check %s ssh" % ip
-		print "%s %s" % (user , pwd)
+		print "response %s" % ssh_response
 		if ssh_response == 0: #ssh port 22 is open
 			time.sleep(float(parser["pre_wait_ssh_ready_time"])) #wait ssh daemon ready
 			try:
@@ -53,7 +53,7 @@ def nodeSSHIsReady(ip,user,pwd,parser):
                                   , user
                                   , pwd) #獲得ssh 
 			except Exception:
-				print "ssh not ready"
+				print " %s ssh not ready" % user
 				return False # ssh not ready
 			ssh.close()
 			return True
