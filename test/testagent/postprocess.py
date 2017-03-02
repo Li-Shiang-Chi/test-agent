@@ -60,7 +60,7 @@ def postprocess_Host_OS(parser):
 	post process host os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.nodeIsReady(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
+	if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Host OS not ready")
 	postprocess_Host_OS_reboot(parser)
 	
@@ -69,7 +69,7 @@ def postprocess_Backup_OS(parser):
 	post process backup os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.nodeIsReady(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
+	if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Backup OS not ready")
 	postprocess_Backup_OS_reboot(parser)
 	
@@ -78,7 +78,7 @@ def postprocess_Slave_OS(parser):
 	post process slave os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.nodeIsReady(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
+	if FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Slave OS not ready")
 	postprocess_Slave_OS_reboot(parser)
 	
@@ -87,7 +87,7 @@ def postprocess_NFS_OS(parser):
 	post process nfs os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.nodeIsReady(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser) == False:
+	if FTOS.is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("NFS OS not ready")
 	postprocess_NFS_reset(parser)
 	postprocess_NFS_OS_reboot(parser)

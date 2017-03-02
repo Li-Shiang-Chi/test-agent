@@ -9,16 +9,16 @@ import os
 import TA_error
 
 
-def nodeIsReady(ip,user,pwd,parser):
-	if nodeOSIsRunning(ip, parser) == False:
+def is_ready(ip,user,pwd,parser):
+	if OS_is_running(ip, parser) == False:
 		print "error : %s OS not ready" % user
 		return False
-	if nodeSSHIsReady(ip, user, pwd, parser) == False:
+	if ssh_is_ready(ip, user, pwd, parser) == False:
 		print "error : %s ssh not ready" % user
 		return False
 	return True
 	
-def nodeOSIsRunning(ip,parser):
+def OS_is_running(ip,parser):
 	"""
 	use ping to check host os is running
 	:param parser : parser: is a dict, get from Test config file
@@ -35,7 +35,7 @@ def nodeOSIsRunning(ip,parser):
 	return False
 
 
-def nodeSSHIsReady(ip,user,pwd,parser):
+def ssh_is_ready(ip,user,pwd,parser):
 	"""
 	use netcat check ssh port (22) is open
 	and check the ssh daemon is running
@@ -60,7 +60,7 @@ def nodeSSHIsReady(ip,user,pwd,parser):
 		time.sleep(float(1)) #every second check one time
 	return False
 
-def wakeUpNode(networkMAC):
+def wake_up(networkMAC):
 	"""
 	use wake on lan to boot specific node
 	:param networkMAC : network card MAC address
