@@ -369,15 +369,20 @@ def exec_add_node(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
+	backup = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+		
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo ls /var/ha/images/")
+	s_stdin, s_stdout, s_stderr = backup.exec_command("sudo ls /var/ha/images/")
 	print s_stdout.read()
 	HAagent.add_backup_node(parser, ssh)
 	#HAagent.add_slave_node(parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))
 	
 	ssh.close()
+	backup.close()
 	
 	"""
 	HAagnet non primary add node to cluster
