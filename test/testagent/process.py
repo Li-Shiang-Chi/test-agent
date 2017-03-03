@@ -371,7 +371,8 @@ def exec_add_node(parser):
 		
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))
-	print ssh.exec_command("sudo ls /var/ha/images")
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo ls /var/ha/images")
+	print s_stdout.read()
 	ssh.exec_command("sudo chmod -R 777 /var/ha/images")
 	HAagent.add_backup_node(parser, ssh)
 	#HAagent.add_slave_node(parser, ssh)
