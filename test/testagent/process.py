@@ -377,6 +377,9 @@ def exec_add_node(parser):
 	time.sleep(float(parser["pro_wait_add_node_time"]))
 	s_stdin, s_stdout, s_stderr = backup.exec_command("sudo ls /var/ha/images")
 	print s_stdout.read()
+	s_stdin, s_stdout, s_stderr = backup.exec_command("cat /var/ha/images/clusterFile.txt")
+	print s_stdout.read()
+	
 	backup.exec_command("sudo chmod -R 777 /var/ha/images")
 	HAagent.add_backup_node(parser, ssh)
 	#HAagent.add_slave_node(parser, ssh)
