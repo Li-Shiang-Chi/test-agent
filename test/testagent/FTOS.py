@@ -25,6 +25,9 @@ def OS_is_running(ip,parser):
 	"""
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
+	return __OS_is_ping(ip, parser)
+
+def __OS_is_ping(ip , parser):
 	t_start = time.time()
 	while ( (time.time() - t_start) < float(parser["pre_wait_node_boot_time"])) :
 		response = os.system("ping -c 1 %s >/dev/null" % ip)
@@ -41,24 +44,44 @@ def ssh_is_ready(ip,user,pwd,parser):
 	and check the ssh daemon is running
 	:param parser : parser: is a dict, get from Test config file
 	"""
+	
+	if __ssh_port_is_ready(ip, parser) :
+		if __ssh_daemon_is_running(ip, user, pwd, parser):
+			return True
+	return False
+		
+	
+
+def __ssh_port_is_ready(ip , parser):
 	t_start = time.time()
-	while( (time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
-		ssh_response = os.system("nc -z %s 22 >/dev/null" % ip)
+	while((time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
+		response = os.system("nc -z %s 22 >/dev/null" % ip)
 		print "check %s ssh" % ip
-		print "response %s" % ssh_response
-		if ssh_response == 0: #ssh port 22 is open
-			time.sleep(float(parser["pre_wait_ssh_ready_time"])) #wait ssh daemon ready
-			try:
-				ssh = shell_server.get_ssh(ip
+		print "response %s" % response
+		if response == 0:
+			return True
+		time.sleep(float(1))
+	return False
+
+def __ssh_daemon_is_running(ip,user,pwd,parser):
+	t_start = time.time()
+	while((time.time() - t_start) < float(parser["pre_wait_ssh_ready_time"])):
+		time.sleep(float(1))
+		try:
+			ssh = shell_server.get_ssh(ip
                                   , user
                                   , pwd) #獲得ssh 
-			except Exception:
-				print " %s ssh not ready" % user
-				return False # ssh not ready
-			ssh.close()
-			return True
-		time.sleep(float(1)) #every second check one time
-	return False
+		except Exception:
+			print " checking %s ssh " % user
+			continue
+		ssh.close()
+		return True
+	try:	
+		ssh = shell_server.get_ssh(ip , user , pwd) #獲得ssh
+	except Exception:
+		print " %s ssh not ready" % user
+		return False; 
+	ssh.close()
 
 def wake_up(networkMAC):
 	"""
