@@ -71,6 +71,7 @@ def postprocess_Backup_OS(parser):
 	"""
 	if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Backup OS not ready")
+	FTOS.reset_pid("backup")
 	postprocess_Backup_OS_reboot(parser)
 	
 def postprocess_Slave_OS(parser):
@@ -90,6 +91,7 @@ def postprocess_NFS_OS(parser):
 	if FTOS.is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("NFS OS not ready")
 	postprocess_NFS_reset(parser)
+	FTOS.reset_pid("primary")
 	postprocess_NFS_OS_reboot(parser)
 	
 def postprocess_Host_OS_reboot(parser):

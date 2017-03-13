@@ -82,6 +82,27 @@ def __ssh_daemon_is_running(ip,user,pwd,parser):
 		print " %s ssh not ready" % user
 		return False; 
 	ssh.close()
+	
+def reset_pid(node):
+	__reset_pid(node)
+	
+def __reset_pid(node):
+	if node == "primary":
+		ssh = shell_server.get_ssh(parser["HostOS_ip"]
+							, parser["HostOS_usr"]
+							, parser["HostOS_pwd"]) #獲得ssh
+		ssh.exec_command("rm /home/primary/Desktop/pid.txt")
+	elif node == "backup":
+		ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+							, parser["BackupOS_usr"]
+							, parser["BackupOS_pwd"]) #獲得ssh
+		ssh.exec_command("rm /home/backup-node/Desktop/pid.txt")
+	elif node == "slave":
+		ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+							, parser["SlaveOS_usr"]
+							, parser["SlaveOS_pwd"]) #獲得ssh
+		ssh.exec_command("rm /home/slave/Desktop/pid.txt")
+	ssh.close()
 
 def wake_up(networkMAC):
 	"""
