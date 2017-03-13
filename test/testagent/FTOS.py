@@ -83,10 +83,10 @@ def __ssh_daemon_is_running(ip,user,pwd,parser):
 		return False; 
 	ssh.close()
 	
-def reset_pid(node):
+def reset_pid(node , parser):
 	__reset_pid(node)
 	
-def __reset_pid(node):
+def __reset_pid(node , parser):
 	if node == "primary":
 		ssh = shell_server.get_ssh(parser["HostOS_ip"]
 							, parser["HostOS_usr"]
