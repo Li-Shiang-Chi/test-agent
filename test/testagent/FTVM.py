@@ -17,7 +17,7 @@ def get_vm_status(vm_name, ip="", ssh=None):
 	:return: status (running/paused/shut off)
 	"""
 	cmd = cmd_virsh.domstate_cmd(vm_name, ip) #獲得virsh domstate指令字串
-
+	print cmd
 	if ssh:
 		s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
 		stdout = s_stdout.read()
@@ -241,11 +241,10 @@ if __name__ == '__main__':
 	#print "start"
 	#if get_vm_status("VM1", "140.115.53.42") == "running":
 		#print "in"
-	ssh = shell_server.get_ssh("192.168.1.27"
-	                    , "user"
-	                    , "pdclab!@#$") #獲得ssh
-	print get_vm_status("T01", "192.168.1.27",ssh)
-	ssh.close()
+	#ssh = shell_server.get_ssh("192.168.1.27"
+	#                   , "user"
+	#                    , "pdclab!@#$") #獲得ssh
+	print get_vm_status("test-daemon12", "192.168.1.10")
 	#print is_shutoff("VM1", "140.115.53.42")
 	#shutdown("VM01", "140.115.53.127")
 	#shutdown("VM1", "140.115.53.42")
