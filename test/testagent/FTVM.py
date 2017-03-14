@@ -178,6 +178,24 @@ def ftshutdown(vm_name , ip="" , ssh=None):
 			#return stdout.rstrip()	
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			
+			
+def destroy(vm_name , ip="" , ssh=None):
+	"""
+	destroy vm, when vm status is running
+
+	:param vm_name: vm name
+	:param ip: vm's ip
+	"""
+	if is_running(vm_name, ip, ssh):
+		cmd = cmd_virsh.destroy_cmd(vm_name, ip)
+		print cmd
+		if ssh:
+			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
+			stdout = s_stdout.read()
+			print stdout
+		else:
+			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 def resume(vm_name, ip="", ssh=None):
 	"""
 	resume vm, when vm status is paused
@@ -269,7 +287,7 @@ if __name__ == '__main__':
     						, "root") #獲得ssh
 	print get_vm_status("test-daemon12", "192.168.1.100")
 	print get_vm_status("test-daemon12", "192.168.1.100") == "shut off"
-	shutdown("test-daemon12", "192.168.1.102",ssh)
+	destroy("test-daemon12", "192.168.1.102",ssh)
 	#print is_shutoff("VM1", "140.115.53.42")
 	#shutdown("VM01", "140.115.53.127")
 	#shutdown("VM1", "140.115.53.42")

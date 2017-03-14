@@ -43,6 +43,13 @@ def shutdown_cmd(vm_name, ip=""):
 	"""
 	return command("shutdown %s" % vm_name, ip)
 
+def destroy_cmd(vm_name , ip=""):
+	"""
+	:param vm_name: vm name
+	:param ip: vm's ip
+	:return cmd: virsh [url] destroy [vm_name]
+	"""
+	return command("destroy %s" % vm_name, ip)
 def paused_cmd(vm_name, ip=""):
 	pass
 
