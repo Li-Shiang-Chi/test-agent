@@ -244,7 +244,8 @@ if __name__ == '__main__':
 	#ssh = shell_server.get_ssh("192.168.1.27"
 	#                   , "user"
 	#                    , "pdclab!@#$") #獲得ssh
-	print get_vm_status("test-daemon12", "192.168.1.10")
+	print get_vm_status("test-daemon12", "192.168.1.100")
+	print get_vm_status("test-daemon12", "192.168.1.100") == "shut off"
 	#print is_shutoff("VM1", "140.115.53.42")
 	#shutdown("VM01", "140.115.53.127")
 	#shutdown("VM1", "140.115.53.42")
