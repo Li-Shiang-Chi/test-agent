@@ -7,6 +7,8 @@ import data_dir
 import shell_server
 import cmd_virsh
 import msg_socket
+import HAagent
+from testagent import cmd_HAagent
 
 def get_vm_status(vm_name, ip="", ssh=None):
 	"""
@@ -101,7 +103,7 @@ def is_login(vm_name, ip, port, time=60):
 	return False
 
 
-def start(vm_name, ip="", ssh=None):
+def start(node_name , vm_name, ip="", ssh=None):
 	"""
 	start vm, when vm status is shutoff 
 
@@ -110,7 +112,6 @@ def start(vm_name, ip="", ssh=None):
 	"""
 	if is_shutoff(vm_name, ip, ssh):
 		cmd = cmd_virsh.start_cmd(vm_name, ip) #獲得virsh start之指令字串
-
 		if ssh:
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
 			print cmd
@@ -119,16 +120,17 @@ def start(vm_name, ip="", ssh=None):
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 
-def ftstart(vm_name, ip="", level="1", ssh=None):
+def ftstart(node_name ,vm_name, ip="", ssh=None):
 	"""
 	ftstart vm, when vm status is shutoff
 
 	:param vm_name: vm name
 	:param ip: vm's ip
 	"""
-
-	if is_shutoff(vm_name, ip, ssh):
-		cmd = cmd_virsh.ftstart_cmd(vm_name, ip, level) #獲得virsh ftstart之指令字串
+	print is_shutoff(vm_name, ip, ssh)
+	if is_shutoff(vm_name,ip, ssh):
+		#cmd = cmd_virsh.ftstart_cmd(vm_name, ip, level) #獲得virsh ftstart之指令字串
+		cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name)
 		print cmd
 		if ssh:
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
@@ -138,7 +140,7 @@ def ftstart(vm_name, ip="", level="1", ssh=None):
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 
-def shutdown(vm_name, ip="", ssh=None):
+def shutdown(node_name ,vm_name, ip="", ssh=None):
 	"""
 	shutdown vm, when vm status is running
 
@@ -147,8 +149,9 @@ def shutdown(vm_name, ip="", ssh=None):
 	"""
 	import datetime
 	if is_running(vm_name, ip, ssh):
-		st = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-		cmd = cmd_virsh.shutdown_cmd(vm_name, ip) #獲得virsh shutdown之指令字串
+		#st = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+		#cmd = cmd_virsh.shutdown_cmd(vm_name, ip) #獲得virsh shutdown之指令字串
+		cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
 		print cmd
 		if ssh:
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
@@ -244,8 +247,12 @@ if __name__ == '__main__':
 	#ssh = shell_server.get_ssh("192.168.1.27"
 	#                   , "user"
 	#                    , "pdclab!@#$") #獲得ssh
+	ssh = shell_server.get_ssh("192.168.1.102"
+    						, "slave"
+    						, "root") #獲得ssh
 	print get_vm_status("test-daemon12", "192.168.1.100")
 	print get_vm_status("test-daemon12", "192.168.1.100") == "shut off"
+	ftstart("primary", "test-daemon12",ssh)
 	#print is_shutoff("VM1", "140.115.53.42")
 	#shutdown("VM01", "140.115.53.127")
 	#shutdown("VM1", "140.115.53.42")

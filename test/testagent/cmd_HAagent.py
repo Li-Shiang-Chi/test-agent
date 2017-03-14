@@ -16,8 +16,10 @@ def add_node_cmd (cluster_name , node_name , node_ip=None , ibmp=None):
 def rm_node_cmd (cluster_name , node_name):
     return "mmsh rmnode %s %s" % (cluster_name , node_name)
 
-def start_ftvm_cmd (node_name , vm_name , xml_path):
-    return "mmsh startftvm %s %s %s" % (node_name , vm_name , xml_path)
+def start_ftvm_cmd (node_name , vm_name , xml_path=None):
+    if xml_path:
+        return "mmsh startftvm %s %s %s" % (node_name , vm_name , xml_path)
+    return "mmsh startftvm %s %s %s" % (node_name , vm_name)
 
 def remove_ftvm_cmd(vm_name):
     return "mmsh removeftvm %s" % (vm_name)
