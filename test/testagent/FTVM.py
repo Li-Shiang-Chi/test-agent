@@ -8,7 +8,7 @@ import shell_server
 import cmd_virsh
 import msg_socket
 import HAagent
-from testagent import cmd_HAagent
+import cmd_HAagent
 
 def get_vm_status(vm_name, ip="", ssh=None):
 	"""
