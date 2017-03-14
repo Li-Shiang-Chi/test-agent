@@ -140,7 +140,7 @@ def ftstart(node_name ,vm_name, ip="", ssh=None):
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 
-def shutdown(node_name ,vm_name, ip="", ssh=None):
+def shutdown(vm_name, ip="", ssh=None):
 	"""
 	shutdown vm, when vm status is running
 
@@ -150,8 +150,7 @@ def shutdown(node_name ,vm_name, ip="", ssh=None):
 	import datetime
 	if is_running(vm_name, ip, ssh):
 		#st = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-		#cmd = cmd_virsh.shutdown_cmd(vm_name, ip) #獲得virsh shutdown之指令字串
-		cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
+		cmd = cmd_virsh.shutdown_cmd(vm_name, ip) #獲得virsh shutdown之指令字串
 		print cmd
 		if ssh:
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
@@ -160,7 +159,25 @@ def shutdown(node_name ,vm_name, ip="", ssh=None):
 			#return stdout.rstrip()
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			
+def ftshutdown(vm_name , ip="" , ssh=None):
+	"""
+	use HAagent shutdown vm, when vm status is running
 
+	:param vm_name: vm name
+	:param ip: vm's ip
+	"""
+	
+	if is_running(vm_name, ip, ssh):
+		cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
+		print cmd
+		if ssh:
+			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
+			stdout = s_stdout.read()
+			print stdout
+			#return stdout.rstrip()	
+		else:
+			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 def resume(vm_name, ip="", ssh=None):
 	"""
 	resume vm, when vm status is paused
@@ -252,7 +269,7 @@ if __name__ == '__main__':
     						, "root") #獲得ssh
 	print get_vm_status("test-daemon12", "192.168.1.100")
 	print get_vm_status("test-daemon12", "192.168.1.100") == "shut off"
-	start("test-daemon12", "192.168.1.102",ssh)
+	shutdown("test-daemon12", "192.168.1.102",ssh)
 	#print is_shutoff("VM1", "140.115.53.42")
 	#shutdown("VM01", "140.115.53.127")
 	#shutdown("VM1", "140.115.53.42")
