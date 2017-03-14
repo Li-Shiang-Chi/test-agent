@@ -252,7 +252,7 @@ if __name__ == '__main__':
     						, "root") #獲得ssh
 	print get_vm_status("test-daemon12", "192.168.1.100")
 	print get_vm_status("test-daemon12", "192.168.1.100") == "shut off"
-	start("primary", "test-daemon12",ssh)
+	start("test-daemon12", "192.168.1.102",ssh)
 	#print is_shutoff("VM1", "140.115.53.42")
 	#shutdown("VM01", "140.115.53.127")
 	#shutdown("VM1", "140.115.53.42")
