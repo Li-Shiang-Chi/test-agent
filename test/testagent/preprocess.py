@@ -21,10 +21,14 @@ when test case start , preprocess will clear the cluster and node file(refresh s
 :param parser : is a dict , get from test config file
 """
 def run_preprocess(parser):
+    print "mm"
     preprocess_mm(parser)
+    print "host"
     preprocess_Host(parser)
+    print "backup"
     preprocess_Backup(parser)
     #preprocess_Slave(parser)
+    print "nfs"
     preprocess_NFS(parser)
     
 def preprocess_Host(parser):
