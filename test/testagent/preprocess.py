@@ -91,7 +91,7 @@ def preprocess_Backup_OS(parser):
     preprocess  , Host os part , check backup node is booted
     :param parser : is a dict , get from test config file
     """
-    if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
+    if not FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
         raise TA_error.Preprocess_Error("Backup OS not ready")
     
 def preprocess_Backup_Mount(parser):
@@ -132,7 +132,7 @@ def preprocess_Slave_Mount(parser):
     ssh.close()
 
 def preprocess_NFS_OS(parser):
-    if FTOS.is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser):
+    if not FTOS.is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser):
         raise TA_error.Preprocess_Error("NFS OS not ready")
 def preprocess_OS_Mount_NFS(parser , ssh = None):
     cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])

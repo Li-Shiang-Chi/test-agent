@@ -87,7 +87,7 @@ def postprocess_Backup_OS(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	
-	if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
+	if not FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
 		raise TA_error.Postprocess_Error("Backup OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in BackupOS cannot shutdown " % parser["vm_name"])
