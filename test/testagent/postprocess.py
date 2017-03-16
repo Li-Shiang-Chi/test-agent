@@ -71,7 +71,7 @@ def postprocess_Host_OS(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
 	
-	if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser):
+	if not FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser):
 		raise TA_error.Postprocess_Error("Host OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
