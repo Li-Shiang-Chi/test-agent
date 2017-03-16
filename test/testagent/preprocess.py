@@ -619,11 +619,11 @@ def prepocess_slaveOS_vm_start(parser):
 
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     #print 58
-    FTVM.start(parser["vm_name"], parser["HostOS_ip"], ssh)
+    FTVM.start(parser["vm_name"], parser["SlaveOS_ip"], ssh)
     #print 58.5
   else:
     #print parser["level"]
-    FTVM.ftstart(parser["vm_name"], parser["HostOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["vm_name"], parser["SlaveOS_ip"], parser["level"], ssh)
     #print 59
   ssh.close()
 
