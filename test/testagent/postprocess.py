@@ -530,15 +530,15 @@ def postprocess_slaveOS_vm_running(parser):
   if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh):
       pass
       print 59
-  elif FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+  elif FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"], ssh):
     print 56
     postprocess_slaveOS_vm_start(parser)
     print 57
     time.sleep(float(parser["pre_slaveOS_VM_boot_time"]))
   print 58
-  if not FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+  if not FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh):
     ssh.close()
-    raise TA_error.Preprocess_Error("HostOS VM: %s can not start" % parser["vm_name"])
+    raise TA_error.Preprocess_Error("SlaveOS VM: %s can not start" % parser["vm_name"])
   ssh.close()
 
 
