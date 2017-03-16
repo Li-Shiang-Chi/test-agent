@@ -22,8 +22,8 @@ when test case start , preprocess will clear the cluster and node file(refresh s
 """
 def run_preprocess(parser):
     #preprocess_mm(parser)
-    #preprocess_Host(parser)
-    #preprocess_Backup(parser)
+    preprocess_Host(parser)
+    preprocess_Backup(parser)
     preprocess_Slave(parser)
     #preprocess_NFS(parser)
     
