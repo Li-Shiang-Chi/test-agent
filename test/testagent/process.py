@@ -263,7 +263,7 @@ def host_vm_ftstart(parser):
 	if "pro_wait_time_start" in parser.keys():
 		time.sleep(int(parser["pro_wait_time_start"]))
 	
-	FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
+	FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"],ssh) #執行開啟容錯機制之開機
 	ssh.close()
 def backup_vm_ftstart(parser):
 	"""
@@ -278,7 +278,7 @@ def backup_vm_ftstart(parser):
 	if "pro_wait_time_start" in parser.keys():
 		time.sleep(int(parser["pro_wait_time_start"]))
 	
-	FTVM.ftstart(parser["BackupOS_name"],parser["vm_name"], parser["BackupOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
+	FTVM.ftstart(parser["BackupOS_name"],parser["vm_name"], parser["BackupOS_ip"],ssh) #執行開啟容錯機制之開機
 	ssh.close()
 	
 def slave_vm_ftstart(parser):
@@ -295,7 +295,7 @@ def slave_vm_ftstart(parser):
 	if "pro_wait_time_start" in parser.keys():
 		time.sleep(int(parser["pro_wait_time_start"]))
 	
-	FTVM.ftstart(parser["SlaveOS_name"],parser["vm_name"], parser["BackupOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
+	FTVM.ftstart(parser["SlaveOS_name"],parser["vm_name"], parser["BackupOS_ip"],ssh) #執行開啟容錯機制之開機
 	ssh.close()
 
 def host_vm_shutdown(parser):

@@ -21,11 +21,11 @@ when test case start , preprocess will clear the cluster and node file(refresh s
 :param parser : is a dict , get from test config file
 """
 def run_preprocess(parser):
-    #preprocess_mm(parser)
+    preprocess_mm(parser)
     preprocess_Host(parser)
     preprocess_Backup(parser)
     #preprocess_Slave(parser)
-    #preprocess_NFS(parser)
+    preprocess_NFS(parser)
     
 def preprocess_Host(parser):
     """
@@ -452,7 +452,7 @@ def prepocess_hostOS_vm_start(parser):
     #print 58.5
   else:
     #print parser["level"]
-    FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], ssh)
     #print 59
   ssh.close()
 
@@ -470,7 +470,7 @@ def prepocess_hostOS_vm_restart(parser):
   if parser["level"] == "0": #若為不開啟容錯機制之重新啟動，則進入
     FTVM.restart(parser["vm_name"], parser["HostOS_ip"],ssh)
   else:
-    FTVM.ftrestart(parser["vm_name"], parser["HostOS_ip"], parser["level"], ssh)
+    FTVM.ftrestart(parser["vm_name"], parser["HostOS_ip"], ssh)
 
 def preprocess_hostOS_vm_shutdown(parser):
   """
@@ -622,7 +622,7 @@ def prepocess_slaveOS_vm_start(parser):
     #print 58.5
   else:
     #print parser["level"]
-    FTVM.ftstart(parser["SlaveOS_name"],parser["vm_name"], parser["SlaveOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["SlaveOS_name"],parser["vm_name"], parser["SlaveOS_ip"], ssh)
     #print 59
   ssh.close()
 
