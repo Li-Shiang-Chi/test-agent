@@ -572,6 +572,7 @@ def preprocess_slaveOS_vm(parser):
   :called func: preprocess_hostOS
   :param parser: is a dict, get from Test config file
   """
+  print parser["pre_slaveOS_VM_status"]
   if parser["pre_check_slaveOS_VM"] == "yes":
     if parser["pre_slaveOS_VM_status"] == "running":
       preprocess_slaveOS_vm_running(parser)
