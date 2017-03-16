@@ -21,8 +21,8 @@ def run_postprocess(parser):
 	:param parser: is a dict, get from Test config file
 	""" 
 	#postprocess_NFS(parser)
-	#postprocess_Host(parser)
-	#postprocess_Backup(parser)
+	postprocess_Host(parser)
+	postprocess_Backup(parser)
 	postprocess_Slave(parser)
 	
     
@@ -68,7 +68,7 @@ def postprocess_Host_OS(parser):
 	"""
 	if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Host OS not ready")
-	postprocess_Host_OS_reboot(parser)
+	#postprocess_Host_OS_reboot(parser)
 	
 def postprocess_Backup_OS(parser):
 	"""
@@ -78,7 +78,7 @@ def postprocess_Backup_OS(parser):
 	if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Backup OS not ready")
 	FTOS.reset_pid("backup" , parser)
-	postprocess_Backup_OS_reboot(parser)
+	#postprocess_Backup_OS_reboot(parser)
 	
 def postprocess_Slave_OS(parser):
 	"""
@@ -109,10 +109,7 @@ def postprocess_Host_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
-	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	
-	ssh.close()
+	FTOS.reboot(ssh)
 	
 def postprocess_Backup_OS_reboot(parser):
 	"""
@@ -124,10 +121,7 @@ def postprocess_Backup_OS_reboot(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	
-	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) 
-	
-	ssh.close()
+	FTOS.reboot(ssh)
 	
 def postprocess_Slave_OS_reboot(parser):
 	"""
@@ -138,10 +132,7 @@ def postprocess_Slave_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
-	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
-	
-	ssh.close()
+	FTOS.reboot(ssh)
 def postprocess_NFS_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
@@ -151,9 +142,7 @@ def postprocess_NFS_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
-	cmd = "reboot"
-	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
-	ssh.close()
+	FTOS.reboot(ssh)
      
 def postprocess_NFS_reset(parser):
 	"""

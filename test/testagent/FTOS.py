@@ -101,6 +101,11 @@ def __reset_pid(node , parser):
 							, parser["SlaveOS_pwd"]) #獲得ssh
 	ssh.exec_command("rm /home/slave/Desktop/pid.txt")
 	ssh.close()
+	
+def reboot(ssh):
+	cmd = "reboot"
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
+	ssh.close()
 
 def wake_up(networkMAC):
 	"""
