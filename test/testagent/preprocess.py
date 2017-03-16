@@ -21,10 +21,10 @@ when test case start , preprocess will clear the cluster and node file(refresh s
 :param parser : is a dict , get from test config file
 """
 def run_preprocess(parser):
-    preprocess_mm(parser)
-    preprocess_Host(parser)
-    preprocess_Backup(parser)
-    #preprocess_Slave(parser)
+    #preprocess_mm(parser)
+    #preprocess_Host(parser)
+    #preprocess_Backup(parser)
+    preprocess_Slave(parser)
     #preprocess_NFS(parser)
     
 def preprocess_Host(parser):
@@ -572,8 +572,6 @@ def preprocess_slaveOS_vm(parser):
   :called func: preprocess_hostOS
   :param parser: is a dict, get from Test config file
   """
-  print parser["test_name"]
-  print parser["pre_slaveOS_VM_status"]
   if parser["pre_check_slaveOS_VM"] == "yes":
     if parser["pre_slaveOS_VM_status"] == "running":
       preprocess_slaveOS_vm_running(parser)
