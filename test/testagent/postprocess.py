@@ -294,11 +294,11 @@ def postprocess_hostOS_vm_shutdown(parser):
 
 	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
 		print "shutdown now 1"
-		time.sleep(float(parser["post_hostOS_wait_VM_enable_shutdown_time"]))
+		time.sleep(float(parser["pos_hostOS_wait_VM_enable_shutdown_time"]))
 		FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
 	elif FTVM.is_paused(parser["vm_name"], parser["HostOS_ip"], ssh):
 		print "shutdown now 2"
-		time.sleep(float(parser["post_hostOS_wait_VM_enable_shutdown_time"]))
+		time.sleep(float(parser["pos_hostOS_wait_VM_enable_shutdown_time"]))
 		FTVM.resume(parser["vm_name"], parser["HostOS_ip"], ssh)
 		FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
 	time.sleep(float(parser["pos_hostOS_VM_shutdown_time"]))
