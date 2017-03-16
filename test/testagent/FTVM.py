@@ -19,7 +19,6 @@ def get_vm_status(vm_name, ip="", ssh=None):
 	:return: status (running/paused/shut off)
 	"""
 	cmd = cmd_virsh.domstate_cmd(vm_name, ip) #獲得virsh domstate指令字串
-	print cmd
 	if ssh:
 		s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
 		stdout = s_stdout.read()
@@ -95,7 +94,7 @@ def is_login(vm_name, ip, port, time=60):
 	import time as t
 	sock = msg_socket.Msg_socket(ip, port, time) #設定socket
 	sock.open() #開啟socket
-	#print sock.msg
+	print sock.msg
 	if (vm_name+" login") == sock.msg: 
 		st = datetime.datetime.fromtimestamp(t.time()).strftime('%Y-%m-%d %H:%M:%S')
                 #print "[%s][FTVM] VM %s:%s is logged in." % (st, vm_name, ip)
