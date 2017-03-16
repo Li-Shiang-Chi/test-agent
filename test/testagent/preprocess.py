@@ -452,6 +452,7 @@ def prepocess_hostOS_vm_start(parser):
     #print 58.5
   else:
     #print parser["level"]
+    print "host ftstart"
     FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], ssh)
     #print 59
   ssh.close()
