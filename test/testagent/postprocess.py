@@ -20,10 +20,10 @@ def run_postprocess(parser):
 	when test done , each node will do postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	postprocess_NFS(parser)
+	#postprocess_NFS(parser)
 	#postprocess_Host(parser)
-	postprocess_Backup(parser)
-	#postprocess_Slave(parser)
+	#postprocess_Backup(parser)
+	postprocess_Slave(parser)
 	
     
 def postprocess_Host(parser):
@@ -31,6 +31,8 @@ def postprocess_Host(parser):
 	when test done , primary postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
+	postprocess_hostOS_vm(parser)
+	postprocess_hostOS_FTsystem(parser)
 	postprocess_Host_OS(parser)
     
 def postprocess_Backup(parser):
@@ -38,6 +40,8 @@ def postprocess_Backup(parser):
 	when test done , Backup postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
+	postprocess_backupOS_vm(parser)
+	postprocess_backupOS_FTsystem(parser)
 	postprocess_Backup_OS(parser)
     
 def postprocess_Slave(parser):
@@ -45,6 +49,8 @@ def postprocess_Slave(parser):
 	when test done , Slave postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
+	postprocess_slaveOS_vm(parser)
+	postprocess_slaveOS_FTsystem(parser)
 	postprocess_Slave_OS(parser)
  
     
@@ -81,7 +87,7 @@ def postprocess_Slave_OS(parser):
 	"""
 	if FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
 		raise TA_error.Postprocess_Error("Slave OS not ready")
-	postprocess_Slave_OS_reboot(parser)
+	#postprocess_Slave_OS_reboot(parser)
 	
 def postprocess_NFS_OS(parser):
 	"""
@@ -159,7 +165,6 @@ def postprocess_NFS_reset(parser):
 	ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
-	
 	NFS.reset(parser, ssh)
 	ssh.close()
 	
@@ -301,12 +306,12 @@ def postprocess_hostOS_vm_shutdown(parser):
 	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
 		print "shutdown now 1"
 		time.sleep(float(parser["post_hostOS_wait_VM_enable_shutdown_time"]))
-		FTVM.shutdown(parser["vm_name"], parser["HostOS_ip"], ssh)
+		FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
 	elif FTVM.is_paused(parser["vm_name"], parser["HostOS_ip"], ssh):
 		print "shutdown now 2"
 		time.sleep(float(parser["post_hostOS_wait_VM_enable_shutdown_time"]))
 		FTVM.resume(parser["vm_name"], parser["HostOS_ip"], ssh)
-		FTVM.shutdown(parser["vm_name"], parser["HostOS_ip"], ssh)
+		FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
 	time.sleep(float(parser["pos_hostOS_VM_shutdown_time"]))
 	#print FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"])
 
@@ -325,13 +330,33 @@ def postprocess_backupOS_vm(parser):
 	"""
 	if parser["pos_check_backupOS_VM"] == "yes":
 		if parser["pos_backupOS_VM_status"] == "running":
-			#postprocess_backupOS_vm_running(parser)
+			postprocess_backupOS_vm_running(parser)
 			pass
 		elif parser["pos_backupOS_VM_status"] == "shut off":
 			postprocess_backupOS_vm_shutdown(parser)
 		elif parser["pos_backupOS_VM_status"] == "paused":
 			pass
+		
+def postprocess_backupOS_vm_running(parser):
+	"""
+	postrocess vm become running
 
+	:called func: postprocess_BackupOS_vm
+	:param parser: is a dict, get from Test config file
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+							, parser["BackupOS_usr"]
+							, parser["BackupOS_pwd"]) #獲得ssh
+	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		FTVM.restart(parser["vm_name"], parser["BackupOS_ip"], ssh)
+	elif FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		FTVM.start(parser["vm_name"], parser["BackupOS_ip"], ssh)
+	time.sleep(float(parser["pos_BackupOS_VM_boot_time"]))
+	if not FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		ssh.close()
+		raise TA_error.Postprocess_Error("BackupOS %s can not start" % parser["vm_name"])
+	ssh.close()
+		
 def postprocess_backupOS_vm_shutdown(parser):
 	"""
 	postprocess backupOS vm shutdown
@@ -347,11 +372,11 @@ def postprocess_backupOS_vm_shutdown(parser):
 	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		print "123"
 		time.sleep(float(parser["post_backupOS_wait_VM_enable_shutdown_time"]))
-		FTVM.shutdown(parser["vm_name"], parser["BackupOS_ip"], ssh)
+		FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 	elif FTVM.is_paused(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		FTVM.resume(parser["vm_name"], parser["BackupOS_ip"], ssh)
 		time.sleep(float(parser["post_backupOS_wait_VM_enable_shutdown_time"]))
-		FTVM.shutdown(parser["vm_name"], parser["BackupOS_ip"], ssh)
+		FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 	time.sleep(float(parser["pos_backupOS_VM_shutdown_time"]))
 
 	'''
@@ -367,6 +392,38 @@ def postprocess_backupOS_vm_shutdown(parser):
 		raise TA_error.Postprocess_Error("backupOS %s can not shutdown" % parser["vm_name"])
 
 	ssh.close()
+	
+def postprocess_backupOS_FTsystem(parser):
+	"""
+	postprocess backupOS FTsystem part
+
+	check FTsystem status 
+
+	start/stop FTsystem
+
+	raise exception if FTsystem can not start/stop
+
+	:called func: postprocess_hostOS
+	:param parser: is a dict, get from Test config file
+	"""
+	if parser["pos_check_backupOS_FTsystem"] == "yes":
+		ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+								, parser["BackupOS_usr"]
+								, parser["BackupOS_pwd"]) #獲得ssh
+		status = FTsystem.get_status(ssh) #獲得libvirt status
+		if status == "not running" and parser["pos_backupOS_FTsystem_start"] == "yes": #若狀態不為running且根據參數pos_hostOS_FTsystem_start必須為running，則進入
+			FTsystem.start(ssh) #透過ssh開啟libvirt
+			time.sleep(float(parser["pos_backupOS_FTsystem_start_time"]))
+			if FTsystem.get_status(ssh) == "not running": #若狀態不為running則raise exception
+				ssh.close()
+				raise TA_error.Postprocess_Error("backupOS FTsystem can not start")
+		if status == "running" and parser["pos_backupOS_FTsystem_start"] == "no": #若狀態為running且根據參數pos_hostOS_FTsystem_start必須不為running，則進入
+			FTsystem.stop(ssh) #透過ssh關閉libvirt
+			time.sleep(float(parser["pos_backupOS_FTsystem_start_time"]))
+			if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
+				ssh.close()
+				raise TA_error.Postprocess_Error("backupOS FTsystem can not stop")
+		ssh.close()
 
 def postprocess_hostOS_OS_running(parser):
 	"""
@@ -443,6 +500,122 @@ def postprocess_hostOS_mount_nfs(parser):
 
 		s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 		ssh.close()
+		
+def postprocess_slaveOS_vm(parser):
+  """
+  preprocess hostOS vm part
+
+  :called func: preprocess_hostOS
+  :param parser: is a dict, get from Test config file
+  """
+  if parser["pre_check_slaveOS_VM"] == "yes":
+    if parser["pre_slaveOS_VM_status"] == "running":
+      postprocess_slaveOS_vm_running(parser)
+    elif parser["pre_slaveOS_VM_status"] == "shut off":
+      postprocess_slaveOS_vm_shutdown(parser)
+    elif parser["pre_slaveOS_VM_status"] == "paused":
+      pass
+  
+def postprocess_slaveOS_vm_running(parser):
+  """
+  preprocess vm become running
+
+  :called func: preprocess_slaveOS_vm
+  :param parser: is a dict, get from Test config file
+  """
+  ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                            , parser["SlaveOS_usr"]
+                            , parser["SlaveOS_pwd"]) #獲得ssh
+
+  if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh):
+      pass
+      print 59
+  elif FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+    print 56
+    postprocess_slaveOS_vm_start(parser)
+    print 57
+    time.sleep(float(parser["pre_slaveOS_VM_boot_time"]))
+  print 58
+  if not FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+    ssh.close()
+    raise TA_error.Preprocess_Error("HostOS VM: %s can not start" % parser["vm_name"])
+  ssh.close()
+
+
+def postprocess_slaveOS_vm_start(parser):
+  """
+  according to fault tolerant level, preprocess vm start
+
+  :called func: preprocess_hostOS_vm_running
+  :param parser: is a dict, get from Test config file
+  """
+  ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                        , parser["SlaveOS_usr"]
+                        , parser["SlaveOS_pwd"]) #獲得ssh
+
+  if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
+    #print 58
+    FTVM.start(parser["vm_name"], parser["HostOS_ip"], ssh)
+    #print 58.5
+  else:
+    #print parser["level"]
+    FTVM.ftstart(parser["vm_name"], parser["HostOS_ip"], parser["level"], ssh)
+    #print 59
+  ssh.close()
+
+def postprocess_slaveOS_vm_shutdown(parser):
+  """
+  postprocess backupOS vm become shutdown
+
+  :called func: preprocess_backupOS_vm
+  :param parser: is a dict, get from Test config file
+  """
+  ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                            , parser["SlaveOS_usr"]
+                            , parser["SlaveOS_pwd"]) #獲得ssh
+  if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"],ssh):
+    FTVM.destroy(parser["vm_name"], parser["SlaveOS_ip"],ssh)
+    time.sleep(float(parser["pos_slaveOS_VM_shutdown_time"]))
+  elif FTVM.is_paused(parser["vm_name"], parser["SlaveOS_ip"],ssh):
+    FTVM.resume(parser["vm_name"], parser["SlaveOS_ip"],ssh)
+    FTVM.destroy(parser["vm_name"], parser["SlaveOS_ip"],ssh)
+    time.sleep(float(parser["pos_slaveOS_VM_shutdown_time"]))
+  if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"],ssh):
+    ssh.close()
+    raise TA_error.Preprocess_Error("SlaveOS %s can not shutdown" % parser["vm_name"])
+  ssh.close()
+
+def postprocess_slaveOS_FTsystem(parser):
+  """
+  postprocess backupOS FTsystem part
+  
+  check FTsystem status 
+
+  start/stop FTsystem
+
+  raise exception if FTsystem can not start/stop
+
+  :called func: preprocess_backupOS_OS
+  :param parser: is a dict, get from Test config file
+  """
+  if parser["pos_check_slaveOS_FTsystem"] == "yes":
+    ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                              , parser["SlaveOS_usr"]
+                              , parser["SlaveOS_pwd"]) #獲得ssh
+    status = FTsystem.get_status(ssh)
+    if status == "not running" and parser["pos_slaveOS_FTsystem_start"] == "yes": #若狀態不為running且根據參數必需是running則進入
+      FTsystem.start(ssh) #透過ssh開啟libvirt
+      time.sleep(float(parser["pos_slaveOS_FTsystem_start_time"]))
+      if FTsystem.get_status(ssh) == "not running": #若狀態不為running則raise exception
+        ssh.close()
+        raise TA_error.Preprocess_Error("slaveOS FTsystem can not start")
+    if status == "running" and parser["pos_slaveOS_FTsystem_start"] == "no": #若狀態為running且根據參數必需不是running則進入
+      FTsystem.stop(ssh)
+      time.sleep(float(parser["pos_slaveOS_FTsystem_start_time"]))
+      if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
+        ssh.close()
+        raise TA_error.Preprocess_Error("slaveOS FTsystem can not stop")
+    ssh.close()
 
 if __name__ == '__main__':
 	#parser = {}

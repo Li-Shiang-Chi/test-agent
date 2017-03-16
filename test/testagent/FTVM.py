@@ -196,6 +196,17 @@ def destroy(vm_name , ip="" , ssh=None):
 			print stdout
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			
+def ftdestroy(vm_name , ip="" , ssh=None):
+	if is_running(vm_name, ip, ssh):
+		cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
+		print cmd
+		if ssh:
+			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
+			stdout = s_stdout.read()
+			print stdout
+		else:
+			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 def resume(vm_name, ip="", ssh=None):
 	"""
 	resume vm, when vm status is paused
@@ -219,7 +230,7 @@ def restart(vm_name, ip="", ssh=None):
 	:param vm_name: vm name
 	:param ip: vm's ip
 	"""
-	shutdown(vm_name, ip, ssh) #讓vm關機
+	destroy(vm_name, ip, ssh) #讓vm關機
 	t_begin = time.time()
 	while time.time() < (t_begin+100):
 		time.sleep(1)
@@ -238,7 +249,7 @@ def ftrestart(vm_name, ip="", level="1", ssh=None):
 	:param ip: vm's ip
 	:param level: fault tolerance level
 	"""
-	shutdown(vm_name, ip, ssh) #讓vm關機
+	destroy(vm_name, ip, ssh) #讓vm關機
 	t_begin = time.time()
 	while time.time() < (t_begin+100):
 		time.sleep(1)
