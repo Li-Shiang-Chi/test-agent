@@ -24,7 +24,7 @@ def run_preprocess(parser):
     #preprocess_mm(parser)
     preprocess_Host(parser)
     preprocess_Backup(parser)
-    preprocess_Slave(parser)
+    #preprocess_Slave(parser)
     #preprocess_NFS(parser)
     
 def preprocess_Host(parser):
@@ -93,7 +93,6 @@ def preprocess_Backup_OS(parser):
     """
     if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Backup OS not ready")
-    preprocess_backupOS_vm(parser)
     
 def preprocess_Backup_Mount(parser):
     """
