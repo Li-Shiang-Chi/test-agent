@@ -47,7 +47,7 @@ class Msg_socket(object):
 
 
 if __name__ == '__main__':
-	sock = Msg_socket("192.168.1.102","20000",10)
+	sock = Msg_socket("192.168.1.100","20000",10)
 	sock.open()
 	print sock.msg
 
