@@ -573,11 +573,11 @@ def preprocess_slaveOS_vm(parser):
   :param parser: is a dict, get from Test config file
   """
   if parser["pre_check_slaveOS_VM"] == "yes":
-    if parser["pre_hostOS_VM_status"] == "running":
+    if parser["pre_slaveOS_VM_status"] == "running":
       preprocess_slaveOS_vm_running(parser)
-    elif parser["pre_hostOS_VM_status"] == "shut off":
+    elif parser["pre_slaveOS_VM_status"] == "shut off":
       preprocess_slaveOS_vm_shutdown(parser)
-    elif parser["pre_hostOS_VM_status"] == "paused":
+    elif parser["pre_slaveOS_VM_status"] == "paused":
       pass
   
 def preprocess_slaveOS_vm_running(parser):
@@ -594,15 +594,15 @@ def preprocess_slaveOS_vm_running(parser):
   if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh):
       pass
       print 59
-  elif FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+  elif FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"], ssh):
     print 56
     prepocess_slaveOS_vm_start(parser)
     print 57
     time.sleep(float(parser["pre_slaveOS_VM_boot_time"]))
   print 58
-  if not FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+  if not FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh):
     ssh.close()
-    raise TA_error.Preprocess_Error("HostOS VM: %s can not start" % parser["vm_name"])
+    raise TA_error.Preprocess_Error("SlaveOS VM: %s can not start" % parser["vm_name"])
   ssh.close()
 
 
