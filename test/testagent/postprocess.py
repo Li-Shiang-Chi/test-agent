@@ -66,8 +66,15 @@ def postprocess_Host_OS(parser):
 	post process host os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
+	
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh 
+	
+	if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser):
 		raise TA_error.Postprocess_Error("Host OS not ready")
+	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"] , ssh):
+		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
 	#postprocess_Host_OS_reboot(parser)
 	
 def postprocess_Backup_OS(parser):
@@ -75,8 +82,15 @@ def postprocess_Backup_OS(parser):
 	post process backup os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
+	
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh 
+	
+	if FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
 		raise TA_error.Postprocess_Error("Backup OS not ready")
+	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"] , ssh):
+		raise TA_error.Postprocess_Error("vm %s in BackupOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("backup" , parser)
 	#postprocess_Backup_OS_reboot(parser)
 	
@@ -85,8 +99,15 @@ def postprocess_Slave_OS(parser):
 	post process slave os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
+	
+	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                              , parser["SlaveOS_usr"]
+                              , parser["SlaveOS_pwd"]) #獲得ssh 
+	
+	if not FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser):
 		raise TA_error.Postprocess_Error("Slave OS not ready")
+	if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"] , ssh):
+		raise TA_error.Postprocess_Error("vm %s in SlaveOS cannot shutdown " % parser["vm_name"])
 	#postprocess_Slave_OS_reboot(parser)
 	
 def postprocess_NFS_OS(parser):

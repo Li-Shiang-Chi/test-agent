@@ -105,6 +105,7 @@ def is_login(vm_name, ip, port, time=60):
 
 def start(vm_name, ip="", ssh=None):
 	"""
+	use libvirt
 	start vm, when vm status is shutoff 
 
 	:param vm_name: vm name
@@ -122,6 +123,7 @@ def start(vm_name, ip="", ssh=None):
 
 def ftstart(node_name ,vm_name, ip="", ssh=None):
 	"""
+	use HAagent
 	ftstart vm, when vm status is shutoff
 
 	:param vm_name: vm name

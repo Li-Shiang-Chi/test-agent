@@ -250,7 +250,7 @@ def vm_start(parser):
 
 	ssh.close()
 
-def vm_ftstart(parser):
+def host_vm_ftstart(parser):
 	"""
 	ftstart vm
 
@@ -263,10 +263,42 @@ def vm_ftstart(parser):
 	if "pro_wait_time_start" in parser.keys():
 		time.sleep(int(parser["pro_wait_time_start"]))
 	
-	FTVM.ftstart(parser["vm_name"], parser["HostOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
+	FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
+	ssh.close()
+def backup_vm_ftstart(parser):
+	"""
+	ftstart vm
+
+	:param parser: is a dict, get from Test config file
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+
+	if "pro_wait_time_start" in parser.keys():
+		time.sleep(int(parser["pro_wait_time_start"]))
+	
+	FTVM.ftstart(parser["BackupOS_name"],parser["vm_name"], parser["BackupOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
+	ssh.close()
+	
+def slave_vm_ftstart(parser):
+	"""
+	ftstart vm
+
+	:param parser: is a dict, get from Test config file
+	"""
+	
+	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                              , parser["SlaveOS_usr"]
+                              , parser["SlaveOS_pwd"]) #獲得ssh
+
+	if "pro_wait_time_start" in parser.keys():
+		time.sleep(int(parser["pro_wait_time_start"]))
+	
+	FTVM.ftstart(parser["SlaveOS_name"],parser["vm_name"], parser["BackupOS_ip"], parser["level"],ssh) #執行開啟容錯機制之開機
 	ssh.close()
 
-def vm_shutdown(parser):
+def host_vm_shutdown(parser):
 	"""
 	shutdown vm
 
@@ -282,38 +314,52 @@ def vm_shutdown(parser):
 	FTVM.shutdown(parser["vm_name"], parser["HostOS_ip"],ssh)
 	ssh.close()
 	
+def vm_ftshutdown(parser):
+	"""
+	shutdown vm
+
+	:param parser: is a dict, get from Test config file
+	"""
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh
+
+	if "pro_wait_time_shutdown" in parser.keys():
+		time.sleep(int(parser["pro_wait_time_shutdown"]))
+	
+	FTVM.ftshutdown(parser["vm_name"], parser["HostOS_ip"],ssh)
+	ssh.close()
+	
+	
+def exec_create_cluster(parser):
 	"""
 	HAagent create cluster
 	:param parser: is a dict, get from Test config file
 	"""
-	
-def exec_create_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	ssh.close()
-	
+
+def exec_create_duplicate_cluster(parser):
 	"""
 	HAagent create duplicate cluster
 	:param parser: is a dict, get from Test config file
 	"""	
-
-def exec_create_duplicate_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	ssh.close()
-	
+
+def exec_de_cluster(parser):
 	"""
 	HAagent delete cluster
 	:param parser: is a dict, get from Test config file
 	"""	
-
-def exec_de_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -321,13 +367,12 @@ def exec_de_cluster(parser):
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	HAagent.de_cluster(parser["Cluster_name"], parser, ssh)
 	ssh.close()
-	
+
+def exec_de_outer_cluster(parser):
 	"""
 	HAagent external cluster primary delete cluster
 	:param parser: is a dict, get from Test config file
 	"""
-
-def exec_de_outer_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -336,12 +381,11 @@ def exec_de_outer_cluster(parser):
 	HAagent.de_cluster("test_b", parser, ssh)
 	ssh.close()
 	
+def exec_non_primary_de_cluster(parser):
 	"""
 	HAagent add node to cluster
 	:param parser: is a dict, get from Test config file
 	"""
-	
-def exec_non_primary_de_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -359,12 +403,11 @@ def exec_non_primary_de_cluster(parser):
 	HAagent.de_cluster(parser["Cluster_name"], parser, ssh)
 	ssh.close()
 	
+def exec_add_node(parser):
 	"""
 	HAagnet add node (primary , backup , slave)
 	:param parser: is a dict, get from Test config file
 	"""	
-	
-def exec_add_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -375,23 +418,18 @@ def exec_add_node(parser):
 		
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))
-	s_stdin, s_stdout, s_stderr = backup.exec_command("sudo ls /var/ha/images")
-	print s_stdout.read()
-	s_stdin, s_stdout, s_stderr = backup.exec_command("cat /var/ha/images/clusterFile.txt")
-	print s_stdout.read()
-	
-	backup.exec_command("sudo chmod -R 777 /var/ha/images")
 	HAagent.add_backup_node(parser, ssh)
-	#HAagent.add_slave_node(parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))
+	#HAagent.add_slave_node(parser, ssh)
+	#time.sleep(float(parser["pro_wait_add_node_time"]))
 	
 	ssh.close()
-	
+
+def exec_non_primary_add_node(parser):
 	"""
 	HAagnet non primary add node to cluster
 	:param parser: is a dict, get from Test config file
 	"""	
-def exec_non_primary_add_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -407,13 +445,11 @@ def exec_non_primary_add_node(parser):
 	backup.close()
 	
 	
-	
+def exec_add_duplicate_node(parser):
 	"""
 	HAagent add duplicate node to cluster
 	:param parser: is a dict, get from Test config file
 	"""
-	
-def exec_add_duplicate_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -421,12 +457,11 @@ def exec_add_duplicate_node(parser):
 	HAagent.create_cluster(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ipmb"], parser["Shelf_ip"], parser, ssh) 
 	ssh.close()
 	
+def exec_add_outer_node(parser):
 	"""
 	HAagent add outer node to cluster
 	:param parser: is a dict, get from Test config file
 	"""
-	
-def exec_add_outer_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -435,12 +470,11 @@ def exec_add_outer_node(parser):
 	time.sleep(1)
 	ssh.close()
 	
+def exec_de_node(parser):
 	"""
 	HAagent remove node in cluster
 	:param parser: is a dict, get from Test config file
 	"""
-	
-def exec_de_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -451,12 +485,11 @@ def exec_de_node(parser):
 	time.sleep(1)
 	ssh.close()
 
-	
+def exec_non_primary_de_node(parser):
 	"""
 	use non-primary node remove node 
 	:param parser: is a dict, get from Test config file
 	"""
-def exec_non_primary_de_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -471,13 +504,11 @@ def exec_non_primary_de_node(parser):
 	HAagent.rm_node(parser["Cluster_name"], parser["HostOS_name"], parser, backup)
 	backup.close()
 	
-	
+def exec_overview(parser):
 	"""
 	HAagent overview
 	:param parser: is a dict, get from Test config file
 	"""
-	
-def exec_overview(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh

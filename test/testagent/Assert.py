@@ -261,6 +261,47 @@ def vm_running_in_backupOS(parser):
 	raise TA_error.Assert_Error("VM (name : %s) is not running in backupOS" % parser["vm_name"])
 
 
+
+def vm_running_in_SlaveOS(parser):
+	"""
+	vm is running in SlaveOS or not
+
+	:param parser: config
+	:return: True/raise exception
+	"""
+
+	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                  , parser["SlaveOS_usr"]
+                  , parser["SlaveOS_pwd"]) #獲得ssh
+
+	t_end = time.time()
+	if "ast_vm_running_wait_time" in parser.keys(): #若參數ast_vm_running_wait_time存在於parser，則進入
+		t_end = time.time()+float(parser["ast_vm_running_wait_time"]) #計算出等待之時間，並存於t_end
+	while time.time() < t_end: #超過t_end則跳出迴圈
+		#每sleep一秒就詢問一次狀態
+		time.sleep(1)
+		if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh): #狀態為running就跳出迴圈
+			break
+	if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh): #若回傳之狀態是running，則test oracle通過，否則raise exception
+		ssh.close()
+		return True
+	ssh.close()
+	raise TA_error.Assert_Error("VM (name : %s) is not running in SlaveOS" % parser["vm_name"])
+
+def vm_shudown_in_SlaveOS(parser):
+	"""
+	vm is running in SlaveOS or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                  , parser["SlaveOS_usr"]
+                  , parser["SlaveOS_pwd"]) #獲得ssh
+	if FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"],ssh): #若回傳之狀態是shut off，則test oracle通過，否則raise exception
+		return True
+	raise TA_error.Assert_Error("VM (name : %s) is not shutdown in SlaveOS" % parser["vm_name"])
+
+
 def FTsystem_running_in_hostOS(parser):
 	"""
 	FTsystem is running in hostOS or not
@@ -435,12 +476,12 @@ def test(parser):
 	"""
 	raise TA_error.Assert_Error("test FTVMTA log feature")
 
+def detect_create_cluster(parser):
 	"""
 	cluster created or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_create_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -452,12 +493,13 @@ def detect_create_cluster(parser):
 	if success :
 		return True
 	raise TA_error.Assert_Error("create cluster fail")
+
+def detect_create_duplicate_cluster(parser):
 	"""
 	duplicate cluster created or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_create_duplicate_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -470,12 +512,12 @@ def detect_create_duplicate_cluster(parser):
 		return True
 	raise TA_error.Assert_Error("create duplicate cluster fail")
 	
+def detect_de_cluster(parser):
 	"""
 	cluster deleted or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_de_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -489,14 +531,12 @@ def detect_de_cluster(parser):
 		return True
 	raise TA_error.Assert_Error("de cluster fail")
 
+def detect_non_primary_de_cluster(parser):
 	"""
 	non-primary node (in this test case is backup node) delete cluster or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-
-
-def detect_non_primary_de_cluster(parser):
 	cluster = parser["Cluster_name"]
 	
 	success = HAagent_info.is_cluster_exist(cluster, parser)
@@ -505,12 +545,12 @@ def detect_non_primary_de_cluster(parser):
 		return True
 	raise TA_error.Assert_Error("non primary de cluster fail")
 	
+def detect_de_outer_cluster(parser):
 	"""
 	outer cluster deleted or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_de_outer_cluster(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -523,13 +563,12 @@ def detect_de_outer_cluster(parser):
 		return True
 	raise TA_error.Assert_Error("de outer cluster fail")
 
+def detect_add_node(parser):
 	"""
 	detect add node to cluster or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-
-def detect_add_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -547,14 +586,13 @@ def detect_add_node(parser):
 	#if not slave_success:
 	#	raise TA_error.Assert_Error("slave add node fail")
 	return True
-	
+
+def detect_add_duplicate_node(parser):
 	"""
 	detect add duplicate node to cluster or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-
-def detect_add_duplicate_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -567,13 +605,13 @@ def detect_add_duplicate_node(parser):
 	if success:
 		return True
 	raise TA_error.Assert_Error("add duplicate node fail")
+
+def detect_add_outer_node(parser):
 	"""
 	detect add outer node to cluster or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-
-def detect_add_outer_node(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
@@ -587,52 +625,48 @@ def detect_add_outer_node(parser):
 		return True
 	raise TA_error.Assert_Error("add outer node fail")
 
+def detect_non_primary_node_add_node(parser):
 	"""
 	detect use non-primary node add node success or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_non_primary_node_add_node(parser):
-	
 	success = HAagent_info.is_node_exists(parser["Cluster_name"], parser["SlaveOS_name"], parser)
 	
 	if not success:
 		return True
 	raise TA_error.Assert_Error("non primary node add node fail")
 	
-
+def detect_de_node(parser):
 	"""
 	detect remove node or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_de_node(parser):
 	success = HAagent_info.is_node_exists("test_c", "test_n", parser)
 	
 	if not success:
 		return True
 	raise TA_error.Assert_Error("de node fail")
 	
-
+def detect_non_primary_de_node(parser):
 	"""
 	detect remove node or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_non_primary_de_node(parser):
 	success = HAagent_info.is_node_exists(parser["Cluster_name"], parser["HostOS_name"], parser)
 	
 	if success:
 		return True
 	raise TA_error.Assert_Error("non primary de node fail")
 
-
+def detect_overview(parser):
 	"""
-	detect overview function is ok or not
+	detect remove node or not
 	:param parser: config
 	:return: True/raise exception
 	"""
-def detect_overview(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh

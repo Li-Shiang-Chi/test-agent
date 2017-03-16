@@ -453,7 +453,7 @@ def prepocess_hostOS_vm_start(parser):
     #print 58.5
   else:
     #print parser["level"]
-    FTVM.ftstart(parser["vm_name"], parser["HostOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], parser["level"], ssh)
     #print 59
   ssh.close()
 
@@ -560,7 +560,7 @@ def preprocess_backupOS_vm_running(parser):
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     FTVM.start(parser["vm_name"], parser["BackupOS_ip"], ssh)
   else:
-    FTVM.ftstart(parser["vm_name"], parser["BackupOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["BackupOS_name"],parser["vm_name"], parser["BackupOS_ip"], parser["level"], ssh)
   ssh.close()
   
   
@@ -623,7 +623,7 @@ def prepocess_slaveOS_vm_start(parser):
     #print 58.5
   else:
     #print parser["level"]
-    FTVM.ftstart(parser["vm_name"], parser["SlaveOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["SlaveOS_name"],parser["vm_name"], parser["SlaveOS_ip"], parser["level"], ssh)
     #print 59
   ssh.close()
 
