@@ -327,7 +327,7 @@ def postprocess_hostOS_vm_shutdown(parser):
 
 	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
 		ssh.close()
-		raise TA_error.Postprocess_Error("HostOS %s can not shutdown" % parser["vm_name"])
+		raise TA_error.Postprocess_Error("HostOS vm : %s can not shutdown" % parser["vm_name"])
 
 	ssh.close()
 
@@ -364,7 +364,7 @@ def postprocess_backupOS_vm_running(parser):
 	time.sleep(float(parser["pos_BackupOS_VM_boot_time"]))
 	if not FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		ssh.close()
-		raise TA_error.Postprocess_Error("BackupOS %s can not start" % parser["vm_name"])
+		raise TA_error.Postprocess_Error("BackupOS vm : %s can not start" % parser["vm_name"])
 	ssh.close()
 		
 def postprocess_backupOS_vm_shutdown(parser):
@@ -399,7 +399,7 @@ def postprocess_backupOS_vm_shutdown(parser):
 
 	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		ssh.close()
-		raise TA_error.Postprocess_Error("backupOS %s can not shutdown" % parser["vm_name"])
+		raise TA_error.Postprocess_Error("backupOS vm : %s can not shutdown" % parser["vm_name"])
 
 	ssh.close()
 	

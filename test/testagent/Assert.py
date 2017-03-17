@@ -302,6 +302,11 @@ def vm_shudown_in_SlaveOS(parser):
 	raise TA_error.Assert_Error("VM (name : %s) is not shutdown in SlaveOS" % parser["vm_name"])
 
 def vm_duplicate_start(parser):
+	"""
+	check vm can duplicate start or not
+	:param parser: config
+	:return: True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                   , parser["HostOS_usr"]
                   , parser["HostOS_pwd"]) #獲得ssh
@@ -315,6 +320,26 @@ def vm_duplicate_start(parser):
 		if success :
 			return True
 	raise TA_error.Assert_Error("vm duplicate start fail")
+
+def non_primary_start_ftvm(parser):
+	"""
+	check non primary node(backup node) can start ftvm or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                  , parser["BackupOS_usr"]
+                  , parser["BackupOS_pwd"]) #獲得ssh
+	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		raise TA_error.Assert_Error("VM : %s already in running" % parser["vm_name"])
+	if FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		out = HAagent.start_ftvm(parser["BackupOS_name"], parser["vm_name"], None , parser, ssh)
+		expected = HAagent_terminal.Not_primary
+		
+		success = (out == expected) and FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"], ssh) # shell message and FTVM shutoff
+		if success :
+			return True
+	raise TA_error.Assert_Error("non primary start ftvm fail")
 		
 def FTsystem_running_in_hostOS(parser):
 	"""
