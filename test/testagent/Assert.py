@@ -393,7 +393,7 @@ def libvirt_stop_start_ftvm(parser):
 	cmd = cmd_HAagent.start_ftvm_cmd(parser["HostOS_name"], parser["vm_name"])
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	out = s_stdout.read()
-	expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , "")
+	expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , "\n")
 	
 	print out
 	print expected
@@ -401,6 +401,8 @@ def libvirt_stop_start_ftvm(parser):
 	success = (out == expected)
 	
 	FTsystem.start(ssh)
+	
+	print success
 	if success : 
 		return True
 	raise TA_error.Assert_Error("libvirt stop then start ftvm fail")
