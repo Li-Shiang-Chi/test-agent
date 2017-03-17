@@ -12,6 +12,7 @@ import TA_error
 import HAagent_info
 import HAagent
 import HAagent_terminal
+from test.test_dis import outer
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
@@ -378,6 +379,9 @@ def non_primary_rm_ftvm(parser):
 	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		out = FTVM.ftshutdown(parser["vm_name"], parser["BackupOS_ip"], ssh)
 		expected = HAagent_terminal.Vm_not_exist
+		
+		print out
+		print expected
 		
 		success = (out == expected) and FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh) #shell message and FTVM running
 		if success :
