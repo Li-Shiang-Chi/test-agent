@@ -313,9 +313,9 @@ def host_vm_shutdown(parser):
 	FTVM.shutdown(parser["vm_name"], parser["HostOS_ip"],ssh)
 	ssh.close()
 	
-def vm_ftshutdown(parser):
+def host_vm_ftshutdown(parser):
 	"""
-	shutdown vm
+	host ftshutdown vm
 
 	:param parser: is a dict, get from Test config file
 	"""
@@ -327,6 +327,38 @@ def vm_ftshutdown(parser):
 		time.sleep(int(parser["pro_wait_time_shutdown"]))
 	
 	FTVM.ftshutdown(parser["vm_name"], parser["HostOS_ip"],ssh)
+	ssh.close()
+	
+def backup_vm_ftshutdown(parser):
+	"""
+	backup ftshutdown vm
+
+	:param parser: is a dict, get from Test config file
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+
+	if "pro_wait_time_shutdown" in parser.keys():
+		time.sleep(int(parser["pro_wait_time_shutdown"]))
+	
+	FTVM.ftshutdown(parser["vm_name"], parser["BackupOS_ip"],ssh)
+	ssh.close()
+	
+def slave_vm_ftshutdown(parser):
+	"""
+	slave ftshutdown vm
+
+	:param parser: is a dict, get from Test config file
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+
+	if "pro_wait_time_shutdown" in parser.keys():
+		time.sleep(int(parser["pro_wait_time_shutdown"]))
+	
+	FTVM.ftshutdown(parser["vm_name"], parser["BackupOS_ip"],ssh)
 	ssh.close()
 	
 	

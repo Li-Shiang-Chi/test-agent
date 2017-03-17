@@ -260,9 +260,22 @@ def vm_running_in_backupOS(parser):
 	ssh.close()
 	raise TA_error.Assert_Error("VM (name : %s) is not running in backupOS" % parser["vm_name"])
 
+def vm_shudown_in_backupOS(parser):
+	"""
+	vm is running in SlaveOS or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                  , parser["BackupOS_usr"]
+                  , parser["BackupOS_pwd"]) #獲得ssh
+	if FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"],ssh): #若回傳之狀態是shut off，則test oracle通過，否則raise exception
+		return True
+	raise TA_error.Assert_Error("VM (name : %s) is not shutdown in BackupOS" % parser["vm_name"])
 
 
-def vm_running_in_SlaveOS(parser):
+
+def vm_running_in_slaveOS(parser):
 	"""
 	vm is running in SlaveOS or not
 
