@@ -377,11 +377,8 @@ def non_primary_rm_ftvm(parser):
 		raise TA_error.Assert_Error("VM : %s shutoff" % parser["vm_name"])
 	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		out = FTVM.ftshutdown(parser["vm_name"], parser["BackupOS_ip"], ssh)
-		expected = HAagent_terminal.Vm_not_exist
-		
-		print out
-		print expected
-		
+		expected = HAagent_terminal.Not_primary
+	
 		success = (out == expected) and FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh) #shell message and FTVM running
 		if success :
 			return True
