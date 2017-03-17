@@ -400,6 +400,7 @@ def libvirt_stop_start_ftvm(parser):
 	
 	success = (out == expected)
 	if success : 
+		FTsystem.start(ssh)
 		return True
 	raise TA_error.Assert_Error("libvirt stop then start ftvm fail")
 	
