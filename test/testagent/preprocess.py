@@ -558,9 +558,9 @@ def preprocess_backupOS_vm_running(parser):
   :called func: preprocess_hostOS_vm_running
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                          , parser["BackupOS_usr"]
-                          , parser["BackupOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                          , parser["HostOS_usr"]
+                          , parser["HostOS_pwd"]) #獲得ssh
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     FTVM.start(parser["vm_name"], parser["BackupOS_ip"], ssh)
   else:
@@ -617,9 +617,9 @@ def prepocess_slaveOS_vm_start(parser):
   :called func: preprocess_hostOS_vm_running
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
-                        , parser["SlaveOS_usr"]
-                        , parser["SlaveOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                        , parser["HostOS_usr"]
+                        , parser["HostOS_pwd"]) #獲得ssh
 
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     #print 58
