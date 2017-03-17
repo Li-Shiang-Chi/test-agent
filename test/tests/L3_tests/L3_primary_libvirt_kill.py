@@ -10,7 +10,7 @@ from testagent import process
 from testagent import Assert
 from testagent import postprocess
 
-def run_primary_libvirt_kill(parser):
+def run_L3_primary_libvirt_kill(parser):
     preprocess.run_preprocess(parser)
     process.kill_libvirt_process(parser)
     Assert.FTsystem_running_in_hostOS(parser)
