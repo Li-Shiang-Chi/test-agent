@@ -262,7 +262,6 @@ def host_vm_ftstart(parser):
 
 	if "pro_wait_time_start" in parser.keys():
 		time.sleep(int(parser["pro_wait_time_start"]))
-	print "265"
 	FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"],ssh) #執行開啟容錯機制之開機
 	ssh.close()
 def backup_vm_ftstart(parser):

@@ -112,16 +112,6 @@ def exit(parser , ssh=None):
     :param parser: system configuration
     :return: execute the command
     """
-    
-def quick_create_cluster(parser , ssh = None):
-    cmd = "sudo %s" % parser["init_file_path"]
-    return remote_exec(cmd , ssh) if ssh else local_exec(cmd , ssh)
-    
-    """
-    local side execute using subprocess module
-    :param cmd: command
-    :return: execute the command
-    """
 
 def local_exec(cmd , parser):
     p = subprocess.Popen(cmd.split() ,stdin=subprocess.PIPE , shell=False)

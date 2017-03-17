@@ -301,7 +301,21 @@ def vm_shudown_in_SlaveOS(parser):
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) is not shutdown in SlaveOS" % parser["vm_name"])
 
-
+def vm_duplicate_start(parser):
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                  , parser["HostOS_usr"]
+                  , parser["HostOS_pwd"]) #獲得ssh
+	
+	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+		raise TA_error.Assert_Error("VM name : %s is shut off in HostOS")
+	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+		out = HAagent.start_ftvm(parser["HostOS_name"], parser["vm_name"], None , parser, ssh)
+		expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , HAagent_terminal.Vm_is_running)
+		success = ( out == expected )
+		if success :
+			return True
+	raise TA_error.Assert_Error("vm duplicate start fail")
+		
 def FTsystem_running_in_hostOS(parser):
 	"""
 	FTsystem is running in hostOS or not
