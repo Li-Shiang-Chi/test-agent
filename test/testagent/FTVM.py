@@ -129,6 +129,7 @@ def ftstart(node_name ,vm_name, ip="", ssh=None):
 	:param ip: vm's ip
 	"""
 	if is_shutoff(vm_name,ip, ssh):
+		cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name)
 		if ssh:
 			return HAagent.start_ftvm(node_name, vm_name, None, None, ssh)
 		else:

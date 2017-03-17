@@ -564,7 +564,7 @@ def preprocess_backupOS_vm_running(parser):
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     FTVM.start(parser["vm_name"], parser["BackupOS_ip"], ssh)
   else:
-    FTVM.ftstart(parser["BackupOS_name"],parser["vm_name"], parser["BackupOS_ip"], parser["level"], ssh)
+    FTVM.ftstart(parser["BackupOS_name"],parser["vm_name"], parser["BackupOS_ip"], ssh)
   ssh.close()
   
   
