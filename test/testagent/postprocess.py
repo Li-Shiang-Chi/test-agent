@@ -381,11 +381,11 @@ def postprocess_backupOS_vm_shutdown(parser):
 
 	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		print "123"
-		time.sleep(float(parser["post_backupOS_wait_VM_enable_shutdown_time"]))
+		time.sleep(float(parser["pos_backupOS_wait_VM_enable_shutdown_time"]))
 		FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 	elif FTVM.is_paused(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		FTVM.resume(parser["vm_name"], parser["BackupOS_ip"], ssh)
-		time.sleep(float(parser["post_backupOS_wait_VM_enable_shutdown_time"]))
+		time.sleep(float(parser["pos_backupOS_wait_VM_enable_shutdown_time"]))
 		FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 	time.sleep(float(parser["pos_backupOS_VM_shutdown_time"]))
 
