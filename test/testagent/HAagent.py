@@ -20,7 +20,7 @@ import cmd
     :param shelf_ip: shelf_ip
     :return: succuess / fail
     """
-def create_cluster(cluster_name , node_name , ibmp , shelf_ip , parser , ssh=None):
+def create_cluster(cluster_name , node_name , ibmp , shelf_ip , parser=None , ssh=None):
     cmd = cmd_HAagent.create_cluster_cmd(cluster_name, node_name, ibmp, shelf_ip)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
@@ -30,7 +30,7 @@ def create_cluster(cluster_name , node_name , ibmp , shelf_ip , parser , ssh=Non
     :param cluster_name: host cluster name
     :return: succuess / fail
     """
-def de_cluster(cluster_name , parser , ssh=None):
+def de_cluster(cluster_name , parser=None , ssh=None):
     cmd = cmd_HAagent.de_cluster_cmd(cluster_name)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     
@@ -42,9 +42,8 @@ def de_cluster(cluster_name , parser , ssh=None):
     :param node_ip: node_ip
     :return: succuess / fail
     """
-def add_node(cluster_name , node_name , node_ip , ibmp , parser , ssh=None):
+def add_node(cluster_name , node_name , node_ip , ibmp , parser=None , ssh=None):
     cmd = cmd_HAagent.add_node_cmd(cluster_name, node_name, node_ip, ibmp)
-    print cmd
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
 def add_backup_node(parser , ssh):
@@ -67,7 +66,7 @@ def add_slave_node(parser , ssh):
     :param node_name: node name
     :return: succuess / fail
     """
-def rm_node(cluster_name , node_name , parser , ssh=None):
+def rm_node(cluster_name , node_name , parser=None , ssh=None):
     cmd = cmd_HAagent.rm_node_cmd(cluster_name, node_name)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     """
@@ -78,7 +77,7 @@ def rm_node(cluster_name , node_name , parser , ssh=None):
     :param xml_path: xml_path
     :return: succuess / fail
     """
-def start_ftvm(node_name , vm_name , xml_path , parser , ssh=None):
+def start_ftvm(node_name , vm_name , xml_path=None , parser=None , ssh=None):
     cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name, xml_path)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     """
@@ -88,21 +87,21 @@ def start_ftvm(node_name , vm_name , xml_path , parser , ssh=None):
     :return: succuess / fail
     """
 
-def remove_ftvm(vm_name , parser , ssh=None):
+def remove_ftvm(vm_name , parser=None , ssh=None):
     cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     """
     execute overview
     :return: information about the whole system
     """
-def overview(parser , ssh=None):
+def overview(parser=None , ssh=None):
     cmd = cmd_HAagent.overview_cmd()
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     """
     execute exit
     :return: exit the HAagent
     """
-def exit(parser , ssh=None):
+def exit(parser=None , ssh=None):
     cmd = cmd_HAagent.exit_cmd()
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 

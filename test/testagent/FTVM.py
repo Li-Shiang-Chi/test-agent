@@ -128,18 +128,11 @@ def ftstart(node_name ,vm_name, ip="", ssh=None):
 	:param vm_name: vm name
 	:param ip: vm's ip
 	"""
-	print is_shutoff(vm_name, ip, ssh)
 	if is_shutoff(vm_name,ip, ssh):
-		#cmd = cmd_virsh.ftstart_cmd(vm_name, ip, level) #獲得virsh ftstart之指令字串
-		cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name)
-		print cmd
 		if ssh:
-			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-			#stdout = s_stdout.read()
-			#print stdout
-			#return stdout.rstrip()
+			return HAagent.start_ftvm(node_name, vm_name, None, None, ssh)
 		else:
-			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			return subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 
 def shutdown(vm_name, ip="", ssh=None):
 	"""
@@ -157,6 +150,7 @@ def shutdown(vm_name, ip="", ssh=None):
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
 			stdout = s_stdout.read()
 			print stdout
+			return stdout
 			#return stdout.rstrip()
 		else:
 			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
@@ -173,12 +167,9 @@ def ftshutdown(vm_name , ip="" , ssh=None):
 		cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
 		print cmd
 		if ssh:
-			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-			stdout = s_stdout.read()
-			print stdout
-			#return stdout.rstrip()	
+			return HAagent.remove_ftvm(vm_name, None, ssh)
 		else:
-			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			return subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 			
 			
 def destroy(vm_name , ip="" , ssh=None):
@@ -195,19 +186,16 @@ def destroy(vm_name , ip="" , ssh=None):
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
 			stdout = s_stdout.read()
 			print stdout
+			return stdout
 		else:
-			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			return subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 			
 def ftdestroy(vm_name , ip="" , ssh=None):
 	if is_running(vm_name, ip, ssh):
-		cmd = cmd_HAagent.remove_ftvm_cmd(vm_name)
-		print cmd
 		if ssh:
-			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
-			stdout = s_stdout.read()
-			print stdout
+			return HAagent.remove_ftvm(vm_name, None, ssh)
 		else:
-			subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
+			return subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 def resume(vm_name, ip="", ssh=None):
 	"""
 	resume vm, when vm status is paused
