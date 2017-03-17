@@ -24,7 +24,7 @@ def ssh_extract_pid_cmd(cmd):
 	:param cmd: part of command
 	:return new_cmd: command is combined
 	"""
-	grep_cmd = command("-oi '([0-9]+)$'") 
+	grep_cmd = command("-oi 'running'") 
 	"""
 	origin cmd :grep -oi '([0-9]+)$'
 	if you want use subprocess.Popen to run cmd you must to change '([0-9]+)$' to ([0-9]+)$

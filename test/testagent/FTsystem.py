@@ -23,7 +23,7 @@ def get_status(ssh):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #執行指令
 	if s_stdout.read() == "": #沒抓取到任何pid，則進入，表示不在執行之狀態
 		print "FTsystem not running"
-		#return "not running"
+		return "not running"
 	return "running"
 
 def is_running(ssh):
