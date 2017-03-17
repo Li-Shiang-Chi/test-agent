@@ -19,6 +19,7 @@ def get_status(ssh):
 	"""
 	cmd = cmd_egrep.ssh_extract_pid_cmd(cmd_service.status_cmd("libvirt-bin")) #獲得透過egrep抓取pid的指令字串
 	cmd = "sudo %s" % cmd
+	print cmd
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #執行指令
 	if s_stdout.read() == "": #沒抓取到任何pid，則進入，表示不在執行之狀態
 		print "FTsystem not running"
@@ -69,8 +70,18 @@ def get_pid(ssh):
 	"""
 	pid_file_path = data_dir.LIBVIRT_PID_DIR+"libvirtd.pid" #獲得libvirtd.pid檔案的路徑
 	cmd = "sudo cat %s" % pid_file_path #組合cat指令
+	print cmd
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #執行指令
 	pid = s_stdout.read()
 	if pid != "":
 		return int(pid)
 	return False
+
+
+if __name__ == "__main__":
+	import shell_server
+	ssh = shell_server.get_ssh("192.168.1.100"
+                              , "primary"
+                              , "root") #獲得ssh
+	print get_pid(ssh)
+	print get_status(ssh)
