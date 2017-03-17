@@ -12,7 +12,6 @@ import TA_error
 import HAagent_info
 import HAagent
 import HAagent_terminal
-from test.test_dis import outer
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
