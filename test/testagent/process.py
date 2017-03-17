@@ -170,6 +170,16 @@ def kill_vm_process(parser):
 	cmd = cmd_kill.kill_cmd(pid, 9) #獲得kill vm process之指令字串
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #透過ssh執行指令
 	ssh.close()
+	
+def stop_libvirt_process(parser):
+	
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh
+	FTsystem.stop(ssh)
+	if FTsystem.get_status(ssh) == "running":
+		raise TA_error.Process_Error("libvirt in host OS cannot stop")
+	ssh.close()
 
 def kill_libvirt_process(parser):
 	"""

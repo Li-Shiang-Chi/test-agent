@@ -33,4 +33,5 @@ encoding//test/tests/L3_tests/L3_non_primary_de_cluster.py=utf-8
 encoding//test/tests/L3_tests/L3_non_primary_rm_node.py=utf-8
 encoding//test/tests/L3_tests/L3_overview.py=utf-8
 encoding//test/tests/L3_tests/L3_primary_libvirt_kill.py=utf-8
+encoding//test/tests/L3_tests/L3_primary_libvirt_stop_start_ftvm.py=utf-8
 encoding/test=UTF-8

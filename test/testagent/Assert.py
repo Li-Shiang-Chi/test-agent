@@ -12,6 +12,7 @@ import TA_error
 import HAagent_info
 import HAagent
 import HAagent_terminal
+from testagent import cmd_HAagent
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
@@ -383,6 +384,23 @@ def non_primary_rm_ftvm(parser):
 		if success :
 			return True
 	raise TA_error.Assert_Error("remove non running ftvm : %s fail" % parser["vm_name"])
+
+def libvirt_stop_start_ftvm(parser):
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                  , parser["HostOS_usr"]
+                  , parser["HostOS_pwd"]) #獲得ssh
+	
+	cmd = cmd_HAagent.start_ftvm_cmd(parser["HostOS_name"], parser["vm_name"])
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
+	out = s_stdout.read()
+	expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , "")
+	
+	
+	success = (out == expected)
+	if success : 
+		return True
+	raise TA_error.Assert_Error("libvirt stop then start ftvm fail")
+	
 		
 def FTsystem_running_in_hostOS(parser):
 	"""
