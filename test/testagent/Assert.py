@@ -395,8 +395,6 @@ def libvirt_stop_start_ftvm(parser):
 	out = s_stdout.read()
 	expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , "\n")
 	
-	print out
-	print expected
 	
 	success = (out == expected)
 	
