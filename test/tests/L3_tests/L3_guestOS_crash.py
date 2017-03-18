@@ -5,7 +5,7 @@ from testagent import postprocess
 
 def run_L3_guestOS_crash(parser):
     
-    preprocess.preprocess(parser)
+    preprocess.run_preprocess(parser)
     print 110
     process.exec_L1_vm_crasher(parser)
     print 111
