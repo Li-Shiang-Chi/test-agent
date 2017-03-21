@@ -16,12 +16,11 @@ import subprocess
 import HAagent
 
 
-
-"""
-when test case start , preprocess will clear the cluster and node file(refresh system)
-:param parser : is a dict , get from test config file
-"""
 def run_preprocess(parser):
+    print "nodes"
+    preprocess_nodes(parser)
+    print "mm"
+    preprocess_mm(parser)
     print "host"
     preprocess_Host(parser)
     print "backup"
@@ -29,8 +28,16 @@ def run_preprocess(parser):
     #preprocess_Slave(parser)
     print "nfs"
     preprocess_NFS(parser)
-    print "mm"
-    preprocess_mm(parser)
+
+def preprocess_nodes(parser):
+    print "host node"
+    preprocess_host_OS(parser)  
+    print "backup node" 
+    preprocess_backup_OS(parser)
+    print "slave node" 
+    preprocess_slave_OS(parser)
+    print "nfs node"
+    preprocess_NFS_OS(parser)
     
 def preprocess_Host(parser):
     """
@@ -38,7 +45,7 @@ def preprocess_Host(parser):
     :param parser : is a dict , get from test config file
     """
     
-    preprocess_host_OS(parser)
+    #preprocess_host_OS(parser)
     preprocess_hostOS_Mount(parser)
     preprocess_hostOS_HAagent(parser)
     preprocess_hostOS_vm(parser)
@@ -49,7 +56,7 @@ def preprocess_Backup(parser):
     when test case start backup node do some preprocess
     :param parser : is a dict , get from test config file
     """
-    preprocess_backup_OS(parser) 
+    #preprocess_backup_OS(parser) 
     preprocess_backupOS_Mount(parser)
     preprocess_backupOS_HAagent(parser)
     preprocess_backupOS_vm(parser)
@@ -60,14 +67,14 @@ def preprocess_Slave(parser):
     when test case start slave node do some preprocess
     :param parser : is a dict , get from test config file
     """
-    preprocess_slave_OS(parser)
+    #preprocess_slave_OS(parser)
     preprocess_slaveOS_Mount(parser)
     preprocess_slaveOS_HAagent(parser)
     preprocess_slaveOS_vm(parser)
     preprocess_slaveOS_FTsystem(parser)
 
 def preprocess_NFS(parser):
-    preprocess_NFS_OS(parser)
+    #preprocess_NFS_OS(parser)
 
 def preprocess_host_OS(parser):
     """
