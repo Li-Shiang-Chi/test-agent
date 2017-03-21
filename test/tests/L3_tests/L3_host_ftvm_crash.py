@@ -17,4 +17,4 @@ def run_L3_host_ftvm_crash(parser):
     print 114
     #Assert.recovery_vm_reboot(parser)
     print 115
-    Assert.detect_host_vm_guestOS_hang_info(parser)
+    Assert.detect_host_vm_crash_info(parser)
