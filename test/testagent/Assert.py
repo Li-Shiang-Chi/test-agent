@@ -481,12 +481,12 @@ def detect_fail_os_crash(parser):
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) has not detect vm os crash" % parser["vm_name"])
 	
-def detect_vm_guestOS_hang_info(parser):
+def detect_host_vm_guestOS_hang_info(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲取ssh
 	
-	fail = HAagent_info.get_vm_infofail(parser["vm_name"], parser, ssh)
+	fail = HAagent_info.get_vm_infofail(parser["HostOS_name"],parser["vm_name"], parser, ssh)
 	expected = HAagent_terminal.Lastfail_messages[0][0] # guestOS hang and reboot success
 	
 	
