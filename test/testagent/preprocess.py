@@ -75,6 +75,7 @@ def preprocess_Slave(parser):
 
 def preprocess_NFS(parser):
     #preprocess_NFS_OS(parser)
+    pass
 
 def preprocess_host_OS(parser):
     """
