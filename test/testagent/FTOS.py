@@ -34,9 +34,9 @@ def OS_is_running(ip,parser):
 	"""
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
-	return __OS_is_ping(ip)
+	return __OS_is_ping(ip ,parser)
 
-def __OS_is_ping(ip):
+def __OS_is_ping(ip , parser):
 	"""
 	use ping to check host os is running
 	:param ip : FTOS ip

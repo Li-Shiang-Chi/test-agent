@@ -137,8 +137,6 @@ def postprocess_Host_OS_reboot(parser):
                               , parser["HostOS_pwd"]) #獲得ssh 
 	if FTOS.is_running(parser["HostOS_name"]):
 		FTOS.reboot(ssh)
-	elif FTOS.is_shutdown(parser["HostOS_name"]):
-		pass
 	
 def postprocess_Backup_OS_reboot(parser):
 	"""
@@ -152,8 +150,6 @@ def postprocess_Backup_OS_reboot(parser):
 	
 	if FTOS.is_running(parser["BackupOS_name"]):
 		FTOS.reboot(ssh)
-	elif FTOS.is_shutdown(parser["BackupOS_name"]):
-		pass
 	
 def postprocess_Slave_OS_reboot(parser):
 	"""
@@ -166,8 +162,6 @@ def postprocess_Slave_OS_reboot(parser):
                               , parser["SlaveOS_pwd"]) #獲得ssh 
 	if FTOS.is_running(parser["SlaveOS_name"]):
 		FTOS.reboot(ssh)
-	elif FTOS.is_shutdown(parser["SlaveOS_name"]):
-		pass
 def postprocess_NFS_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
@@ -179,8 +173,6 @@ def postprocess_NFS_OS_reboot(parser):
                               , parser["NFS_pwd"]) #獲得ssh
 	if FTOS.is_running(parser["NFS_name"]):
 		FTOS.reboot(ssh)
-	elif FTOS.is_shutdown(parser["NFS_name"]):
-		pass
      
 def postprocess_NFS_reset(parser):
 	"""
