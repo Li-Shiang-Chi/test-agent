@@ -9,7 +9,7 @@ import shell_server
 import cmd_HAagent
 import file
 import json
-from testagent import HAagent, HAagent_terminal
+import HAagent_terminal
 
 
 def is_add_primary_success(parser):
