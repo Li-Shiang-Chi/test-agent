@@ -489,11 +489,6 @@ def detect_host_vm_guestOS_hang_info(parser):
 	fail = HAagent_info.get_vm_infofail(parser["HostOS_name"],parser["vm_name"], parser, ssh)
 	expected = HAagent_terminal.Lastfail_messages[2][0] # guestOS hang and reboot success
 	
-	
-	print fail
-	print expected
-	
-	
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
