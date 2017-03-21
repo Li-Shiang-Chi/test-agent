@@ -7,9 +7,17 @@ import shell_server
 import mmsh
 import os
 import TA_error
+import msg_socket
 
 
 def is_ready(ip,user,pwd,parser):
+	"""
+	check FTOS is ready (OS running and ssh ready)
+	:param ip : FTOS ip
+	:param user : FTOS user name
+	:param pwd : FTOS user password
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	if OS_is_running(ip, parser) == False:
 		print "error : %s OS not ready" % user
 		return False
@@ -21,13 +29,19 @@ def is_ready(ip,user,pwd,parser):
 def OS_is_running(ip,parser):
 	"""
 	use ping to check host os is running
+	:param ip : FTOS ip
 	:param parser : parser: is a dict, get from Test config file
 	"""
 	if("pre_wait_node_os_shutdown_time" in parser.keys()):
 		time.sleep(float(parser["pre_wait_node_os_shutdown_time"]))
-	return __OS_is_ping(ip, parser)
+	return __OS_is_ping(ip)
 
-def __OS_is_ping(ip , parser):
+def __OS_is_ping(ip):
+	"""
+	use ping to check host os is running
+	:param ip : FTOS ip
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	t_start = time.time()
 	while ( (time.time() - t_start) < float(parser["pre_wait_node_boot_time"])) :
 		response = os.system("ping -c 1 %s >/dev/null" % ip)
@@ -42,6 +56,9 @@ def ssh_is_ready(ip,user,pwd,parser):
 	"""
 	use netcat check ssh port (22) is open
 	and check the ssh daemon is running
+	:param ip : FTOS ip
+	:param user : FTOS user
+	:param pwd : FTOS user password
 	:param parser : parser: is a dict, get from Test config file
 	"""
 	
@@ -53,6 +70,12 @@ def ssh_is_ready(ip,user,pwd,parser):
 	
 
 def __ssh_port_is_ready(ip , parser):
+	"""
+	use netcat check ssh port (22) is open
+	and check the ssh daemon is running
+	:param ip : FTOS ip
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	t_start = time.time()
 	while((time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
 		response = os.system("nc -z %s 22 >/dev/null" % ip)
@@ -64,6 +87,13 @@ def __ssh_port_is_ready(ip , parser):
 	return False
 
 def __ssh_daemon_is_running(ip,user,pwd,parser):
+	"""
+	use ssh log in to the shell , check ssh is ready
+	:param ip : FTOS ip
+	:param user : FTOS user
+	:param pwd : FTOS user password
+	:param parser : parser: is a dict, get from Test config file
+	"""
 	t_start = time.time()
 	while((time.time() - t_start) < float(parser["pre_wait_ssh_ready_time"])):
 		time.sleep(float(1))
@@ -203,4 +233,4 @@ if __name__ == "__main__":
 	parser = {}
 	parser["pre_hostOS_boot_time"] = "200"
 	parser["HostOS_ip"] = "192.168.1.100"
-	HostOSIsRunning(parser)
+	#HostOSIsRunning(parser)

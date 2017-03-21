@@ -15,6 +15,11 @@ import HAagent_terminal
 import cmd_HAagent
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
+	"""
+	detect backup OS role is slave on master host
+	:param parser: config
+	:return: True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                       , parser["HostOS_usr"]
                       , parser["HostOS_pwd"]) #獲得ssh
@@ -356,6 +361,11 @@ def non_primary_start_ftvm(parser):
 	raise TA_error.Assert_Error("non primary start ftvm : %s fail" % parser["vm_name"])
 
 def rm_non_running_ftvm(parser):
+	"""
+	detect remove non running ftvm
+	:param parser: config
+	:return: True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                   , parser["HostOS_usr"]
                   , parser["HostOS_pwd"]) #獲得ssh
@@ -371,6 +381,11 @@ def rm_non_running_ftvm(parser):
 	raise TA_error.Assert_Error("remove non running ftvm : %s fail" % parser["vm_name"])
 
 def non_primary_rm_ftvm(parser):
+	"""
+	detect non primary remove ftvm
+	:param parser: config
+	:return: True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                   , parser["BackupOS_usr"]
                   , parser["BackupOS_pwd"]) #獲得ssh
@@ -386,6 +401,11 @@ def non_primary_rm_ftvm(parser):
 	raise TA_error.Assert_Error("remove non running ftvm : %s fail" % parser["vm_name"])
 
 def libvirt_stop_start_ftvm(parser):
+	"""
+	detect when libvirt daemon shutdown , can HAAgent start ftvm
+	:param parser: config
+	:return: True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                   , parser["HostOS_usr"]
                   , parser["HostOS_pwd"]) #獲得ssh
@@ -400,7 +420,7 @@ def libvirt_stop_start_ftvm(parser):
 	
 	FTsystem.start(ssh)
 	
-	print success
+	#print success
 	if success : 
 		return True
 	raise TA_error.Assert_Error("libvirt stop then start ftvm fail")
@@ -482,6 +502,11 @@ def detect_fail_os_crash(parser):
 	raise TA_error.Assert_Error("VM (name : %s) has not detect vm os crash" % parser["vm_name"])
 	
 def detect_host_vm_guestOS_hang_info(parser):
+	"""
+	detech mmsh overview information fit the guestOS hang reboot message
+	:param parser : config
+	:return True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲取ssh
@@ -493,6 +518,11 @@ def detect_host_vm_guestOS_hang_info(parser):
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
 def detect_host_vm_crash_info(parser):
+	"""
+	detech mmsh overview information fit the vm crash reboot message
+	:param parser : config
+	:return True/raise exception
+	"""
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲取ssh
@@ -798,11 +828,11 @@ def detect_overview(parser):
                               , parser["HostOS_pwd"]) #獲得ssh
 	
 	out = HAagent.overview(parser, ssh)	
-	success = (HAagent_terminal.overview in out)
+	#success = (HAagent_terminal. in out)
 	
-	if success:
-		return True
-	raise TA_error.Assert_Error("overview fail")
+	#if success:
+	#	return True
+	#raise TA_error.Assert_Error("overview fail")
 
 if __name__ == '__main__':
 	parser = {}

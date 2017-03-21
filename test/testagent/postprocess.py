@@ -20,10 +20,10 @@ def run_postprocess(parser):
 	when test done , each node will do postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	#postprocess_NFS(parser)
+	postprocess_NFS(parser)
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
-	postprocess_Slave(parser)
+	#postprocess_Slave(parser)
 	
     
 def postprocess_Host(parser):
@@ -75,7 +75,8 @@ def postprocess_Host_OS(parser):
 		raise TA_error.Postprocess_Error("Host OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
-	#postprocess_Host_OS_reboot(parser)
+	if parser["pos_hostOS_restart"] == "yes":
+		postprocess_Host_OS_reboot(parser)
 	
 def postprocess_Backup_OS(parser):
 	"""
@@ -92,7 +93,8 @@ def postprocess_Backup_OS(parser):
 	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in BackupOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("backup" , parser)
-	#postprocess_Backup_OS_reboot(parser)
+	if parser["pos_backupOS_restart"] == "yes":
+		postprocess_Backup_OS_reboot(parser)
 	
 def postprocess_Slave_OS(parser):
 	"""
@@ -108,7 +110,8 @@ def postprocess_Slave_OS(parser):
 		raise TA_error.Postprocess_Error("Slave OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in SlaveOS cannot shutdown " % parser["vm_name"])
-	#postprocess_Slave_OS_reboot(parser)
+	if parser["pos_slaveOS_restart"] == "yes":
+		postprocess_Slave_OS_reboot(parser)
 	
 def postprocess_NFS_OS(parser):
 	"""
@@ -119,7 +122,9 @@ def postprocess_NFS_OS(parser):
 		raise TA_error.Postprocess_Error("NFS OS not ready")
 	postprocess_NFS_reset(parser)
 	FTOS.reset_pid("primary" , parser)
-	postprocess_NFS_OS_reboot(parser)
+	
+	if parser["pos_NFSOS_restart"] == "yes":
+		postprocess_NFS_OS_reboot(parser)
 	
 def postprocess_Host_OS_reboot(parser):
 	"""
@@ -130,7 +135,10 @@ def postprocess_Host_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
-	FTOS.reboot(ssh)
+	if FTOS.is_running(parser["HostOS_name"]):
+		FTOS.reboot(ssh)
+	elif FTOS.is_shutdown(parser["HostOS_name"]):
+		pass
 	
 def postprocess_Backup_OS_reboot(parser):
 	"""
@@ -142,7 +150,10 @@ def postprocess_Backup_OS_reboot(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	
-	FTOS.reboot(ssh)
+	if FTOS.is_running(parser["BackupOS_name"]):
+		FTOS.reboot(ssh)
+	elif FTOS.is_shutdown(parser["BackupOS_name"]):
+		pass
 	
 def postprocess_Slave_OS_reboot(parser):
 	"""
@@ -153,7 +164,10 @@ def postprocess_Slave_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
-	FTOS.reboot(ssh)
+	if FTOS.is_running(parser["SlaveOS_name"]):
+		FTOS.reboot(ssh)
+	elif FTOS.is_shutdown(parser["SlaveOS_name"]):
+		pass
 def postprocess_NFS_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
@@ -163,7 +177,10 @@ def postprocess_NFS_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
-	FTOS.reboot(ssh)
+	if FTOS.is_running(parser["NFS_name"]):
+		FTOS.reboot(ssh)
+	elif FTOS.is_shutdown(parser["NFS_name"]):
+		pass
      
 def postprocess_NFS_reset(parser):
 	"""
