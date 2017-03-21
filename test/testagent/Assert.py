@@ -499,10 +499,7 @@ def detect_host_vm_crash_info(parser):
 	
 	fail = HAagent_info.get_vm_infofail(parser["HostOS_name"],parser["vm_name"], parser, ssh)
 	expected = HAagent_terminal.Lastfail_messages[0][0] # vm crash and reboot now
-	
-	print fail
-	print expected
-	
+
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
