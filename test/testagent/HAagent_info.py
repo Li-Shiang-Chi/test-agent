@@ -122,6 +122,7 @@ def __get_vm_fail(node_name ,vm_name , parser ,ssh=None):
 def __vm_fail_parse(fail):
     fail_model = HAagent_terminal.Lastfail_messages
     for i in fail_model:
+        print i
         key = fail_model[i][0] # fail type
         value = fail_model[i][1] # fail message
         if value == fail: 
