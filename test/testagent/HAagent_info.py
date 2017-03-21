@@ -112,13 +112,12 @@ def is_node_exists(cluster_name , node_name , parser):
     return False
 
 def get_vm_infofail(node_name , vm_name , parser ,ssh=None):
-    fail = __get_vm_fail(node_name , vm_name, parser, ssh)
-    return __vm_fail_parse(fail)
+    return __get_vm_fail(node_name , vm_name, parser, ssh)
     
 def __get_vm_fail(node_name ,vm_name , parser ,ssh=None):
-    cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh)
-    res = json.loads(cluster_file_content)["nodes"][node_name]["vms"][vm_name]["last_fail"]
-    return res
+    cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh) # get cluster file content
+    res = json.loads(cluster_file_content)["nodes"][node_name]["vms"][vm_name]["last_fail"] # get json information
+    return __vm_fail_parse(res)
 def __vm_fail_parse(fail):
     fail_model = HAagent_terminal.Lastfail_messages
     for row in fail_model:
@@ -127,14 +126,13 @@ def __vm_fail_parse(fail):
         if value == fail: 
             return key
             
-def get_node_infofail(vm_name , parser , ssh=None):
-    fail = __get_node_fail(vm_name, parser, ssh)
-    return __node_fail_parse(fail)
+def get_node_infofail(node_name , parser , ssh=None):
+    return __get_node_fail(node_name, parser, ssh)
 
 def __get_node_fail(node_name, parser, ssh):
     cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh)
     res = json.loads(cluster_file_content)["nodes"][node_name]["last_fail"]
-    return res
+    return __node_fail_parse(res)
 
 def __node_fail_parse(fail):
     #fail_model = HAagent_terminal.Lastfail_messages

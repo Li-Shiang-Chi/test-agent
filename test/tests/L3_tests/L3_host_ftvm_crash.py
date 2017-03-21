@@ -3,11 +3,11 @@ from testagent import process
 from testagent import Assert
 from testagent import postprocess
 
-def run_L3_guestOS_crash(parser):
+def run_L3_host_ftvm_crash(parser):
     
     preprocess.run_preprocess(parser)
     print 110
-    process.exec_L1_vm_crasher(parser)
+    process.kill_vm_process(parser)
     print 111
     Assert.vm_running_in_hostOS(parser)
     print 112

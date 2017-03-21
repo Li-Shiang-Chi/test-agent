@@ -16,7 +16,8 @@ def run_L1_ft_vm_crash(parser):
 	print 113
 	Assert.vm_is_login_in_hostOS(parser)
 	print 114
-	Assert.detect_fail_vm_crash(parser)
+	#Assert.detect_fail_vm_crash(parser)
 	print 115
-	Assert.recovery_vm_p_restart(parser)
+	#Assert.recovery_vm_p_restart(parser)
 	print 116
+	
