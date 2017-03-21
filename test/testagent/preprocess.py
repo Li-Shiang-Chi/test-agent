@@ -13,6 +13,7 @@ import master_monitor
 import mmsh
 import TA_error
 import subprocess
+import HAagent
 
 
 
@@ -37,8 +38,9 @@ def preprocess_Host(parser):
     :param parser : is a dict , get from test config file
     """
     
-    preprocess_Host_OS(parser)
-    preprocess_Host_Mount(parser)
+    preprocess_host_OS(parser)
+    preprocess_hostOS_Mount(parser)
+    preprocess_hostOS_HAagent(parser)
     preprocess_hostOS_vm(parser)
     preprocess_hostOS_FTsystem(parser)
     
@@ -47,8 +49,9 @@ def preprocess_Backup(parser):
     when test case start backup node do some preprocess
     :param parser : is a dict , get from test config file
     """
-    preprocess_Backup_OS(parser) 
-    preprocess_Backup_Mount(parser)
+    preprocess_backup_OS(parser) 
+    preprocess_backupOS_Mount(parser)
+    preprocess_backupOS_HAagent(parser)
     preprocess_backupOS_vm(parser)
     preprocess_backupOS_FTsystem(parser)
     
@@ -57,15 +60,16 @@ def preprocess_Slave(parser):
     when test case start slave node do some preprocess
     :param parser : is a dict , get from test config file
     """
-    preprocess_Slave_OS(parser)
-    preprocess_Slave_Mount(parser)
+    preprocess_slave_OS(parser)
+    preprocess_slaveOS_Mount(parser)
+    preprocess_slaveOS_HAagent(parser)
     preprocess_slaveOS_vm(parser)
     preprocess_slaveOS_FTsystem(parser)
 
 def preprocess_NFS(parser):
     preprocess_NFS_OS(parser)
 
-def preprocess_Host_OS(parser):
+def preprocess_host_OS(parser):
     """
     preprocess  , Host os part , check Host node is booted
     :param parser : is a dict , get from test config file
@@ -73,8 +77,7 @@ def preprocess_Host_OS(parser):
     if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Host OS not ready")
     
-    
-def preprocess_Host_Mount(parser):
+def preprocess_hostOS_Mount(parser):
     """
     preprocess , check Host node is mounting to nfs
     :param parser : is a dict , get from test config file
@@ -90,7 +93,7 @@ def preprocess_Host_Mount(parser):
         raise TA_error.Preprocess_Error("Host os not mount to nfs") # not mount to nfs , raise error
     ssh.close()
     
-def preprocess_Backup_OS(parser):
+def preprocess_backup_OS(parser):
     """
     preprocess  , Host os part , check backup node is booted
     :param parser : is a dict , get from test config file
@@ -98,7 +101,7 @@ def preprocess_Backup_OS(parser):
     if not FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
         raise TA_error.Preprocess_Error("Backup OS not ready")
     
-def preprocess_Backup_Mount(parser):
+def preprocess_backupOS_Mount(parser):
     """
     preprocess , check backup node is mounting to nfs
     :param parser : is a dict , get from test config file
@@ -113,14 +116,14 @@ def preprocess_Backup_Mount(parser):
         raise TA_error.Preprocess_Error("Host os not mount to nfs") # not mount to nfs , raise error
     ssh.close()
     
-def preprocess_Slave_OS(parser):
+def preprocess_slave_OS(parser):
     """
     preprocess  , Host os part , check slave node is booted
     :param parser : is a dict , get from test config file
     """
     if FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Slave OS not ready")
-def preprocess_Slave_Mount(parser):
+def preprocess_slaveOS_Mount(parser):
     """
     preprocess , slave Host node is mounting to nfs
     :param parser : is a dict , get from test config file
@@ -151,6 +154,30 @@ def preprocess_is_OS_Mount_NFS(parser , ssh = None):
         if s_stdout != "":
             return True
     return False
+
+def preprocess_hostOS_HAagent(parser):
+    ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                                  , parser["HostOS_usr"]
+                                  , parser["HostOS_pwd"]) #獲得ssh 
+    if HAagent.is_running(ssh, parser):
+        return True
+    raise TA_error.Preprocess_Error("Host OS HAAgent process not ready")
+
+def preprocess_backupOS_HAagent(parser):
+    ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                                  , parser["BackupOS_usr"]
+                                  , parser["BackupOS_pwd"]) #獲得ssh 
+    if HAagent.is_running(ssh, parser):
+        return True
+    raise TA_error.Preprocess_Error("Backup OS HAAgent process not ready")
+
+def preprocess_slaveOS_HAagent(parser):
+    ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                                  , parser["SlaveOS_usr"]
+                                  , parser["SlaveOS_pwd"]) #獲得ssh 
+    if HAagent.is_running(ssh, parser):
+        return True
+    raise TA_error.Preprocess_Error("Slave OS HAAgent process not ready")
     
 def preprocess(parser):
   """

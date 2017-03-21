@@ -10,6 +10,8 @@ import cmd_HAagent
 import cmd_egrep
 import subprocess
 import cmd
+import time
+from testagent import cmd_service
 
 
 """
@@ -102,6 +104,18 @@ def overview(parser=None , ssh=None):
     execute exit
     :return: exit the HAagent
     """
+    
+def is_running(ssh , parser):
+    cmd = cmd_egrep.get_process_id("HAAgent.py")
+    t_start = time.time()
+    while((time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
+        pid = remote_exec(cmd, ssh)
+        print pid
+        if pid != "":
+            return True
+    return False
+
+    
 def exit(parser=None , ssh=None):
     cmd = cmd_HAagent.exit_cmd()
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)

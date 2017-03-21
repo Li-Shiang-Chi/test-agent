@@ -75,6 +75,7 @@ def postprocess_Host_OS(parser):
 		raise TA_error.Postprocess_Error("Host OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
+	FTOS.reset_pid("primary" , parser)
 	if parser["pos_hostOS_restart"] == "yes":
 		postprocess_Host_OS_reboot(parser)
 	
