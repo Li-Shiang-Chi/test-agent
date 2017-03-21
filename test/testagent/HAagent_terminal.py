@@ -209,7 +209,6 @@ Lastfail_messages = (
         ( "GuestOSHangAndRebootSuccess", "guest OS hang and has been rebooted now "),
         ( "GuestOSHangAndRebootFailed", "guest OS hang and failed to reboot it")
     )
-
 # max number of trying command times
 Max_update_vm_status_times = 2
 Max_check_isdir_times = 3

@@ -9,6 +9,7 @@ import shell_server
 import cmd_HAagent
 import file
 import json
+from testagent import HAagent, HAagent_terminal
 
 
 def is_add_primary_success(parser):
@@ -80,14 +81,14 @@ def is_cluster_exist(cluster_name , parser):
         return True
     return False
 
-"""
-check is node in HAagent
-:param cluster_name : cluster name
-:param node_name : node name
-:param parser : is a dict get from base.configure
-"""
 
 def is_node_exists(cluster_name , node_name , parser):
+    """
+    check is node in HAagent
+    :param cluster_name : cluster name
+    :param node_name : node name
+    :param parser : is a dict get from base.configure
+    """
     ssh = shell_server.get_ssh(parser["HostOS_ip"],
                                parser["HostOS_usr"], 
                                parser["HostOS_pwd"]) # get ssh object
@@ -109,6 +110,40 @@ def is_node_exists(cluster_name , node_name , parser):
     if node_name in overview and cluster_file_content:
         return True
     return False
+
+def get_vm_infofail(vm_name , parser ,ssh=None):
+    fail = __get_vm_fail(vm_name, parser, ssh)
+    return __vm_fail_parse(fail)
+    
+def __get_vm_fail(vm_name , parser ,ssh=None):
+    cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh)
+    res = json.loads(cluster_file_content)["vms"][vm_name]["last_fail"]
+    return res
+def __vm_fail_parse(fail):
+    fail_model = HAagent_terminal.Lastfail_messages
+    for i in fail_model:
+        key = fail_model[i][0]
+        value = fail_model[i][1]
+        if value == fail: # fail message
+            return key  # fail type
+            
+def get_node_infofail(vm_name , parser , ssh=None):
+    fail = __get_node_fail(vm_name, parser, ssh)
+    return __node_fail_parse(fail)
+
+def __get_node_fail(node_name, parser, ssh):
+    cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh)
+    res = json.loads(cluster_file_content)["nodes"][node_name]["last_fail"]
+    return res
+
+def __node_fail_parse(fail):
+    #fail_model = HAagent_terminal.Lastfail_messages
+    #for i in fail_model:
+    #    key = fail_model[i][0]
+    #    value = fail_model[i][1]
+    #    if value == fail:
+    #        return key
+    return 0
 
 def get_node_role(name , parser):
     ssh = shell_server.get_ssh(parser["NFS_ip"],

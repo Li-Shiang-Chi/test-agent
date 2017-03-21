@@ -480,7 +480,23 @@ def detect_fail_os_crash(parser):
 	if mmsh.infofail(parser["vm_name"],ssh) == "vm os crash":
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) has not detect vm os crash" % parser["vm_name"])
-
+	
+def detect_vm_guestOS_hang_info(parser):
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_vm_infofail(parser["vm_name"], parser, ssh)
+	expected = HAagent_terminal.Lastfail_messages[0][0] # guestOS hang and reboot success
+	
+	
+	print fail
+	print expected
+	
+	
+	if fail != expected:
+		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
+	return True
 def do_recovery(parser):
 	"""
 	FTsystem do recovery or not
@@ -790,6 +806,15 @@ if __name__ == '__main__':
 	parser["HostOS_name"] = "h2"
 	parser["BackupOS_name"] = "h2"
 	
-	print backupOS_role_is_Master_on_BackupOS(parser)
+	parser["HostOS_ip"] = "192.168.1.100"
+	parser["HostOS_usr"] = "primary"
+	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
+	parser["vm_name"] = "test-daemon12"
+	parser["HostOS_pwd"] = "root"
+	
+	
+	detect_vm_guestOS_hang_info(parser)
+	
+	#print backupOS_role_is_Master_on_BackupOS(parser)
 
 	

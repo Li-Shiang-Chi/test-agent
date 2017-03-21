@@ -13,7 +13,7 @@ def run_L3_guestOS_crash(parser):
     print 112
     Assert.vm_is_login_in_hostOS(parser)
     print 113
-    #Assert.detect_fail_os_crash(parser)
+    Assert.detect_fail_os_crash(parser)
     print 114
-    #Assert.recovery_vm_reboot(parser)
+    Assert.recovery_vm_reboot(parser)
     print 115
