@@ -813,7 +813,7 @@ if __name__ == '__main__':
 	parser["HostOS_pwd"] = "root"
 	
 	
-	detect_vm_guestOS_hang_info(parser)
+	detect_host_vm_guestOS_hang_info(parser)
 	
 	#print backupOS_role_is_Master_on_BackupOS(parser)
 
