@@ -803,7 +803,6 @@ if __name__ == '__main__':
 	parser["BackupOS_ip"] = "140.115.53.132"
 	parser["BackupOS_usr"] = "user"
 	parser["BackupOS_pwd"] = "000000"
-	parser["HostOS_name"] = "h2"
 	parser["BackupOS_name"] = "h2"
 	
 	parser["HostOS_ip"] = "192.168.1.100"
@@ -811,6 +810,7 @@ if __name__ == '__main__':
 	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
 	parser["vm_name"] = "test-daemon12"
 	parser["HostOS_pwd"] = "root"
+	parser["HostOS_name"] = "primary"
 	
 	
 	detect_host_vm_guestOS_hang_info(parser)
