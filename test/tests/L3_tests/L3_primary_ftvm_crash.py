@@ -3,7 +3,7 @@ from testagent import process
 from testagent import Assert
 from testagent import postprocess
 
-def run_L3_host_ftvm_crash(parser):
+def run_L3_primary_ftvm_crash(parser):
     
     preprocess.run_preprocess(parser)
     print 110
@@ -17,4 +17,4 @@ def run_L3_host_ftvm_crash(parser):
     print 114
     #Assert.recovery_vm_reboot(parser)
     print 115
-    Assert.detect_host_vm_crash_info(parser)
+    Assert.detect_primary_vm_crash_info(parser)

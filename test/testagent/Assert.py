@@ -501,7 +501,7 @@ def detect_fail_os_crash(parser):
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) has not detect vm os crash" % parser["vm_name"])
 	
-def detect_host_vm_guestOS_hang_info(parser):
+def detect_primary_vm_guestOS_hang_info(parser):
 	"""
 	detech mmsh overview information fit the guestOS hang reboot message
 	:param parser : config
@@ -517,7 +517,7 @@ def detect_host_vm_guestOS_hang_info(parser):
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
-def detect_host_vm_crash_info(parser):
+def detect_primary_vm_crash_info(parser):
 	"""
 	detech mmsh overview information fit the vm crash reboot message
 	:param parser : config
