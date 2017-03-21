@@ -135,7 +135,7 @@ def postprocess_Host_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
-	if FTOS.is_running(parser["HostOS_name"]):
+	if FTOS.OS_is_running(parser["HostOS_ip"], parser):
 		FTOS.reboot(ssh)
 	
 def postprocess_Backup_OS_reboot(parser):
@@ -148,7 +148,7 @@ def postprocess_Backup_OS_reboot(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	
-	if FTOS.is_running(parser["BackupOS_name"]):
+	if FTOS.OS_is_running(parser["BackupOS_ip"], parser):
 		FTOS.reboot(ssh)
 	
 def postprocess_Slave_OS_reboot(parser):
@@ -160,7 +160,7 @@ def postprocess_Slave_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
-	if FTOS.is_running(parser["SlaveOS_name"]):
+	if FTOS.OS_is_running(parser["SlaveOS_ip"], parser):
 		FTOS.reboot(ssh)
 def postprocess_NFS_OS_reboot(parser):
 	"""
