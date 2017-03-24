@@ -13,4 +13,4 @@ def run_L3_non_primary_guestOS_crash(parser):
     print 112
     Assert.vm_is_login_in_BackupOS(parser)
     print 115
-    Assert.detect_primary_vm_guestOS_hang_info(parser)
+    Assert.detect_backup_vm_guestOS_hang_info(parser)
