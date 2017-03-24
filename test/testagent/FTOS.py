@@ -9,23 +9,6 @@ import os
 import TA_error
 import msg_socket
 import HAagent
-
-
-def is_ready(ip,user,pwd,parser):
-	"""
-	check FTOS is ready (OS running and ssh ready)
-	:param ip : FTOS ip
-	:param user : FTOS user name
-	:param pwd : FTOS user password
-	:param parser : parser: is a dict, get from Test config file
-	"""
-	if OS_is_running(ip, parser) == False:
-		print "error : %s OS not ready" % user
-		return False
-	if ssh_is_ready(ip, user, pwd, parser) == False:
-		print "error : %s ssh not ready" % user
-		return False
-	return True
 	
 def OS_is_running(ip,parser):
 	"""
@@ -140,14 +123,6 @@ def reboot(ssh):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)	
 	ssh.close()
 
-def wake_up(networkMAC):
-	"""
-	use wake on lan to boot specific node
-	:param networkMAC : network card MAC address
-	"""
-	cmd = "wakeonlan %s" %  networkMAC
-	print cmd
-	status, error = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 	
 
 def get_OS_status(OS_name):

@@ -554,7 +554,7 @@ def exec_overview(parser):
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh
 	
-	HAagent.quick_create_cluster(parser, ssh)
+	#HAagent.quick_create_cluster(parser, ssh)
 	time.sleep(1)
 	ssh.close()
     

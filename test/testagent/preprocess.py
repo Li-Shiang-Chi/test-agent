@@ -30,6 +30,10 @@ def run_preprocess(parser):
     preprocess_NFS(parser)
 
 def preprocess_nodes(parser):
+    """
+    check every node is alive and  ssh accessible
+    :param parser : is a dict , get from test config file
+    """
     print "host node"
     preprocess_host_OS(parser)  
     print "backup node" 
@@ -79,11 +83,16 @@ def preprocess_NFS(parser):
 
 def preprocess_host_OS(parser):
     """
-    preprocess  , Host os part , check Host node is booted
+    preprocess  , Host os part , check Host node is booted and ssh accessible
     :param parser : is a dict , get from test config file
     """
-    if FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
-        raise TA_error.Preprocess_Error("Host OS not ready")
+
+    if FTOS.OS_is_running(parser["HostOS_ip"], parser) == False:
+        FTOS.L1_boot(parser["HostOS_NetworkAdaptor"])
+        if FTOS.OS_is_running(parser["HostOS_ip"], parser) == False:
+            raise TA_error.Preprocess_Error("Host node can not start")
+    if FTOS.ssh_is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("Host node ssh can not access")
     
 def preprocess_hostOS_Mount(parser):
     """
@@ -103,11 +112,15 @@ def preprocess_hostOS_Mount(parser):
     
 def preprocess_backup_OS(parser):
     """
-    preprocess  , Host os part , check backup node is booted
+    preprocess  , backup os part , check backup node is booted and ssh accessible
     :param parser : is a dict , get from test config file
     """
-    if not FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
-        raise TA_error.Preprocess_Error("Backup OS not ready")
+    if FTOS.OS_is_running(parser["BackupOS_ip"], parser) == False:
+        FTOS.L1_boot(parser["BackupOS_NetworkAdaptor"])
+        if FTOS.OS_is_running(parser["BackupOS_ip"], parser) == False:
+            raise TA_error.Preprocess_Error("Backup node can not start")
+    if FTOS.ssh_is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("Backup node ssh can not access")
     
 def preprocess_backupOS_Mount(parser):
     """
@@ -129,8 +142,12 @@ def preprocess_slave_OS(parser):
     preprocess  , Host os part , check slave node is booted
     :param parser : is a dict , get from test config file
     """
-    if FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
-        raise TA_error.Preprocess_Error("Slave OS not ready")
+    if FTOS.OS_is_running(parser["SlaveOS_ip"], parser) == False:
+        FTOS.L1_boot(parser["SlaveOS_NetworkAdaptor"])
+        if FTOS.OS_is_running(parser["SlaveOS_ip"], parser) == False:
+            raise TA_error.Preprocess_Error("Slave node can not start")
+    if FTOS.ssh_is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("Slave node ssh can not access")
 def preprocess_slaveOS_Mount(parser):
     """
     preprocess , slave Host node is mounting to nfs
@@ -147,8 +164,12 @@ def preprocess_slaveOS_Mount(parser):
     ssh.close()
 
 def preprocess_NFS_OS(parser):
-    if not FTOS.is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser):
-        raise TA_error.Preprocess_Error("NFS OS not ready")
+    if FTOS.OS_is_running(parser["NFS_ip"], parser) == False:
+        #FTOS.L1_boot(parser["NFS_NetworkAdaptor"])
+        if FTOS.OS_is_running(parser["NFS_ip"], parser) == False:
+            raise TA_error.Preprocess_Error("NFS node can not start")
+    if FTOS.ssh_is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser) == False:
+        raise TA_error.Preprocess_Error("NFS node ssh can not access")
 def preprocess_OS_Mount_NFS(parser , ssh = None):
     cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
