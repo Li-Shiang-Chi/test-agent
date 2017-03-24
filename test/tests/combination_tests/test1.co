@@ -15,7 +15,7 @@ L3_non_primary_de_cluster
 L3_primary_ftvm_crash
 L3_non_primary_start_ftvm
 L3_primary_rm_ftvm
-L3_primary_rm_non_running_ftvm
+L3_rm_non_running_ftvm
 L3_non_primary_rm_ftvm
 L3_primary_libvirt_kill
 L3_primary_libvirt_stop_start_ftvm
