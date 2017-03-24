@@ -376,6 +376,7 @@ def vm_duplicate_start(parser):
 	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
 		raise TA_error.Assert_Error("VM name : %s is shut off in HostOS")
 	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+		
 		out = FTVM.ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
 		expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , HAagent_terminal.Vm_is_running)
 		success = ( out == expected )
@@ -385,7 +386,7 @@ def vm_duplicate_start(parser):
 		
 		if success :
 			return True
-	raise TA_error.Assert_Error("vm : %s duplicate start fail" % parser["vm_name"])
+		raise TA_error.Assert_Error("vm : %s duplicate start fail" % parser["vm_name"])
 
 def non_primary_start_ftvm(parser):
 	"""
