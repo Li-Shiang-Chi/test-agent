@@ -8,6 +8,7 @@ def run_L3_primary_libvirtk_ftvm_crash(parser):
     preprocess.run_preprocess(parser)
     print 110
     process.kill_libvirt_process(parser)
+    Assert.libvirt_running_in_hostOS(parser)
     process.kill_vm_process(parser)
     print 111
     Assert.vm_running_in_hostOS(parser)
