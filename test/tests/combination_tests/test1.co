@@ -19,8 +19,8 @@ L3_primary_rm_non_running_ftvm
 L3_non_primary_rm_ftvm
 L3_primary_libvirt_kill
 L3_primary_libvirt_stop_start_ftvm
-L3_primary_ftvm crash
-L3_primary_ftvm_guestOS_crash
-L3_backup_ftvm_crash
-L3_backup_guestOS_crash
+L3_primary_ftvm_crash
+L3_primary_guestOS_crash
+L3_non_primary_ftvm_crash
+L3_non_primary_guestOS_crash
 L3_primary_libvirtk_ftvm_crash

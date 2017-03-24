@@ -13,6 +13,7 @@ import HAagent_info
 import HAagent
 import HAagent_terminal
 import cmd_HAagent
+from test.test_dis import outer
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
 	"""
@@ -379,6 +380,10 @@ def vm_duplicate_start(parser):
 		out = FTVM.ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
 		expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , HAagent_terminal.Vm_is_running)
 		success = ( out == expected )
+		
+		print out
+		print expected
+		
 		if success :
 			return True
 	raise TA_error.Assert_Error("vm : %s duplicate start fail" % parser["vm_name"])
