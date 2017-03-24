@@ -24,7 +24,7 @@ def run_postprocess(parser):
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
 	#postprocess_Slave(parser)
-	
+
     
 def postprocess_Host(parser):
 	"""
@@ -70,9 +70,6 @@ def postprocess_Host_OS(parser):
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]
                               , parser["HostOS_usr"]
                               , parser["HostOS_pwd"]) #獲得ssh 
-	
-	if not FTOS.is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser):
-		raise TA_error.Postprocess_Error("Host OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("primary" , parser)
@@ -89,8 +86,6 @@ def postprocess_Backup_OS(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	
-	if not FTOS.is_ready(parser["BackupOS_ip"], parser["BackupOS_usr"], parser["BackupOS_pwd"], parser):
-		raise TA_error.Postprocess_Error("Backup OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in BackupOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("backup" , parser)
@@ -107,8 +102,6 @@ def postprocess_Slave_OS(parser):
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh 
 	
-	if not FTOS.is_ready(parser["SlaveOS_ip"], parser["SlaveOS_usr"], parser["SlaveOS_pwd"], parser):
-		raise TA_error.Postprocess_Error("Slave OS not ready")
 	if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in SlaveOS cannot shutdown " % parser["vm_name"])
 	if parser["pos_slaveOS_restart"] == "yes":
@@ -119,8 +112,7 @@ def postprocess_NFS_OS(parser):
 	post process nfs os part
 	:param parser: is a dict, get from Test config file
 	"""
-	if FTOS.is_ready(parser["NFS_ip"], parser["NFS_usr"], parser["NFS_pwd"], parser) == False:
-		raise TA_error.Postprocess_Error("NFS OS not ready")
+	
 	postprocess_NFS_reset(parser)
 	FTOS.reset_pid("primary" , parser)
 	
