@@ -377,12 +377,9 @@ def vm_duplicate_start(parser):
 		raise TA_error.Assert_Error("VM name : %s is shut off in HostOS")
 	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
 		
-		out = FTVM.ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
+		out = FTVM.duplicate_ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
 		expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , HAagent_terminal.Vm_is_running)
 		success = ( out == expected )
-		
-		print out
-		print expected
 		
 		if success :
 			return True

@@ -135,7 +135,14 @@ def ftstart(node_name ,vm_name, ip="", ssh=None):
 			return HAagent.start_ftvm(node_name, vm_name, None, None, ssh)
 		else:
 			return subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
-
+		
+def duplicate_ftstart(node_name ,vm_name, ip="", ssh=None):
+	if is_running(vm_name,ip, ssh):
+		cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name)
+		if ssh:
+			return HAagent.start_ftvm(node_name, vm_name, None, None, ssh)
+		else:
+			return subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 def shutdown(vm_name, ip="", ssh=None):
 	"""
 	shutdown vm, when vm status is running
