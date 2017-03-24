@@ -11,7 +11,7 @@ import cmd_egrep
 import subprocess
 import cmd
 import time
-from testagent import cmd_service
+import cmd_service
 
 
 """
