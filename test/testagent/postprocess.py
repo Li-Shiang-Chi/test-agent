@@ -74,8 +74,7 @@ def postprocess_Host_OS(parser):
 		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("primary" , parser)
 	if parser["pos_hostOS_restart"] == "yes":
-		pass
-		#postprocess_Host_OS_reboot(parser)
+		postprocess_Host_OS_reboot(parser)
 	
 def postprocess_Backup_OS(parser):
 	"""
@@ -91,8 +90,7 @@ def postprocess_Backup_OS(parser):
 		raise TA_error.Postprocess_Error("vm %s in BackupOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("backup" , parser)
 	if parser["pos_backupOS_restart"] == "yes":
-		pass
-		#postprocess_Backup_OS_reboot(parser)
+		postprocess_Backup_OS_reboot(parser)
 	
 def postprocess_Slave_OS(parser):
 	"""
@@ -107,8 +105,7 @@ def postprocess_Slave_OS(parser):
 	if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in SlaveOS cannot shutdown " % parser["vm_name"])
 	if parser["pos_slaveOS_restart"] == "yes":
-		pass
-		#postprocess_Slave_OS_reboot(parser)
+		postprocess_Slave_OS_reboot(parser)
 	
 def postprocess_NFS_OS(parser):
 	"""
@@ -120,8 +117,7 @@ def postprocess_NFS_OS(parser):
 	FTOS.reset_pid("primary" , parser)
 	
 	if parser["pos_NFSOS_restart"] == "yes":
-		pass
-		#postprocess_NFS_OS_reboot(parser)
+		postprocess_NFS_OS_reboot(parser)
 	
 def postprocess_Host_OS_reboot(parser):
 	"""
