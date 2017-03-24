@@ -934,9 +934,11 @@ if __name__ == '__main__':
 	parser["HostOS_pwd"] = "root"
 	parser["HostOS_name"] = "primary"
 	
-	
-	detect_host_vm_crash_info(parser)
-	
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                              , parser["HostOS_usr"]
+                              , parser["HostOS_pwd"]) #獲得ssh
+	out = FTVM.ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
+	print out
 	#print backupOS_role_is_Master_on_BackupOS(parser)
 
 	
