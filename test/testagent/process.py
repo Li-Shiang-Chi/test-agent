@@ -171,6 +171,24 @@ def kill_vm_process(parser):
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #透過ssh執行指令
 	ssh.close()
 	
+def kill_backup_vm_process(parser):
+	"""
+	kill vm process on backupOS
+
+	:param parser: is a dict, get from Test config file
+	"""
+	if "pro_wait_time_kill_vm_p" in parser.keys(): #若pro_wait_time_kill_vm_p存在於parser
+		time.sleep(int(parser["pro_wait_time_kill_vm_p"]))
+	#print "kill"
+
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+	pid = FTVM.get_pid(parser["vm_name"], parser["BackupOS_ip"], ssh) #獲得VM之pid
+	cmd = cmd_kill.kill_cmd(pid, 9) #獲得kill vm process之指令字串
+	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #透過ssh執行指令
+	ssh.close()
+	
 def stop_libvirt_process(parser):
 	
 	ssh = shell_server.get_ssh(parser["HostOS_ip"]

@@ -191,6 +191,33 @@ def vm_running_in_hostOS(parser):
 	ssh.close()
 	raise TA_error.Assert_Error("VM (name : %s) is not running in hostOS" % parser["vm_name"])
 
+def vm_running_in_BackupOS(parser):
+	"""
+	vm is running in hostOS or not
+
+	:param parser: config
+	:return: True/raise exception
+	"""
+
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                  , parser["BackupOS_usr"]
+                  , parser["BackupOS_pwd"]) #獲得ssh
+
+	t_end = time.time()
+	if "ast_vm_running_wait_time" in parser.keys(): #若參數ast_vm_running_wait_time存在於parser，則進入
+		t_end = time.time()+float(parser["ast_vm_running_wait_time"]) #計算出等待之時間，並存於t_end
+	while time.time() < t_end: #超過t_end則跳出迴圈
+		#每sleep一秒就詢問一次狀態
+		time.sleep(1)
+		if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh): #狀態為running就跳出迴圈
+			break
+	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh): #若回傳之狀態是running，則test oracle通過，否則raise exception
+		ssh.close()
+		return True
+	ssh.close()
+	raise TA_error.Assert_Error("VM (name : %s) is not running in BackupOS" % parser["vm_name"])
+
+
 def vm_shudown_in_hostOS(parser):
 	"""
 	vm is running in hostOS or not
@@ -218,6 +245,22 @@ def vm_is_login_in_hostOS(parser):
 				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) is not login in hostOS" % parser["vm_name"])
+
+
+def vm_is_login_in_BackupOS(parser):
+	"""
+	vm is login in BackupOS or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+	
+	print 577
+	if FTVM.is_login(parser["vm_name"]
+				  , parser["TA_ip"]
+				  , parser["TA_msg_sock_port"]
+				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
+		return True
+	raise TA_error.Assert_Error("VM (name : %s) is not login in BackupOS" % parser["vm_name"])
 	
 		
 
@@ -533,6 +576,26 @@ def detect_primary_vm_crash_info(parser):
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
+
+
+def detect_backup_vm_crash_info(parser):
+	"""
+	detech mmsh overview information fit the vm crash reboot message
+	:param parser : config
+	:return True/raise exception
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_vm_infofail(parser["BackupOS_name"],parser["vm_name"], parser, ssh)
+	expected = HAagent_terminal.Lastfail_messages[0][0] # vm crash and reboot now
+
+	if fail != expected:
+		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
+	return True
+
+
 def do_recovery(parser):
 	"""
 	FTsystem do recovery or not
