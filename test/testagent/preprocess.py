@@ -39,7 +39,7 @@ def preprocess_nodes(parser):
     print "backup node" 
     preprocess_backup_OS(parser)
     print "slave node" 
-    preprocess_slave_OS(parser)
+    #preprocess_slave_OS(parser)
     print "nfs node"
     preprocess_NFS_OS(parser)
     
