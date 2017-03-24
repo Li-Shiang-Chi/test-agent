@@ -13,7 +13,6 @@ import HAagent_info
 import HAagent
 import HAagent_terminal
 import cmd_HAagent
-from test.test_dis import outer
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
 	"""
