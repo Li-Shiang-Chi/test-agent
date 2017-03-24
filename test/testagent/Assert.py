@@ -445,6 +445,22 @@ def non_primary_rm_ftvm(parser):
 			return True
 	raise TA_error.Assert_Error("remove non running ftvm : %s fail" % parser["vm_name"])
 
+
+def detect_rm_non_running_ftvm(parser):
+	ssh = shell_server.get_ssh(parser["HostOS_ip"]
+                  , parser["HostOS_usr"]
+                  , parser["HostOS_pwd"]) #獲得ssh
+	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+		raise TA_error.Assert_Error("VM : %s running in HostOS" % parser["vm_name"])
+	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+		out = HAagent.remove_ftvm(parser["vm_name"], parser, ssh)
+		expected = HAagent_terminal.Vm_not_exist
+		
+		success = (out == expected)
+		if success:
+			return True
+		raise TA_error.Assert_Error("rm non running vm fail")
+
 def libvirt_stop_start_ftvm(parser):
 	"""
 	detect when libvirt daemon shutdown , can HAAgent start ftvm
