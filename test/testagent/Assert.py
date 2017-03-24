@@ -560,6 +560,24 @@ def detect_primary_vm_guestOS_hang_info(parser):
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
+
+def detect_backup_vm_guestOS_hang_info(parser):
+	"""
+	detech mmsh overview information fit the guestOS hang reboot message
+	:param parser : config
+	:return True/raise exception
+	"""
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_vm_infofail(parser["BackupOS_name"],parser["vm_name"], parser, ssh)
+	expected = HAagent_terminal.Lastfail_messages[2][0] # guestOS hang and reboot success
+	
+	if fail != expected:
+		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
+	return True
+
 def detect_primary_vm_crash_info(parser):
 	"""
 	detech mmsh overview information fit the vm crash reboot message

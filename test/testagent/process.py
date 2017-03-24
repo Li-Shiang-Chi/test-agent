@@ -241,7 +241,7 @@ def kill_master_monitor_process(parser):
 	#subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 	ssh.close()
 
-def exec_L1_vm_crasher(parser):
+def exec_vm_guestOS_crasher(parser):
 	"""
 	execute level 1 crasher in vm 
 	kill init process
