@@ -81,7 +81,6 @@ def rm_node(cluster_name , node_name , parser=None , ssh=None):
     """
 def start_ftvm(node_name , vm_name , xml_path=None , parser=None , ssh=None):
     cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name, xml_path)
-    print cmd
     return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
     """
     execute removeftvm <vm name>

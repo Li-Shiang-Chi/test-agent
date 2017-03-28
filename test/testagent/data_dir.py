@@ -19,7 +19,7 @@ L1_TESTS_CFG_DIR = os.path.join(L1_TESTS_DIR, "cfg/")
 L2_TESTS_DIR = os.path.join(TESTS_DIR, "L2_tests/")
 L2_TESTS_CFG_DIR = os.path.join(L2_TESTS_DIR, "cfg/")
 ##
-L3_TESTS_DIR = os.path.join(TESTS_DIR , "L3_tests/")
+L3_TESTS_DIR = os.path.join(TESTS_DIR , "HA3_tests/")
 L3_TESTS_CFG_DIR = os.path.join(L3_TESTS_DIR , "cfg/")
 ##
 COMBINATION_TESTS_DIR = os.path.join(TESTS_DIR, "combination_tests/")

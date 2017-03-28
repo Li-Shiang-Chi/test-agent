@@ -87,11 +87,11 @@ def preprocess_host_OS(parser):
     :param parser : is a dict , get from test config file
     """
 
-    if FTOS.OS_is_running(parser["HostOS_ip"], parser) == False:
-        FTOS.L1_boot(parser["HostOS_NetworkAdaptor"])
-        if FTOS.OS_is_running(parser["HostOS_ip"], parser) == False:
+    if FTOS.OS_is_running(parser["PrimaryOS_ip"], parser) == False:
+        FTOS.L1_boot(parser["PrimaryOS_NetworkAdaptor"])
+        if FTOS.OS_is_running(parser["PrimaryOS_ip"], parser) == False:
             raise TA_error.Preprocess_Error("Host node can not start")
-    if FTOS.ssh_is_ready(parser["HostOS_ip"], parser["HostOS_usr"], parser["HostOS_pwd"], parser) == False:
+    if FTOS.ssh_is_ready(parser["PrimaryOS_ip"], parser["PrimaryOS_usr"], parser["PrimaryOS_pwd"], parser) == False:
         raise TA_error.Preprocess_Error("Host node ssh can not access")
     
 def preprocess_hostOS_Mount(parser):
@@ -100,9 +100,9 @@ def preprocess_hostOS_Mount(parser):
     :param parser : is a dict , get from test config file
     """
     
-    ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                        , parser["HostOS_usr"]
-                        , parser["HostOS_pwd"]) #獲得ssh
+    ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                        , parser["PrimaryOS_usr"]
+                        , parser["PrimaryOS_pwd"]) #獲得ssh
     
     if preprocess_is_OS_Mount_NFS(parser , ssh) == False: # check node is mount to nfs
         preprocess_OS_Mount_NFS(parser , ssh) # mount to nfs
@@ -185,9 +185,9 @@ def preprocess_is_OS_Mount_NFS(parser , ssh = None):
     return False
 
 def preprocess_hostOS_HAagent(parser):
-    ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                                  , parser["HostOS_usr"]
-                                  , parser["HostOS_pwd"]) #獲得ssh 
+    ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                                  , parser["PrimaryOS_usr"]
+                                  , parser["PrimaryOS_pwd"]) #獲得ssh 
     if HAagent.is_running(ssh, parser):
         return True
     raise TA_error.Preprocess_Error("Host OS HAAgent process not ready")
@@ -244,14 +244,14 @@ def preprocess_mm(parser):
 
 def preprocess_hostOS(parser):
   """
-  preprocess HostOS
+  preprocess PrimaryOS
 
   :called func: preprocess
   :param parser: is a dict, get from Test config file
   """
   #preprocess_hostOS_hw(parser)
   """
-  because of some unknow problem of FTKVM , we can't check HostOS status 
+  because of some unknow problem of FTKVM , we can't check PrimaryOS status 
   """
   #preprocess_hostOS_OS(parser)
   
@@ -284,10 +284,10 @@ def preprocess_hostOS_hw(parser):
   :param parser: is a dict, get from Test config file
   """
   if parser["pre_check_hostOS_hw"] == "yes":
-    if mmsh.stateshmgr(parser["HostOS_shmgr_name"]) == "stop":
-      raise TA_error.Preprocess_Error("HostOS hw shmgr stop")
-    if mmsh.stateipmc(parser["HostOS_ipmc_name"]) == "stop":
-      raise TA_error.Preprocess_Error("HostOS hw ipmc stop")
+    if mmsh.stateshmgr(parser["PrimaryOS_shmgr_name"]) == "stop":
+      raise TA_error.Preprocess_Error("PrimaryOS hw shmgr stop")
+    if mmsh.stateipmc(parser["PrimaryOS_ipmc_name"]) == "stop":
+      raise TA_error.Preprocess_Error("PrimaryOS hw ipmc stop")
 
 def preprocess_hostOS_OS(parser):
   """
@@ -309,14 +309,14 @@ def preprocess_hostOS_OS_boot(parser):
   :called func: preprocess_hostOS_OS
   :param parser: is a dict, get from Test config file
   """
-  if not FTOS.is_running(parser["HostOS_name"]):
-    if FTOS.is_shutdown(parser["HostOS_name"]):
-      status = FTOS.boot(parser["HostOS_name"])
+  if not FTOS.is_running(parser["PrimaryOS_name"]):
+    if FTOS.is_shutdown(parser["PrimaryOS_name"]):
+      status = FTOS.boot(parser["PrimaryOS_name"])
       if status != "success":
-        raise TA_error.Preprocess_Error("HostOS OS boot command fail")
+        raise TA_error.Preprocess_Error("PrimaryOS OS boot command fail")
     time.sleep(float(parser["pre_hostOS_boot_time"]))
-    if not FTOS.is_running(parser["HostOS_name"]):
-      raise TA_error.Preprocess_Error("HostOS OS can not boot")
+    if not FTOS.is_running(parser["PrimaryOS_name"]):
+      raise TA_error.Preprocess_Error("PrimaryOS OS can not boot")
   
 
 def preprocess_hostOS_OS_shutdown(parser):
@@ -326,14 +326,14 @@ def preprocess_hostOS_OS_shutdown(parser):
   :called func: preprocess_hostOS_OS
   :param parser: is a dict, get from Test config file
   """
-  if not FTOS.is_shutdown(parser["HostOS_name"]): #若host不為關機狀態
-    if FTOS.is_running(parser["HostOS_name"]):
-      status = FTOS.shutdown(parser["HostOS_name"])
+  if not FTOS.is_shutdown(parser["PrimaryOS_name"]): #若host不為關機狀態
+    if FTOS.is_running(parser["PrimaryOS_name"]):
+      status = FTOS.shutdown(parser["PrimaryOS_name"])
       if status != "success":
-        raise TA_error.Preprocess_Error("HostOS OS shutdown command fail")
+        raise TA_error.Preprocess_Error("PrimaryOS OS shutdown command fail")
     time.sleep(float(parser["pre_hostOS_shutdown_time"]))
-    if not FTOS.is_shutdown(parser["HostOS_name"]):
-      raise TA_error.Preprocess_Error("HostOS OS can not shutdown")
+    if not FTOS.is_shutdown(parser["PrimaryOS_name"]):
+      raise TA_error.Preprocess_Error("PrimaryOS OS can not shutdown")
 
 def preprocess_backupOS_OS(parser):
   """
@@ -372,15 +372,15 @@ def preprocess_hostOS_wd(parser):
   :param parser: is a dict, get from Test config file
   """
   if parser["pre_check_hostOS_hw"] == "yes":
-    if mmsh.statewd(parser["HostOS_name"]) == "stop":
-      status = mmsh.startwd(parser["HostOS_name"])
+    if mmsh.statewd(parser["PrimaryOS_name"]) == "stop":
+      status = mmsh.startwd(parser["PrimaryOS_name"])
       if status != "success":
-        raise TA_error.Preprocess_Error("HostOS watchdog process can not start")
+        raise TA_error.Preprocess_Error("PrimaryOS watchdog process can not start")
   
 
 def preprocess_hostOS_FTsystem(parser):
   """
-  preprocess HostOS FTsystem part
+  preprocess PrimaryOS FTsystem part
   
   check FTsystem status 
 
@@ -392,22 +392,22 @@ def preprocess_hostOS_FTsystem(parser):
   :param parser: is a dict, get from Test config file
   """
   if parser["pre_check_hostOS_FTsystem"] == "yes":
-    ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+    ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
     status = FTsystem.get_status(ssh)
     if status == "not running" and parser["pre_hostOS_FTsystem_start"] == "yes": #若狀態不為running且根據參數必需是running則進入
         FTsystem.start(ssh) #透過ssh開啟libvirt
         time.sleep(float(parser["pre_hostOS_FTsystem_start_time"]))
         if FTsystem.get_status(ssh) == "not running": #若狀態不為running則raise exception
             ssh.close()
-        raise TA_error.Preprocess_Error("HostOS FTsystem can not start")
+        raise TA_error.Preprocess_Error("PrimaryOS FTsystem can not start")
     if status == "running" and parser["pre_hostOS_FTsystem_start"] == "no": #若狀態為running且根據參數必需不是running則進入
         FTsystem.stop(ssh)
         time.sleep(float(parser["pre_hostOS_FTsystem_start_time"]))
         if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
             ssh.close()
-        raise TA_error.Preprocess_Error("HostOS FTsystem can not stop")
+        raise TA_error.Preprocess_Error("PrimaryOS FTsystem can not stop")
     ssh.close()
 
 
@@ -472,26 +472,26 @@ def preprocess_hostOS_vm_running(parser):
   :called func: preprocess_hostOS_vm
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                            , parser["HostOS_usr"]
-                            , parser["HostOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                            , parser["PrimaryOS_usr"]
+                            , parser["PrimaryOS_pwd"]) #獲得ssh
 
-  if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+  if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
     print 59
     if "pre_hostOS_VM_restart" in parser.keys() and parser["pre_hostOS_VM_restart"] == "yes": #根據參數若VM需重新啟動
       print 54
       prepocess_hostOS_vm_restart(parser)
       print 55
       time.sleep(float(parser["pre_hostOS_VM_boot_time"]))
-  elif FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+  elif FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
     print 56
     prepocess_hostOS_vm_start(parser)
     print 57
     time.sleep(float(parser["pre_hostOS_VM_boot_time"]))
   print 58
-  if not FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+  if not FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
     ssh.close()
-    raise TA_error.Preprocess_Error("HostOS VM: %s can not start" % parser["vm_name"])
+    raise TA_error.Preprocess_Error("PrimaryOS VM: %s can not start" % parser["vm_name"])
 
   ssh.close()
 
@@ -502,18 +502,18 @@ def prepocess_hostOS_vm_start(parser):
   :called func: preprocess_hostOS_vm_running
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                        , parser["HostOS_usr"]
-                        , parser["HostOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                        , parser["PrimaryOS_usr"]
+                        , parser["PrimaryOS_pwd"]) #獲得ssh
 
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     #print 58
-    FTVM.start(parser["vm_name"], parser["HostOS_ip"], ssh)
+    FTVM.start(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
     #print 58.5
   else:
     #print parser["level"]
     print "host ftstart"
-    FTVM.ftstart(parser["HostOS_name"],parser["vm_name"], parser["HostOS_ip"], ssh)
+    FTVM.ftstart(parser["PrimaryOS_name"],parser["vm_name"], parser["PrimaryOS_ip"], ssh)
     #print 59
   ssh.close()
 
@@ -524,14 +524,14 @@ def prepocess_hostOS_vm_restart(parser):
   :called func: preprocess_hostOS_vm_running
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                        , parser["HostOS_usr"]
-                        , parser["HostOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                        , parser["PrimaryOS_usr"]
+                        , parser["PrimaryOS_pwd"]) #獲得ssh
 
   if parser["level"] == "0": #若為不開啟容錯機制之重新啟動，則進入
-    FTVM.restart(parser["vm_name"], parser["HostOS_ip"],ssh)
+    FTVM.restart(parser["vm_name"], parser["PrimaryOS_ip"],ssh)
   else:
-    FTVM.ftrestart(parser["vm_name"], parser["HostOS_ip"], ssh)
+    FTVM.ftrestart(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 
 def preprocess_hostOS_vm_shutdown(parser):
   """
@@ -541,19 +541,19 @@ def preprocess_hostOS_vm_shutdown(parser):
   :param parser: is a dict, get from Test config file
   """
 
-  ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                        , parser["HostOS_usr"]
-                        , parser["HostOS_pwd"]) #獲得ssh
-  if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
-    FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
+  ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                        , parser["PrimaryOS_usr"]
+                        , parser["PrimaryOS_pwd"]) #獲得ssh
+  if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+    FTVM.destroy(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
     time.sleep(float(parser["pre_hostOS_VM_shutdown_time"]))
-  elif FTVM.is_paused(parser["vm_name"], parser["HostOS_ip"], ssh):
-    FTVM.resume(parser["vm_name"], parser["HostOS_ip"], ssh)
-    FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
+  elif FTVM.is_paused(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+    FTVM.resume(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+    FTVM.destroy(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
     time.sleep(float(parser["pre_hostOS_VM_shutdown_time"]))
-  if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+  if not FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
     ssh.close()
-    raise TA_error.Preprocess_Error("HostOS %s can not shutdown" % parser["vm_name"])
+    raise TA_error.Preprocess_Error("PrimaryOS %s can not shutdown" % parser["vm_name"])
   ssh.close()
 
 def preprocess_hostOS_vm_login(parser):
@@ -567,7 +567,7 @@ def preprocess_hostOS_vm_login(parser):
                   , parser["TA_ip"]
                   , parser["TA_msg_sock_port"]
                   , int(parser["pre_hostOS_VM_login_time"])):
-    raise TA_error.Preprocess_Error("HostOS %s is not login" % parser["vm_name"])
+    raise TA_error.Preprocess_Error("PrimaryOS %s is not login" % parser["vm_name"])
 
 def preprocess_backupOS_vm(parser):
   """
@@ -614,9 +614,9 @@ def preprocess_backupOS_vm_running(parser):
   :called func: preprocess_hostOS_vm_running
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                          , parser["HostOS_usr"]
-                          , parser["HostOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                          , parser["PrimaryOS_usr"]
+                          , parser["PrimaryOS_pwd"]) #獲得ssh
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     FTVM.start(parser["vm_name"], parser["BackupOS_ip"], ssh)
   else:
@@ -673,9 +673,9 @@ def prepocess_slaveOS_vm_start(parser):
   :called func: preprocess_hostOS_vm_running
   :param parser: is a dict, get from Test config file
   """
-  ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                        , parser["HostOS_usr"]
-                        , parser["HostOS_pwd"]) #獲得ssh
+  ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                        , parser["PrimaryOS_usr"]
+                        , parser["PrimaryOS_pwd"]) #獲得ssh
 
   if parser["level"] == "0": #若為不開啟容錯機制之開機，則進入
     #print 58

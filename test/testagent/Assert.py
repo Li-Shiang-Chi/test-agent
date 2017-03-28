@@ -13,6 +13,7 @@ import HAagent_info
 import HAagent
 import HAagent_terminal
 import cmd_HAagent
+import FTOS
 
 def backupOS_role_is_Slave_on_MasterOS(parser):
 	"""
@@ -20,26 +21,26 @@ def backupOS_role_is_Slave_on_MasterOS(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                      , parser["HostOS_usr"]
-                      , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                      , parser["PrimaryOS_usr"]
+                      , parser["PrimaryOS_pwd"]) #獲得ssh
 
 	role = mmsh.inforole(parser["BackupOS_name"], ssh)
 	ssh.close()
 	if role == "slave": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["PrimaryOS_name"])
 
 def hostOS_role_is_Slave_on_BackupOS(parser):
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                       , parser["BackupOS_usr"]
                       , parser["BackupOS_pwd"]) #獲得ssh
 
-	role = mmsh.inforole(parser["HostOS_name"], ssh)
+	role = mmsh.inforole(parser["PrimaryOS_name"], ssh)
 	ssh.close()
 	if role == "slave": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["PrimaryOS_name"])
 
 def backupOS_role_is_Master_on_BackupOS(parser):
 
@@ -51,83 +52,98 @@ def backupOS_role_is_Master_on_BackupOS(parser):
 	ssh.close()
 	if role == "master": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["PrimaryOS_name"])
 
-def hostOS_role_is_Master(parser):
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                      , parser["HostOS_usr"]
-                      , parser["HostOS_pwd"]) #獲得ssh
+def primaryOS_role_is_primary(parser):
 
-	role = mmsh.inforole(parser["HostOS_name"], ssh)
-	ssh.close()
-	if role == "master": 
+	role = HAagent_info.get_node_role(parser["PrimaryOS_name"], parser)
+
+	if role == "primary": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not master" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) role is not primary" % parser["PrimaryOS_name"])
 
-def hostOS_role_is_Backup(parser):
-	role = mmsh.inforole(parser["HostOS_name"])
+def primaryOS_role_is_backup(parser):
+	role = HAagent_info.get_node_role(parser["PrimaryOS_name"], parser)
+
 	if role == "backup": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not backup" % parser["HostOS_name"] )
+	raise TA_error.Assert_Error("Host (name : %s) role is not backup" % parser["PrimaryOS_name"])
 
-def hostOS_role_is_Slave(parser):
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                      , parser["BackupOS_usr"]
-                      , parser["BackupOS_pwd"]) #獲得ssh
+def primaryOS_role_is_slave(parser):
+	role = HAagent_info.get_node_role(parser["SlaveOS_name"], parser)
 
-	role = mmsh.inforole(parser["HostOS_name"], ssh)
 	if role == "slave": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["PrimaryOS_name"])
 
-def backupOS_role_is_Master(parser):
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                      , parser["BackupOS_usr"]
-                      , parser["BackupOS_pwd"]) #獲得ssh
 
-	role = mmsh.inforole(parser["BackupOS_name"], ssh)
-	if role == "master": 
+def backupOS_role_is_primary(parser):
+	
+	role = HAagent_info.get_node_role(parser["BackupOS_name"], parser)
+
+	if role == "primary": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not master" % parser["BackupOS_name"])
+	raise TA_error.Assert_Error("backup (name : %s) role is not primary" % parser["BackupOS_name"])
 
-def backupOS_role_is_Backup(parser):
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                      , parser["HostOS_usr"]
-                      , parser["HostOS_pwd"]) #獲得ssh
 
-	role = mmsh.inforole(parser["BackupOS_name"],ssh)
+def backupOS_role_is_backup(parser):
+	
+	role = HAagent_info.get_node_role(parser["BackupOS_name"], parser)
+
 	if role == "backup": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not backup." % parser["BackupOS_name"])
+	raise TA_error.Assert_Error("backup (name : %s) role is not backup" % parser["BackupOS_name"])
 
-def backupOS_role_is_Slave(parser):
+def backupOS_role_is_slave(parser):
 
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                      , parser["BackupOS_usr"]
-                      , parser["BackupOS_pwd"]) #獲得ssh
+	role = HAagent_info.get_node_role(parser["BackupOS_name"], parser)
 
-	role = mmsh.inforole(parser["BackupOS_name"], ssh)
-	ssh.close()
 	if role == "slave": 
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) role is not slave." % parser["BackupOS_name"])
+	raise TA_error.Assert_Error("backup (name : %s) role is not primary" % parser["BackupOS_name"])
+
+def slaveOS_role_is_primary(parser):
+
+	role = HAagent_info.get_node_role(parser["SlaveOS_name"], parser)
+
+	if role == "primary": 
+		return True
+	raise TA_error.Assert_Error("slave (name : %s) role is not primary" % parser["SlaveOS_name"])
+
+def slaveOS_role_is_backup(parser):
+
+	role = HAagent_info.get_node_role(parser["SlaveOS_name"], parser)
+
+	if role == "backup": 
+		return True
+	raise TA_error.Assert_Error("slave (name : %s) role is not backup" % parser["SlaveOS_name"])
+
+def slaveOS_role_is_slave(parser):
+
+	role = HAagent_info.get_node_role(parser["SlaveOS_name"], parser)
+
+	if role == "slave": 
+		return True
+	raise TA_error.Assert_Error("slave (name : %s) role is not slave" % parser["SlaveOS_name"])
 
 
-def detect_hostOS_crash(parser):
+
+def detect_primaryOS_crash(parser):
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                           , parser["BackupOS_usr"]
                           , parser["BackupOS_pwd"]) #獲得ssh
-
-	if mmsh.statehost(parser["HostOS_name"], ssh) == "shutdown": #若回傳之狀態是hardware shutdown，則test oracle通過，否則raise exception
+	if mmsh.statehost(parser["PrimaryOS_name"], ssh) == "shutdown": #若回傳之狀態是hardware shutdown，則test oracle通過，否則raise exception
 		ssh.close()
 		return True
 	ssh.close()
-	raise TA_error.Assert_Error("Host (name : %s) has not detect host os crash " % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) has not detect host os crash " % parser["PrimaryOS_name"])
+	
+	
 
-def detect_BackupOS_crash(parser):
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                          , parser["HostOS_usr"]
-                          , parser["HostOS_pwd"]) #獲得ssh
+def detect_backupOS_crash(parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                          , parser["PrimaryOS_usr"]
+                          , parser["PrimaryOS_pwd"]) #獲得ssh
 
 	if mmsh.statehost(parser["BackupOS_name"], ssh) == "shutdown": #若回傳之狀態是hardware shutdown，則test oracle通過，否則raise exception
 		ssh.close()
@@ -145,10 +161,10 @@ def hostOS_status_is_M4(parser):
 	"""
 	if "ast_hostOS_running_wait_time" in parser.keys(): #若參數ast_hostOS_running_wait_time存在於parser，則進入
 		time.sleep(int(parser["ast_hostOS_running_wait_time"]))
-	#print mmsh.stateipmc(parser["HostOS_name"])
-	if mmsh.stateipmc(parser["HostOS_name"]) == "M4": #若回傳之狀態是M4，則該test oracle通過，否則raise exception
+	#print mmsh.stateipmc(parser["PrimaryOS_name"])
+	if mmsh.stateipmc(parser["PrimaryOS_name"]) == "M4": #若回傳之狀態是M4，則該test oracle通過，否則raise exception
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) hardware status is not M4" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) hardware status is not M4" % parser["PrimaryOS_name"])
 
 #---
 def hostOS_status_is_running(parser):
@@ -159,10 +175,23 @@ def hostOS_status_is_running(parser):
 	"""
 	if "ast_hostOS_running_wait_time" in parser.keys(): #若參數ast_hostOS_running_wait_time存在於parser，則進入
 		time.sleep(int(parser["ast_hostOS_running_wait_time"]))
-	#print mmsh.statehost(parser["HostOS_name"])
-	if mmsh.statehost(parser["HostOS_name"]) == "running": #若回傳之狀態是running，則test oracle通過，否則raise exception
+	#print mmsh.statehost(parser["PrimaryOS_name"])
+	if mmsh.statehost(parser["PrimaryOS_name"]) == "running": #若回傳之狀態是running，則test oracle通過，否則raise exception
 		return True
-	raise TA_error.Assert_Error("Host (name : %s) status is not running" % parser["HostOS_name"])
+	raise TA_error.Assert_Error("Host (name : %s) status is not running" % parser["PrimaryOS_name"])
+
+
+def vm_recover_in_primaryOS(parser):
+	vm_running_in_hostOS(parser)
+	vm_is_login_in_hostOS(parser)
+
+def vm_recover_in_backupOS(parser):
+	vm_running_in_backupOS(parser)
+	vm_is_login_in_backupOS(parser)
+	
+def vm_recover_in_slaveOS(parser):
+	vm_running_in_slaveOS(parser)
+	vm_is_login_in_slaveOS(parser)
 
 
 def vm_running_in_hostOS(parser):
@@ -173,9 +202,9 @@ def vm_running_in_hostOS(parser):
 	:return: True/raise exception
 	"""
 
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                  , parser["HostOS_usr"]
-                  , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                  , parser["PrimaryOS_usr"]
+                  , parser["PrimaryOS_pwd"]) #獲得ssh
 
 	t_end = time.time()
 	if "ast_vm_running_wait_time" in parser.keys(): #若參數ast_vm_running_wait_time存在於parser，則進入
@@ -183,9 +212,9 @@ def vm_running_in_hostOS(parser):
 	while time.time() < t_end: #超過t_end則跳出迴圈
 		#每sleep一秒就詢問一次狀態
 		time.sleep(1)
-		if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh): #狀態為running就跳出迴圈
+		if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh): #狀態為running就跳出迴圈
 			break
-	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh): #若回傳之狀態是running，則test oracle通過，否則raise exception
+	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh): #若回傳之狀態是running，則test oracle通過，否則raise exception
 		ssh.close()
 		return True
 	ssh.close()
@@ -224,10 +253,10 @@ def vm_shudown_in_hostOS(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                  , parser["HostOS_usr"]
-                  , parser["HostOS_pwd"]) #獲得ssh
-	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"],ssh): #若回傳之狀態是shut off，則test oracle通過，否則raise exception
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                  , parser["PrimaryOS_usr"]
+                  , parser["PrimaryOS_pwd"]) #獲得ssh
+	if FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"],ssh): #若回傳之狀態是shut off，則test oracle通過，否則raise exception
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) is not shutdown in hostOS" % parser["vm_name"])
 
@@ -247,21 +276,6 @@ def vm_is_login_in_hostOS(parser):
 	raise TA_error.Assert_Error("VM (name : %s) is not login in hostOS" % parser["vm_name"])
 
 
-def vm_is_login_in_BackupOS(parser):
-	"""
-	vm is login in BackupOS or not
-	:param parser: config
-	:return: True/raise exception
-	"""
-	
-	print 577
-	if FTVM.is_login(parser["vm_name"]
-				  , parser["TA_ip"]
-				  , parser["TA_msg_sock_port"]
-				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
-		return True
-	raise TA_error.Assert_Error("VM (name : %s) is not login in BackupOS" % parser["vm_name"])
-	
 		
 
 def vm_is_login_in_backupOS(parser):
@@ -279,6 +293,21 @@ def vm_is_login_in_backupOS(parser):
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) is not login in backupOS" % parser["vm_name"])	
 
+
+def vm_is_login_in_slaveOS(parser):
+	"""
+	vm is login in hostOS or not
+	:param parser: config
+	:return: True/raise exception
+	"""
+	
+
+	if FTVM.is_login(parser["vm_name"]
+				  , parser["TA_ip"]
+				  , parser["TA_msg_sock_port"]
+				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
+		return True
+	raise TA_error.Assert_Error("VM (name : %s) is not login in backupOS" % parser["vm_name"])	
 
 def vm_running_in_backupOS(parser):
 	"""
@@ -369,16 +398,16 @@ def vm_duplicate_start(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                  , parser["HostOS_usr"]
-                  , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                  , parser["PrimaryOS_usr"]
+                  , parser["PrimaryOS_pwd"]) #獲得ssh
 	
-	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
-		raise TA_error.Assert_Error("VM name : %s is shut off in HostOS")
-	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+	if FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+		raise TA_error.Assert_Error("VM name : %s is shut off in PrimaryOS")
+	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		
-		out = FTVM.duplicate_ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
-		expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , HAagent_terminal.Vm_is_running)
+		out = FTVM.duplicate_ftstart(parser["PrimaryOS_name"], parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+		expected = HAagent_terminal.Checking_vm_running_failed % (parser["PrimaryOS_name"] , HAagent_terminal.Vm_is_running)
 		success = ( out == expected )
 		
 		if success :
@@ -411,13 +440,13 @@ def rm_non_running_ftvm(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                  , parser["HostOS_usr"]
-                  , parser["HostOS_pwd"]) #獲得ssh
-	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                  , parser["PrimaryOS_usr"]
+                  , parser["PrimaryOS_pwd"]) #獲得ssh
+	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		raise TA_error.Assert_Error("VM : %s already in running" % parser["vm_name"])
-	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
-		out = FTVM.ftshutdown(parser["vm_name"], parser["HostOS_ip"], ssh)
+	if FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+		out = FTVM.ftshutdown(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 		expected = HAagent_terminal.Vm_not_exist
 		
 		success = (out == expected) 
@@ -447,12 +476,12 @@ def non_primary_rm_ftvm(parser):
 
 
 def detect_rm_non_running_ftvm(parser):
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                  , parser["HostOS_usr"]
-                  , parser["HostOS_pwd"]) #獲得ssh
-	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
-		raise TA_error.Assert_Error("VM : %s running in HostOS" % parser["vm_name"])
-	if FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                  , parser["PrimaryOS_usr"]
+                  , parser["PrimaryOS_pwd"]) #獲得ssh
+	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+		raise TA_error.Assert_Error("VM : %s running in PrimaryOS" % parser["vm_name"])
+	if FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		out = HAagent.remove_ftvm(parser["vm_name"], parser, ssh)
 		expected = HAagent_terminal.Vm_not_exist
 		
@@ -467,14 +496,14 @@ def libvirt_stop_start_ftvm(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                  , parser["HostOS_usr"]
-                  , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                  , parser["PrimaryOS_usr"]
+                  , parser["PrimaryOS_pwd"]) #獲得ssh
 	
-	cmd = cmd_HAagent.start_ftvm_cmd(parser["HostOS_name"], parser["vm_name"])
+	cmd = cmd_HAagent.start_ftvm_cmd(parser["PrimaryOS_name"], parser["vm_name"])
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	out = s_stdout.read()
-	expected = HAagent_terminal.Checking_vm_running_failed % (parser["HostOS_name"] , "\n")
+	expected = HAagent_terminal.Checking_vm_running_failed % (parser["PrimaryOS_name"] , "\n")
 	
 	
 	success = (out == expected)
@@ -493,9 +522,9 @@ def FTsystem_running_in_hostOS(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 
 	if FTsystem.get_status(ssh) == "running": #透過ssh詢問FTsystem之狀態是否為running
 		ssh.close()
@@ -510,9 +539,9 @@ def detect_fail(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 	if mmsh.infofail(parser["vm_name"],ssh) != "no fail":
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) has no fail in hostOS" % parser["vm_name"])
@@ -523,9 +552,9 @@ def detect_no_fail(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh	
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh	
 	if mmsh.infofail(parser["vm_name"],ssh) == "no fail":
 		return True
 	raise TA_error.Assert_Error("VM (name : %s) has fail in hostOS" % parser["vm_name"])
@@ -536,9 +565,9 @@ def detect_fail_vm_crash(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 	print 558
 	if "ast_vm_crash_time" in parser.keys(): #若參數ast_vm_crash_time存在於parser，則進入
 		time.sleep(int(parser["ast_vm_crash_time"]))
@@ -554,9 +583,9 @@ def detect_fail_os_crash(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 
 	if mmsh.infofail(parser["vm_name"],ssh) == "vm os crash":
 		return True
@@ -568,11 +597,11 @@ def detect_primary_vm_guestOS_hang_info(parser):
 	:param parser : config
 	:return True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 	
-	fail = HAagent_info.get_vm_infofail(parser["HostOS_name"],parser["vm_name"], parser, ssh)
+	fail = HAagent_info.get_vm_infofail(parser["PrimaryOS_name"],parser["vm_name"], parser, ssh)
 	expected = HAagent_terminal.Lastfail_messages[2][0] # guestOS hang and reboot success
 	
 	if fail != expected:
@@ -602,11 +631,11 @@ def detect_primary_vm_crash_info(parser):
 	:param parser : config
 	:return True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 	
-	fail = HAagent_info.get_vm_infofail(parser["HostOS_name"],parser["vm_name"], parser, ssh)
+	fail = HAagent_info.get_vm_infofail(parser["PrimaryOS_name"],parser["vm_name"], parser, ssh)
 	expected = HAagent_terminal.Lastfail_messages[0][0] # vm crash and reboot now
 
 	if fail != expected:
@@ -631,6 +660,62 @@ def detect_backup_vm_crash_info(parser):
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
 
+###########################################################
+def detect_primaryOS_crash_info(parser):
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_node_infofail(parser["PrimaryOS_name"], parser, ssh)
+	#expected = HAagent_terminal.Lastfail_messages[][]
+	return True
+
+def detect_primary_network_isolation_info(parser):
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_node_infofail(parser["PrimaryOS_name"], parser, ssh)
+	#expected = HAagent_terminal.Lastfail_messages[][]
+	return True
+
+def detect_backupOS_crash_info(parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_node_infofail(parser["BackupOS_name"], parser, ssh)
+	#expected = HAagent_terminal.Lastfail_messages[][]
+	return True
+
+def detect_backupOS_network_isolation_info(parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_node_infofail(parser["BackupOS_name"], parser, ssh)
+	#expected = HAagent_terminal.Lastfail_messages[][]
+	return True
+
+
+def detect_slaveOS_crash_info(parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_node_infofail(parser["SlaveOS_name"], parser, ssh)
+	#expected = HAagent_terminal.Lastfail_messages[][]
+	return True
+
+def detect_slaveOS_network_isolation_info(parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
+	
+	fail = HAagent_info.get_node_infofail(parser["SlaveOS_name"], parser, ssh)
+	#expected = HAagent_terminal.Lastfail_messages[][]
+	return True
+##################################################################################
 
 def do_recovery(parser):
 	"""
@@ -638,9 +723,9 @@ def do_recovery(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 
 	if mmsh.inforecover(parser["vm_name"],ssh) != "no recover":
 		return True
@@ -653,9 +738,9 @@ def no_recovery(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 
 	if mmsh.inforecover(parser["vm_name"],ssh) == "no recover":
 		return True
@@ -667,9 +752,9 @@ def recovery_vm_p_restart(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 
 	if "ast_vm_p_restart_time" in parser.keys(): #若參數ast_vm_p_restart_time存在於parser，則進入
 		time.sleep(int(parser["ast_vm_p_restart_time"]))
@@ -683,9 +768,9 @@ def recovery_vm_reboot(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲取ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲取ssh
 
 	if mmsh.inforecover(parser["vm_name"],ssh) == "vm reboot":
 		return True
@@ -699,9 +784,9 @@ def libvirt_running_in_hostOS(parser):
 	"""
 	if "ast_libvirt_running_wait_time" in parser.keys(): #若參數ast_libvirt_running_wait_time存在於parser，則進入
 		 time.sleep(float(parser["ast_libvirt_running_wait_time"]))
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	if FTsystem.is_running(ssh):
 		return True
 	ssh.close()
@@ -737,9 +822,9 @@ def detect_create_cluster(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
 	cluster = parser["Cluster_name"]
 	success =  HAagent_info.is_cluster_exist(cluster, parser)
@@ -755,9 +840,9 @@ def detect_create_duplicate_cluster(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
 	out = HAagent.create_cluster("test_c", "test_n", "127.0.0.1", "9999", parser, ssh)
 	success = (HAagent_terminal.Already_in_cluster in out)
@@ -773,9 +858,9 @@ def detect_de_cluster(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
 	cluster = parser["Cluster_name"]
 	
@@ -806,9 +891,9 @@ def detect_de_outer_cluster(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
 	cluster = "test_c"
 	success = HAagent_info.is_cluster_exist(cluster, parser)
@@ -824,9 +909,9 @@ def detect_add_node(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 
 	primary_success = HAagent_info.is_add_primary_success(parser)
 	backup_success = HAagent_info.is_add_backup_success(parser)
@@ -848,11 +933,11 @@ def detect_add_duplicate_node(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	#add the same node and return stdoutput
-	out = HAagent.add_node(parser["Cluster_name"], parser["HostOS_name"], parser["HostOS_ip"] , parser["HostOS_ipmb"], parser, ssh)
+	out = HAagent.add_node(parser["Cluster_name"], parser["PrimaryOS_name"], parser["PrimaryOS_ip"] , parser["PrimaryOS_ipmb"], parser, ssh)
 	print out
 	success = (HAagent_terminal.Node_name_repeat in out)
 	ssh.close()
@@ -867,9 +952,9 @@ def detect_add_outer_node(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
 	#add node in non exist cluster
 	out = HAagent.add_node("test_b", parser["BackupOS_name"], parser["BackupOS_ip"], parser["BackupOS_ipmb"], parser, ssh)
@@ -910,7 +995,7 @@ def detect_non_primary_de_node(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	success = HAagent_info.is_node_exists(parser["Cluster_name"], parser["HostOS_name"], parser)
+	success = HAagent_info.is_node_exists(parser["Cluster_name"], parser["PrimaryOS_name"], parser)
 	
 	if success:
 		return True
@@ -922,9 +1007,9 @@ def detect_overview(parser):
 	:param parser: config
 	:return: True/raise exception
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
 	out = HAagent.overview(parser, ssh)	
 	#success = (HAagent_terminal. in out)
@@ -940,17 +1025,17 @@ if __name__ == '__main__':
 	parser["BackupOS_pwd"] = "000000"
 	parser["BackupOS_name"] = "h2"
 	
-	parser["HostOS_ip"] = "192.168.1.100"
-	parser["HostOS_usr"] = "primary"
+	parser["PrimaryOS_ip"] = "192.168.1.100"
+	parser["PrimaryOS_usr"] = "primary"
 	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
 	parser["vm_name"] = "test-daemon12"
-	parser["HostOS_pwd"] = "root"
-	parser["HostOS_name"] = "primary"
+	parser["PrimaryOS_pwd"] = "root"
+	parser["PrimaryOS_name"] = "primary"
 	
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh
-	FTVM.ftstart(parser["HostOS_name"], parser["vm_name"], parser["HostOS_ip"], ssh)
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
+	FTVM.ftstart(parser["PrimaryOS_name"], parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 	#print out
 	#print backupOS_role_is_Master_on_BackupOS(parser)
 

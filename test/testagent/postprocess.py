@@ -20,12 +20,23 @@ def run_postprocess(parser):
 	when test done , each node will do postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
+	postprocess_nodes(parser)
 	postprocess_NFS(parser)
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
 	#postprocess_Slave(parser)
 
-    
+
+def postprocess_nodes(parser):
+	if parser["pos_check_primaryOS_status"] == "yes":
+		if not FTOS.OS_is_running(parser["PrimaryOS_ip"], parser):
+			postprocess_primaryOS_running(parser)
+	if parser["pos_check_backupOS_status"] == "yes":
+		if not FTOS.OS_is_running(parser["BackupOS_ip"], parser):
+			postprocess_backupOS_running(parser)
+	if parser["pos_check_slaveOS_status"] == "yes":
+		if not FTOS.OS_is_running(parser["SlaveOS_ip"], parser):
+			postprocess_slaveOS_running(parser)
 def postprocess_Host(parser):
 	"""
 	when test done , primary postprocess
@@ -67,11 +78,11 @@ def postprocess_Host_OS(parser):
 	:param parser: is a dict, get from Test config file
 	"""
 	
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh 
-	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"] , ssh):
-		raise TA_error.Postprocess_Error("vm %s in HostOS cannot shutdown " % parser["vm_name"])
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh 
+	if not FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"] , ssh):
+		raise TA_error.Postprocess_Error("vm %s in PrimaryOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("primary" , parser)
 	if parser["pos_hostOS_restart"] == "yes":
 		postprocess_Host_OS_reboot(parser)
@@ -125,10 +136,10 @@ def postprocess_Host_OS_reboot(parser):
 	:param parser: is a dict, get from Test config file
 	"""
 	
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-                              , parser["HostOS_usr"]
-                              , parser["HostOS_pwd"]) #獲得ssh 
-	if FTOS.OS_is_running(parser["HostOS_ip"], parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh 
+	if FTOS.OS_is_running(parser["PrimaryOS_ip"], parser):
 		FTOS.reboot(ssh)
 	
 def postprocess_Backup_OS_reboot(parser):
@@ -229,16 +240,16 @@ def postprocess_hostOS_OS(parser):
 	:param parser: is a dict, get from Test config file
 	"""
 	if parser["pos_hostOS_shutdown"] == "yes": #若pos_hostOS_shutdown為yes則進入
-		if mmsh.statehost(parser["HostOS_name"]) != "shutdown": #詢問mmsh，vm所在host的狀態，若不為shutdown 則進行關機之動作
-			mmsh.stophost(parser["HostOS_name"])
+		if mmsh.statehost(parser["PrimaryOS_name"]) != "shutdown": #詢問mmsh，vm所在host的狀態，若不為shutdown 則進行關機之動作
+			mmsh.stophost(parser["PrimaryOS_name"])
 			time.sleep(float(parser["pos_hostOS_shutdown_time"]))
-	if mmsh.statehost(parser["HostOS_name"]) != "shutdown": #若狀態不為shutdown則raise exception
-		raise TA_error.Postprocess_Error("HostOS can not shutdown")
+	if mmsh.statehost(parser["PrimaryOS_name"]) != "shutdown": #若狀態不為shutdown則raise exception
+		raise TA_error.Postprocess_Error("PrimaryOS can not shutdown")
 
 
 def postprocess_hostOS_FTsystem(parser):
 	"""
-	postprocess HostOS FTsystem part
+	postprocess PrimaryOS FTsystem part
 
 	check FTsystem status 
 
@@ -250,22 +261,22 @@ def postprocess_hostOS_FTsystem(parser):
 	:param parser: is a dict, get from Test config file
 	"""
 	if parser["pos_check_hostOS_FTsystem"] == "yes":
-		ssh = shell_server.get_ssh(parser["HostOS_ip"]
-								, parser["HostOS_usr"]
-								, parser["HostOS_pwd"]) #獲得ssh
+		ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+								, parser["PrimaryOS_usr"]
+								, parser["PrimaryOS_pwd"]) #獲得ssh
 		status = FTsystem.get_status(ssh) #獲得libvirt status
 		if status == "not running" and parser["pos_hostOS_FTsystem_start"] == "yes": #若狀態不為running且根據參數pos_hostOS_FTsystem_start必須為running，則進入
 			FTsystem.start(ssh) #透過ssh開啟libvirt
 			time.sleep(float(parser["pos_hostOS_FTsystem_start_time"]))
 			if FTsystem.get_status(ssh) == "not running": #若狀態不為running則raise exception
 				ssh.close()
-				raise TA_error.Postprocess_Error("HostOS FTsystem can not start")
+				raise TA_error.Postprocess_Error("PrimaryOS FTsystem can not start")
 		if status == "running" and parser["pos_hostOS_FTsystem_start"] == "no": #若狀態為running且根據參數pos_hostOS_FTsystem_start必須不為running，則進入
 			FTsystem.stop(ssh) #透過ssh關閉libvirt
 			time.sleep(float(parser["pos_hostOS_FTsystem_start_time"]))
 			if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
 				ssh.close()
-				raise TA_error.Postprocess_Error("HostOS FTsystem can not stop")
+				raise TA_error.Postprocess_Error("PrimaryOS FTsystem can not stop")
 		ssh.close()
 
 
@@ -291,17 +302,17 @@ def postprocess_hostOS_vm_running(parser):
 	:called func: postprocess_hostOS_vm
 	:param parser: is a dict, get from Test config file
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-							, parser["HostOS_usr"]
-							, parser["HostOS_pwd"]) #獲得ssh
-	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
-		FTVM.restart(parser["vm_name"], parser["HostOS_ip"], ssh)
-	elif FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
-		FTVM.start(parser["vm_name"], parser["HostOS_ip"], ssh)
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+							, parser["PrimaryOS_usr"]
+							, parser["PrimaryOS_pwd"]) #獲得ssh
+	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+		FTVM.restart(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+	elif FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
+		FTVM.start(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 	time.sleep(float(parser["pos_hostOS_VM_boot_time"]))
-	if not FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+	if not FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		ssh.close()
-		raise TA_error.Postprocess_Error("HostOS %s can not start" % parser["vm_name"])
+		raise TA_error.Postprocess_Error("PrimaryOS %s can not start" % parser["vm_name"])
 	ssh.close()
 
 def postprocess_hostOS_vm_shutdown(parser):
@@ -311,25 +322,25 @@ def postprocess_hostOS_vm_shutdown(parser):
 	:called func: postprocess_hostOS_vm
 	:param parser: is a dict, get from Test config file
 	"""
-	ssh = shell_server.get_ssh(parser["HostOS_ip"]
-							, parser["HostOS_usr"]
-							, parser["HostOS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+							, parser["PrimaryOS_usr"]
+							, parser["PrimaryOS_pwd"]) #獲得ssh
 
-	if FTVM.is_running(parser["vm_name"], parser["HostOS_ip"], ssh):
+	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		print "shutdown now 1"
 		time.sleep(float(parser["pos_hostOS_wait_VM_enable_shutdown_time"]))
-		FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
-	elif FTVM.is_paused(parser["vm_name"], parser["HostOS_ip"], ssh):
+		FTVM.destroy(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+	elif FTVM.is_paused(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		print "shutdown now 2"
 		time.sleep(float(parser["pos_hostOS_wait_VM_enable_shutdown_time"]))
-		FTVM.resume(parser["vm_name"], parser["HostOS_ip"], ssh)
-		FTVM.destroy(parser["vm_name"], parser["HostOS_ip"], ssh)
+		FTVM.resume(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+		FTVM.destroy(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 	time.sleep(float(parser["pos_hostOS_VM_shutdown_time"]))
-	#print FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"])
+	#print FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"])
 
-	if not FTVM.is_shutoff(parser["vm_name"], parser["HostOS_ip"], ssh):
+	if not FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		ssh.close()
-		raise TA_error.Postprocess_Error("HostOS vm : %s can not shutdown" % parser["vm_name"])
+		raise TA_error.Postprocess_Error("PrimaryOS vm : %s can not shutdown" % parser["vm_name"])
 
 	ssh.close()
 
@@ -437,31 +448,50 @@ def postprocess_backupOS_FTsystem(parser):
 				raise TA_error.Postprocess_Error("backupOS FTsystem can not stop")
 		ssh.close()
 
-def postprocess_hostOS_OS_running(parser):
+def postprocess_primaryOS_running(parser):
 	"""
 	postrocess host OS become running
 
 	:called func: postprocess_hostOS
 	:param parser: is a dict, get from Test config file
 	"""
-	if parser["pos_check_hostOS_OS"] == "yes":
-		FTOS.L1_boot(parser["HostOS_NetworkAdaptor"])
+	if parser["pos_check_primaryOS_status"] == "yes":
+		FTOS.L1_boot(parser["PrimaryOS_NetworkAdaptor"])
+	if FTOS.OS_is_running(parser["PrimaryOS_ip"], parser):
+		return True
+	raise TA_error.Postprocess_Error("primary OS can not boot")
 
-
-def postprocess_backupOS_OS_running(parser):
+def postprocess_backupOS_running(parser):
 	"""
-	postrocess host OS become running
+	postrocess backup OS become running
 
 	:called func: postprocess_hostOS
 	:param parser: is a dict, get from Test config file
 	"""
-	if parser["pos_check_backupOS_OS"] == "yes":
+	if parser["pos_check_backupOS_status"] == "yes":
 		FTOS.L1_boot(parser["BackupOS_NetworkAdaptor"])
+	if FTOS.OS_is_running(parser["BackupOS_ip"], parser):
+		return True
+	raise TA_error.Postprocess_Error("backup OS can not boot")	
+		
+def postprocess_slaveOS_running(parser):
+	"""
+	postrocess slave OS become running
 
+	:called func: postprocess_hostOS
+	:param parser: is a dict, get from Test config file
+	"""
+	if parser["pos_check_slaveOS_status"] == "yes":
+		FTOS.L1_boot(parser["SlaveOS_NetworkAdaptor"])
+	if FTOS.OS_is_running(parser["SlaveOS_ip"], parser):
+		return True
+	raise TA_error.Postprocess_Error("slave OS can not boot")	
+		
+	
 def postprocess_hostOS_ATCA_OS_running(parser):
 
 	if parser["pos_boot_ATCA_hostOS"] == "yes":
-		cmd = "ssh 172.16.33.222 'clia activate %s 0'" % (parser["HostOS_ipmc_name"])
+		cmd = "ssh 172.16.33.222 'clia activate %s 0'" % (parser["PrimaryOS_ipmc_name"])
 
 		ssh = shell_server.get_ssh(parser["BackupOS_ip"]
 							, parser["BackupOS_usr"]
@@ -470,11 +500,11 @@ def postprocess_hostOS_ATCA_OS_running(parser):
 		s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 		ssh.close()
 
-		if not FTVM.is_login(parser["HostOS_name"]
+		if not FTVM.is_login(parser["PrimaryOS_name"]
 			, parser["TA_ip"]
 			, parser["TA_msg_sock_port"]
 			, int(parser["pos_hostOS_login_time"])):
-			raise TA_error.Postprocess_Error("HostOS %s is not login" % parser["HostOS_name"])
+			raise TA_error.Postprocess_Error("PrimaryOS %s is not login" % parser["PrimaryOS_name"])
 
 		#postprocess_hostOS_mount_nfs(parser)
 
@@ -486,9 +516,9 @@ def postprocess_backupOS_ATCA_OS_running(parser):
 
 		print cmd
 
-		ssh = shell_server.get_ssh(parser["HostOS_ip"]
-    						, parser["HostOS_usr"]
-    						, parser["HostOS_pwd"]) #獲得ssh
+		ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+    						, parser["PrimaryOS_usr"]
+    						, parser["PrimaryOS_pwd"]) #獲得ssh
 
 		s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 		ssh.close()
@@ -497,7 +527,7 @@ def postprocess_backupOS_ATCA_OS_running(parser):
 			, parser["TA_ip"]
 			, parser["TA_msg_sock_port"]
 			, int(parser["pos_backupOS_login_time"])):
-			raise TA_error.Postprocess_Error("HostOS %s is not login" % parser["BackupOS_name"])
+			raise TA_error.Postprocess_Error("PrimaryOS %s is not login" % parser["BackupOS_name"])
 
 		#postprocess_hostOS_mount_nfs(parser)
 
@@ -506,9 +536,9 @@ def postprocess_hostOS_mount_nfs(parser):
 	if parser["pos_hostOS_mount_nfs"] == "yes":
 		cmd = "mount -t nfs %s:%s %s" % (parser["nfs_ip"],parser["nfs_share_folder"],parser["local_nfs_path"])
 
-		ssh = shell_server.get_ssh(parser["HostOS_ip"]
-						, parser["HostOS_usr"]
-						, parser["HostOS_pwd"]) #獲得ssh
+		ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+						, parser["PrimaryOS_usr"]
+						, parser["PrimaryOS_pwd"]) #獲得ssh
 
 		s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 		ssh.close()
@@ -637,7 +667,7 @@ if __name__ == '__main__':
 	#parser["vm_name"] = "T01"
 	
 	parser = {}
-	parser["HostOS_ip"] = "192.168.1.100"
-	parser["HostOS_usr"] = "primary"
-	parser["HostOS_pwd"] = "root"
-	#postProcessHostOSReboot(parser)
+	parser["PrimaryOS_ip"] = "192.168.1.100"
+	parser["PrimaryOS_usr"] = "primary"
+	parser["PrimaryOS_pwd"] = "root"
+	#postProcessPrimaryOSReboot(parser)

@@ -102,9 +102,9 @@ def reset_pid(node , parser):
 	
 def __reset_pid(node , parser):
 	if node == "primary":
-		ssh = shell_server.get_ssh(parser["HostOS_ip"]
-							, parser["HostOS_usr"]
-							, parser["HostOS_pwd"]) #獲得ssh
+		ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+							, parser["PrimaryOS_usr"]
+							, parser["PrimaryOS_pwd"]) #獲得ssh
 		ssh.exec_command("rm /home/primary/Desktop/pid.txt")
 	elif node == "backup":
 		ssh = shell_server.get_ssh(parser["BackupOS_ip"]
@@ -210,5 +210,5 @@ def is_login(host_name, ip, port, time=60):
 if __name__ == "__main__":
 	parser = {}
 	parser["pre_hostOS_boot_time"] = "200"
-	parser["HostOS_ip"] = "192.168.1.100"
+	parser["PrimaryOS_ip"] = "192.168.1.100"
 	#HostOSIsRunning(parser)

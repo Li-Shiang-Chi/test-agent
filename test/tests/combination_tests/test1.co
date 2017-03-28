@@ -9,9 +9,9 @@ L3_add_duplicate_node
 L3_add_outer_node
 L3_rm_node
 #L3_overview
+L3_non_primary_de_cluster
 L3_primary_start_ftvm
 L3_primary_start_duplicate_ftvm
-L3_non_primary_de_cluster
 L3_primary_ftvm_crash
 L3_non_primary_start_ftvm
 L3_primary_rm_ftvm
