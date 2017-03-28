@@ -674,7 +674,7 @@ if __name__ == '__main__':
 	parser["NFS_usr"] = "slave"
 	parser["NFS_pwd"] = "root"
 	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
-	parser["node_files_folder"] = "/var/ha/images/nodeFileFolder/"
+	parser["node_files_folder_path"] = "/var/ha/images/nodeFileFolder/"
 	ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
