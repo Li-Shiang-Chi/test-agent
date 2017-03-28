@@ -127,7 +127,6 @@ def postprocess_NFS_OS(parser):
 	"""
 	
 	postprocess_NFS_reset(parser)
-	FTOS.reset_pid("primary" , parser)
 	
 	if parser["pos_NFSOS_restart"] == "yes":
 		postprocess_NFS_OS_reboot(parser)

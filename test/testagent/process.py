@@ -112,12 +112,8 @@ def exec_primaryOS_shutdown(parser):
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
-	
-	print parser["PrimaryOS_ip"]
-	print parser["PrimaryOS_usr"]
-	print parser["PrimaryOS_pwd"]
 	print 78
-	cmd = "sudo poweroff -f" 
+	cmd = "sudo poweroff -f > /dev/null 2>&2 &" 
 	print cmd 
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	#print "stdout",s_stdout.read()
