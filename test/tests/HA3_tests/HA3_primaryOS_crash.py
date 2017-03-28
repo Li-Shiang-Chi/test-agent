@@ -18,7 +18,7 @@ def run_HA3_primaryOS_crash(parser):
     #Assert.detect_primaryOS_crash(parser)
     Assert.detect_primaryOS_crash_info(parser)
     print 110
-    Assert.primaryOS_role_is_backup(parser)
+    Assert.primaryOS_role_is_slave(parser)
     print 111
     Assert.backupOS_role_is_primary(parser)
     print 112
