@@ -112,12 +112,16 @@ def exec_primaryOS_shutdown(parser):
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
+	
+	print parser["PrimaryOS_ip"]
+	print parser["PrimaryOS_usr"]
+	print parser["PrimaryOS_pwd"]
 	print 78
 	cmd = "sudo poweroff -f" 
 	print cmd 
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
-	#print "stdout",s_stdout.read()
-	#print "stderr",s_stderr.read()
+	print "stdout",s_stdout.read()
+	print "stderr",s_stderr.read()
 	ssh.close()
 	print 79
 	if "pro_wait_time_exe_L1_crasher" in parser.keys(): #若pro_wait_time_exe_L1_crasher存在於parser
@@ -612,5 +616,5 @@ if __name__ == '__main__':
 	parser["Shelf_ip"] = "127.0.0.1"
 	parser["pro_wait_add_node_time"] = "5"
 	
-	exec_add_node(parser)
+	exec_primaryOS_shutdown(parser)
 	
