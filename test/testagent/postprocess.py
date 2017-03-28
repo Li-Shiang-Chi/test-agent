@@ -670,4 +670,14 @@ if __name__ == '__main__':
 	parser["PrimaryOS_ip"] = "192.168.1.100"
 	parser["PrimaryOS_usr"] = "primary"
 	parser["PrimaryOS_pwd"] = "root"
+	parser["NFS_ip"] = "192.168.1.102"
+	parser["NFS_usr"] = "slave"
+	parser["NFS_pwd"] = "root"
+	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
+	parser["node_files_folder"] = "/var/ha/images/nodeFileFolder/"
+	ssh = shell_server.get_ssh(parser["NFS_ip"]
+                              , parser["NFS_usr"]
+                              , parser["NFS_pwd"]) #獲得ssh
+	
+	NFS.reset(parser, ssh)
 	#postProcessPrimaryOSReboot(parser)
