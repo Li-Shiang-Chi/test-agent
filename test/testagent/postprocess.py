@@ -24,6 +24,8 @@ def run_postprocess(parser):
 	postprocess_NFS(parser)
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
+	
+	print "post process"
 	#postprocess_Slave(parser)
 
 
