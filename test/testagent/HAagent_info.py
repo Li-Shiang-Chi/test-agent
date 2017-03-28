@@ -158,11 +158,11 @@ def get_node_role(name , parser):
     
 def role_parse(role):
     
-    if role == "0":
+    if role == 0:
         return "primary"
-    elif role == "1":
+    elif role == 1:
         return "backup"
-    elif role == "2":
+    elif role == 2:
         return "slave"
     else:
         return "role not found"

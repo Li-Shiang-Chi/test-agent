@@ -71,7 +71,7 @@ def primaryOS_role_is_backup(parser):
 
 def primaryOS_role_is_slave(parser):
 	role = HAagent_info.get_node_role(parser["PrimaryOS_name"], parser)
-	
+	print role
 	if role == "slave": 
 		return True
 	raise TA_error.Assert_Error("Host (name : %s) role is not slave" % parser["PrimaryOS_name"])
@@ -80,7 +80,8 @@ def primaryOS_role_is_slave(parser):
 def backupOS_role_is_primary(parser):
 	
 	role = HAagent_info.get_node_role(parser["BackupOS_name"], parser)
-
+	
+	
 	if role == "primary": 
 		return True
 	raise TA_error.Assert_Error("backup (name : %s) role is not primary" % parser["BackupOS_name"])

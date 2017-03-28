@@ -21,9 +21,9 @@ def run_postprocess(parser):
 	:param parser: is a dict, get from Test config file
 	""" 
 	postprocess_nodes(parser)
-	postprocess_NFS(parser)
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
+	postprocess_NFS(parser)
 	
 	print "post process"
 	#postprocess_Slave(parser)
