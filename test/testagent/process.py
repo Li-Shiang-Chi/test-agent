@@ -120,8 +120,8 @@ def exec_primaryOS_shutdown(parser):
 	cmd = "sudo poweroff -f" 
 	print cmd 
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
-	print "stdout",s_stdout.read()
-	print "stderr",s_stderr.read()
+	#print "stdout",s_stdout.read()
+	#print "stderr",s_stderr.read()
 	ssh.close()
 	print 79
 	if "pro_wait_time_exe_L1_crasher" in parser.keys(): #若pro_wait_time_exe_L1_crasher存在於parser
