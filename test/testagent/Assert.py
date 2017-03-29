@@ -603,7 +603,7 @@ def detect_primary_vm_guestOS_hang_info(parser):
                               , parser["PrimaryOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_vm_infofail(parser["PrimaryOS_name"],parser["vm_name"], parser, ssh)
-	expected = HAagent_terminal.Lastfail_messages[2][0] # guestOS hang and reboot success
+	expected = HAagent_terminal.Vm_lastfail_messages[2][0] # guestOS hang and reboot success
 	
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
@@ -620,7 +620,7 @@ def detect_backup_vm_guestOS_hang_info(parser):
                               , parser["BackupOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_vm_infofail(parser["BackupOS_name"],parser["vm_name"], parser, ssh)
-	expected = HAagent_terminal.Lastfail_messages[2][0] # guestOS hang and reboot success
+	expected = HAagent_terminal.Vm_lastfail_messages[2][0] # guestOS hang and reboot success
 	
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
@@ -637,7 +637,7 @@ def detect_primary_vm_crash_info(parser):
                               , parser["PrimaryOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_vm_infofail(parser["PrimaryOS_name"],parser["vm_name"], parser, ssh)
-	expected = HAagent_terminal.Lastfail_messages[0][0] # vm crash and reboot now
+	expected = HAagent_terminal.Vm_lastfail_messages[0][0] # vm crash and reboot now
 
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
@@ -655,21 +655,24 @@ def detect_backup_vm_crash_info(parser):
                               , parser["BackupOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_vm_infofail(parser["BackupOS_name"],parser["vm_name"], parser, ssh)
-	expected = HAagent_terminal.Lastfail_messages[0][0] # vm crash and reboot now
+	expected = HAagent_terminal.Vm_lastfail_messages[0][0] # vm crash and reboot now
 
 	if fail != expected:
 		raise TA_error.Assert_Error("vm : %s info fail , fail reason : %s  expected : %s"  % (parser["vm_name"] , fail , expected))
 	return True
 
-###########################################################
 def detect_primaryOS_crash_info(parser):
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_node_infofail(parser["PrimaryOS_name"], parser, ssh)
-	#expected = HAagent_terminal.Lastfail_messages[][]
-	return True
+	expected = HAagent_terminal.Node_status_hostdown
+	success = (fail == expected)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("primary OS crash info fail , Fail msg : %s , Expected msg : %s" % fail , expected)
 
 def detect_primary_network_isolation_info(parser):
 	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
@@ -677,8 +680,12 @@ def detect_primary_network_isolation_info(parser):
                               , parser["BackupOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_node_infofail(parser["PrimaryOS_name"], parser, ssh)
-	#expected = HAagent_terminal.Lastfail_messages[][]
-	return True
+	expected = HAagent_terminal.Node_status_self_network_isolation
+	success = (fail == expected)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("primary network isolation info fail , Fail msg : %s , Expected msg : %s" % fail , expected)
 
 def detect_backupOS_crash_info(parser):
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
@@ -686,8 +693,12 @@ def detect_backupOS_crash_info(parser):
                               , parser["PrimaryOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_node_infofail(parser["BackupOS_name"], parser, ssh)
-	#expected = HAagent_terminal.Lastfail_messages[][]
-	return True
+	expected = HAagent_terminal.Node_status_hostdown
+	success = (fail == expected)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("backup OS crash info fail , Fail msg : %s , Expected msg : %s" % fail , expected)
 
 def detect_backupOS_network_isolation_info(parser):
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
@@ -695,8 +706,12 @@ def detect_backupOS_network_isolation_info(parser):
                               , parser["PrimaryOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_node_infofail(parser["BackupOS_name"], parser, ssh)
-	#expected = HAagent_terminal.Lastfail_messages[][]
-	return True
+	expected = HAagent_terminal.Node_status_self_network_isolation
+	success = (fail == expected)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("backup network isolation info fail , Fail msg : %s , Expected msg : %s" % fail , expected)
 
 
 def detect_slaveOS_crash_info(parser):
@@ -705,8 +720,12 @@ def detect_slaveOS_crash_info(parser):
                               , parser["PrimaryOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_node_infofail(parser["SlaveOS_name"], parser, ssh)
-	#expected = HAagent_terminal.Lastfail_messages[][]
-	return True
+	expected = HAagent_terminal.Node_status_hostdown
+	success = (fail == expected)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("slave OS crash info fail , Fail msg : %s , Expected msg : %s" % fail , expected)
 
 def detect_slaveOS_network_isolation_info(parser):
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
@@ -714,9 +733,12 @@ def detect_slaveOS_network_isolation_info(parser):
                               , parser["PrimaryOS_pwd"]) #獲取ssh
 	
 	fail = HAagent_info.get_node_infofail(parser["SlaveOS_name"], parser, ssh)
-	#expected = HAagent_terminal.Lastfail_messages[][]
-	return True
-##################################################################################
+	expected = HAagent_terminal.Node_status_self_network_isolation
+	success = (fail == expected)
+	
+	if success:
+		return True
+	raise TA_error.Assert_Error("slave network isolation info fail , Fail msg : %s , Expected msg : %s" % fail , expected)
 
 def do_recovery(parser):
 	"""

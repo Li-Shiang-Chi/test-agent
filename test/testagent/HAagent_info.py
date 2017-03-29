@@ -118,8 +118,9 @@ def __get_vm_fail(node_name ,vm_name , parser ,ssh=None):
     cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh) # get cluster file content
     res = json.loads(cluster_file_content)["nodes"][node_name]["vms"][vm_name]["last_fail"] # get json information
     return __vm_fail_parse(res)
+
 def __vm_fail_parse(fail):
-    fail_model = HAagent_terminal.Lastfail_messages
+    fail_model = HAagent_terminal.Vm_lastfail_messages
     for row in fail_model:
         key = row[0] # fail type
         value = row[1] # fail message
@@ -135,13 +136,10 @@ def __get_node_fail(node_name, parser, ssh):
     return __node_fail_parse(res)
 
 def __node_fail_parse(fail):
-    #fail_model = HAagent_terminal.Lastfail_messages
-    #for i in fail_model:
-    #    key = fail_model[i][0]
-    #    value = fail_model[i][1]
-    #    if value == fail:
-    #        return key
-    return 0
+    fail_model = HAagent_terminal.Node_lastfail_messages
+    for key , value in fail_model.iteritems():
+        if value == fail:
+            return key
 
 def get_node_role(name , parser):
     ssh = shell_server.get_ssh(parser["NFS_ip"],
@@ -151,6 +149,7 @@ def get_node_role(name , parser):
     cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] , ssh) # get cluster file content in nfs
     try:
         res = json.loads(cluster_file_content)["nodes"][name]["role"]
+        ssh.close()
         return role_parse(res)
     except KeyError:
         return "Key not found"

@@ -30,7 +30,7 @@ Primary_role = 0
 Backup_role = 1
 Node_role = 2
 # variable name list for clusterInfo
-Clusterinfo_variable_name_list = ["cluster_name", "shelf_ip", "nodes", "my_Node_name"]
+Clusterinfo_variable_name_list = ["cluster_name", "shelf_ip", "nodes", "my_node_name"]
 # the ip address of DNS server that used to get self ip address
 Dns_server_ip = "8.8.8.8"
 Get_ip_port = 80
@@ -48,8 +48,7 @@ CommandHandler_port = 6666
 VMManager_port = 6667
 Connect_timeout = 5
 
-# this part is used in CommandHandler
-# command title
+# CommandHandler command title, cannot contain space
 Command_createcluster = "createcluster"
 Command_addnode = "addnode"
 Command_rmnode = "rmnode"
@@ -59,26 +58,40 @@ Command_startftvm = "startftvm"
 Command_removeftvm = "removeftvm"
 Command_joincluster = "joincluster"
 Command_leavecluster = "leavecluster"
-Command_becomeprimary = "becomeprimary"
-# VMManager command title
-Command_check_domain_running = "eheckDomainRunning"
-Command_start_vm = "startVM"
+Command_become_primary = "becomeprimary"
+Command_become_backup = "becomebackup"
+Command_become_node = "becomenode"
+Command_update_vm_status = "updateVMStatus"
+Command_update_vm_location = "updateVMLocation"
+Command_update_node_status = "updateNodeStatus"
+Command_change_backup_to_node = "changeBackupToNode"
+Command_change_node_to_backup = "changeNodeToBackup"
+# VMManager command title, cannot contain space
+Command_start_vm = "startVM"    # it also use in CommandHandler
+Command_close_all_self_vms = "closeAllSelfVM"   # it also use in CommandHandler
+Command_check_domain_running = "checkDomainRunning"
 Command_shutdown_vm = "shutdownVM"
 Command_reboot_vm = "rebootVM"
-Command_update_vm_status = "updateVMStatus"
 Invalid_command = "this is invalid command"
 
 # command format
 # joincluster cluster_name node_name
 Joincluster_command_format = Command_joincluster + " %s %s"
 Leavecluster_command_format = Command_leavecluster
-Becomeprimary_command_format = Command_becomeprimary
+Becomeprimary_command_format = Command_become_primary
+Becomebackup_command_format = Command_become_backup
+Becomenode_command_format = Command_become_node
+Change_backup_to_node_command_format = Command_change_backup_to_node
+Change_node_to_backup_command_format = Command_change_node_to_backup + " %s"
 # add vm_name to command tail
 Checkdomainrunning_command_format = Command_check_domain_running + " %s"
-Startvm_command_format = Command_start_vm + " %s"
+Startvm_command_format = Command_start_vm + " %s"       # it also use in CommandHandler
 Shutdownvm_command_format = Command_shutdown_vm + " %s"
 Rebootvm_command_format = Command_reboot_vm + " %s"
 Update_vm_status_command_format = Command_update_vm_status + " %s %s"
+Update_vm_location_command_format = Command_update_vm_location + " %s %s %s"
+Update_node_status_command_format = Command_update_node_status + " %s %s"
+Close_all_self_vms_command_format = Command_close_all_self_vms
 
 # CommandHandler success message
 Create_cluster_success = "create cluster success"
@@ -90,11 +103,18 @@ Rmnode_success = "remove %s success"
 Joincluster_success = "join cluster successfully"
 Leavecluster_success = "leave cluster successfully"
 Becomeprimary_success = "become primary successfully"
+Becomebackup_success = "become backup successfully"
+Becomenode_success = "become node successfully"
 Rmnode_success_2 = "because there is only this node in cluster, System decluster directly"
 Startvm_success = "start vm successfully"
 Shutdownvm_success = "shutdown vm successfully"
 Rebootvm_success = "reboot vm successfully"
 Update_vm_status_success = "update vm status successfully"
+Update_vm_location_success = "update vm location successfully"
+Update_node_status_success = "update node status successfully"
+Close_all_self_vms_success = "close all self vms successfully"  # it also use in VMManager
+Change_backup_to_node_success = "in clusterInfo, change backup to node successfully"
+Change_node_to_backup_success = "change node to backup successfully"
 
 # CommandHandler failed message
 Startvm_create_vm_failed = "failed to start vm and add vm into cluster file, the result is: %s"
@@ -102,6 +122,8 @@ Startvm_addVM_failed = "start vm successfully, but failed to add vm into cluster
 Shutdownvm_destroy_vm_failed = "failed to shutdown vm and remove vm from cluster file, the result is: %s"
 Shutdownvm_rmVM_failed = "shutdown vm successfully, but remove vm from cluster file, the result is: %s"
 Checking_vm_running_failed = "failed to check vm running on node(%s), the failed result is: %s"
+Update_node_status_failed = "failed to update node status to cluster file"
+Close_all_self_vms_failed = "failed to close all self vms, there still has vm running"
 
 # file or folder information error messages
 Nfs_folder_not_exist = "nfs folder doesn't exist or is empty"
@@ -134,6 +156,9 @@ Clusterinfo_is_empty = "clusterInfo is empty"
 Rmnode_fail_without_backup = "because there is no backup in cluster now, please try again later"
 Create_NodeFileFolder_failed = "failed to create node file folder"
 Clusterfile_not_json_string = "Cluster file content is not json string"
+Unknown_node_status = "unknown node status"
+Cluster_is_health = "cluster is health"
+Cluster_not_health = "cluster is not health, this command cannot be executed"
 
 # vm operation message
 Vm_is_running = "the specific vm has run at one of nodes, you cannot start it again"
@@ -142,7 +167,6 @@ Vm_create_success = "create vm by libvirt api successfully"
 Vm_create_failed = "failed to create vm by libvirt api"
 Vm_destroy_success = "destroy vm by libvirt api successfully"
 Vm_destroy_failed = "failed to destroy vm by libvirt api"
-
 
 # other error messages
 Get_ip_address_error = "get wrong self ip"
@@ -167,10 +191,14 @@ Libvirt_create_domain_failed = "failed to create a domain from an XML definition
 Libvirt_create_domain_success = "create a domain from an XML definition successfully"
 #StartVM_failed = 'failed to start vm, the state of vm is %s'
 Read_xml_file_failed = "failed to read xml file"
+CheckDomainRunning_exception_message = "failed to check domain running, please check libvirt is alive"
+CheckDomainExist_exception_message = "failed to check domain exist, please check libvirt is alive"
+startDetection_exception_message = "failed to run startDetection method in VMDetector, please check libvirt is alive"
 CreateVM_exception_message = "failed to create vm"
 StartVM_exception_message = "failed to start vm, check the vm name is correct"
 ShutdownVM_exception_message = "failed to shutdown vm, check the vm name is correct"
 RebootVM_exception_message = "failed to reboot vm, check the vm setting"
+CloseAllSelfVMs_exception_message = "failed to close all self vms, check the vm setting"
 
 # threads name
 Thread_command_handler = "CommandHandler"
@@ -203,23 +231,36 @@ Event_watchdog_action = (
         )
 
 # last fail of vm
-Lastfail_messages = (
+Vm_lastfail_messages = (
     ( "VMCrashAndRebootSuccess", "vm crashed and has been rebooted now"),
     ( "VMCrashAndRebootFailed", "vm crashed and failed to reboot it" ),
         ( "GuestOSHangAndRebootSuccess", "guest OS hang and has been rebooted now "),
         ( "GuestOSHangAndRebootFailed", "guest OS hang and failed to reboot it")
     )
+
 # max number of trying command times
 Max_update_vm_status_times = 2
+Max_update_node_status_time = 2
 Max_check_isdir_times = 3
+Max_ping_times = 1
+Max_close_all_self_vms_times = 3
 
 # the format of detection command
 Detection_ping_format = "ping -c 1 %s >/dev/null"
+Handler_shutdown_host_format = "shutdown -h now"
 
 # the response of detectin command
 Response_ping_success = 0
 
-# the status of node health
-Node_status_health = 0
-Node_status_hostdown = 1
-Node_status_self_network_isolation = 2
+# it is node status string, it usually use for communication in this system
+# And it also is the key of Node_lastfail_messages and it will be sent by socket to communicate, so it cannot contain space 
+Node_status_health = "Health"
+Node_status_hostdown = "HostDown"
+Node_status_self_network_isolation = "SelfNetworkIsolation"
+
+# the dictionary that combine the key of this dictionary and the status of node health which will wrote in cluster file
+Node_lastfail_messages = {
+        Node_status_health : "health",
+        Node_status_hostdown : "hostdown",
+        Node_status_self_network_isolation : "self network isolation"
+        }
