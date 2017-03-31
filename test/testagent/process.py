@@ -237,6 +237,7 @@ def kill_libvirt_process(parser):
 	if pid == False:
 		ssh.close()
 		raise TA_error.Process_Error("can not get libvirt pid")
+	print "libvirt pid %s" % pid
 	cmd = cmd_kill.kill_cmd(pid, 9) #獲得kill libvirt process之指令字串
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #透過ssh執行指令
 	ssh.close()
