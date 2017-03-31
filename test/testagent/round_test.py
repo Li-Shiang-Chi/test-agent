@@ -649,6 +649,8 @@ def run_tests(options):
   global n_tests_total
   if n_tests_total > 0:
     print_result()
+  tests_stop_time = time.strftime('%Y-%m-%d-%H.%M.%S')
+  print "\nTests at "+tests_stop_time+"\n"
 
 
 
