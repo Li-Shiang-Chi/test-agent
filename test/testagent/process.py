@@ -182,6 +182,7 @@ def kill_vm_process(parser):
 	:param parser: is a dict, get from Test config file
 	"""
 	if "pro_wait_time_kill_vm_p" in parser.keys(): #若pro_wait_time_kill_vm_p存在於parser
+		print "sleep"
 		time.sleep(float(parser["pro_wait_time_kill_vm_p"]))
 	#print "kill"
 
