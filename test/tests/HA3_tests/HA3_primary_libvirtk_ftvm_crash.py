@@ -9,7 +9,7 @@ def run_HA3_primary_libvirtk_ftvm_crash(parser):
     print 110
     process.kill_libvirt_process(parser)
     Assert.libvirt_running_in_hostOS(parser)
-    process.kill_vm_process(parser)
+   # process.kill_vm_process(parser)
     print 111
     Assert.vm_recover_in_primaryOS(parser)
     print 113
