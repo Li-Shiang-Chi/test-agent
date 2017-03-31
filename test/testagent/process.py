@@ -182,13 +182,14 @@ def kill_vm_process(parser):
 	:param parser: is a dict, get from Test config file
 	"""
 	if "pro_wait_time_kill_vm_p" in parser.keys(): #若pro_wait_time_kill_vm_p存在於parser
-		time.sleep(int(parser["pro_wait_time_kill_vm_p"]))
+		time.sleep(float(5))
 	#print "kill"
 
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
 	pid = FTVM.get_pid(parser["vm_name"], parser["PrimaryOS_ip"], ssh) #獲得VM之pid
+	print "vm pid %s" % pid
 	cmd = cmd_kill.kill_cmd(pid, 9) #獲得kill vm process之指令字串
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #透過ssh執行指令
 	ssh.close()

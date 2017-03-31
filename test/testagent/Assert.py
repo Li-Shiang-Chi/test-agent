@@ -809,7 +809,7 @@ def libvirt_running_in_hostOS(parser):
 	:return: True/raise exception
 	"""
 	if "ast_libvirt_running_wait_time" in parser.keys(): #若參數ast_libvirt_running_wait_time存在於parser，則進入
-		 time.sleep(float(parser["ast_libvirt_running_wait_time"]))
+		time.sleep(float(parser["ast_libvirt_running_wait_time"]))
 	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
