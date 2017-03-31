@@ -509,6 +509,9 @@ def libvirt_stop_start_ftvm(parser):
 	
 	success = (out == expected)
 	
+	print out
+	print expected
+	
 	FTsystem.start(ssh)
 	
 	#print success
