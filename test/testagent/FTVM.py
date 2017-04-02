@@ -113,7 +113,6 @@ def start(vm_name, ip="", ssh=None):
 	if is_shutoff(vm_name, ip, ssh):
 		cmd = cmd_virsh.start_cmd(vm_name, ip) #獲得virsh start之指令字串
 		if ssh:
-			print "HAAgent is running %s" % HAagent.is_running(ssh)
 			s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #執行指令
 			print cmd
 			stdout = s_stdout.read()
@@ -132,6 +131,7 @@ def ftstart(node_name ,vm_name, ip="", ssh=None):
 	if is_shutoff(vm_name,ip, ssh):
 		cmd = cmd_HAagent.start_ftvm_cmd(node_name, vm_name)
 		if ssh:
+			print "HAAgent is running %s" % HAagent.is_running(ssh)
 			print cmd
 			return HAagent.start_ftvm(node_name, vm_name, None, None, ssh)
 		else:
