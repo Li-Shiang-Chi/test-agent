@@ -104,10 +104,10 @@ def overview(parser=None , ssh=None):
     :return: exit the HAagent
     """
     
-def is_running(ssh , parser):
+def is_running(ssh , parser=None):
     cmd = cmd_egrep.get_process_id("HAAgent.py")
     t_start = time.time()
-    while((time.time() - t_start) < float(parser["pre_wait_ssh_port_time"])):
+    while((time.time() - t_start) < float(10)):
         pid = remote_exec(cmd, ssh)
         print pid
         if pid != "":

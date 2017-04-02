@@ -414,6 +414,7 @@ def postprocess_backupOS_vm_shutdown(parser):
 	times = 0
 	while times < 30 and not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		times += 1
+		print "check backupos vm status"
 		FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 		time.sleep(float(1))
 
