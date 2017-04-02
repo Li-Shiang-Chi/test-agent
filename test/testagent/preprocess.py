@@ -237,7 +237,7 @@ def preprocess_mm(parser):
 
   if parser["pre_init_mm"] == "yes":
     #print 99
-    cmd = "bash initAll.sh"
+    cmd = "bash initAll.sh >> init.out"
     status, error = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate()
     #print status
     #print 100
