@@ -1103,7 +1103,7 @@ if __name__ == '__main__':
                               , parser["GuestOS_usr"]
                               , parser["GuestOS_pwd"]) #獲得ssh
 		
-	cmd = "sudo /etc/profile.d/HAagent.sh"
+	cmd = "sudo /etc/profile.d/login_reply.sh"
 	#print cmd
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	if FTVM.is_login(parser["vm_name"]
