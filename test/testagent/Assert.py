@@ -1110,8 +1110,7 @@ if __name__ == '__main__':
 			, parser["TA_ip"]
 			, parser["TA_msg_sock_port"]
 			, int(parser["ast_vm_login_wait_time"])):
+		
 		 #若回傳VM登入完成，則test oracle通過，否則raise exception
 		print " lasdasdasd"
-		return True
-
 	
