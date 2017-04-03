@@ -27,7 +27,7 @@ class Msg_socket(object):
 		self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self.socket.bind((self.ip, int(self.port)))
 		self.socket.settimeout(self.time) #設定socket開起時間久
-		self.socket.listen(1) #設定該socket只能有一個client連進來
+		self.socket.listen(6) #設定該socket只能有一個client連進來
 
 	def open(self):
 		"""
