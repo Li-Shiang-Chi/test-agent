@@ -1106,6 +1106,7 @@ if __name__ == '__main__':
 	parser["TA_ip"] = "192.168.1.102"
 	parser["TA_msg_sock_port"] = "20000"
 	parser["ast_vm_login_wait_time"] = "10"
+	parser["login_reply_path"] = "/etc/profile.d/login_reply.sh"
 	
 	#ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
     #                         , parser["PrimaryOS_usr"]
@@ -1118,7 +1119,7 @@ if __name__ == '__main__':
                               , parser["GuestOS_usr"]
                               , parser["GuestOS_pwd"]) #獲得ssh
 		
-	cmd = "sudo /etc/profile.d/login_reply.sh"
+	cmd = "sudo %s" % parser["login_reply_path"]
 	#print cmd
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	if FTVM.is_login(parser["vm_name"]
