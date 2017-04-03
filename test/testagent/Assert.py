@@ -292,6 +292,20 @@ def vm_is_login_in_backupOS(parser):
 				  , parser["TA_msg_sock_port"]
 				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
 		return True
+	else:
+		ssh = shell_server.get_ssh(parser["GuestOS_ip"]
+                              , parser["GuestOS_usr"]
+                              , parser["GuestOS_pwd"]) #獲得ssh
+		
+		cmd = "sudo /etc/profile.d/HAagent.sh"
+		#print cmd
+		s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+		if FTVM.is_login(parser["vm_name"]
+				  , parser["TA_ip"]
+				  , parser["TA_msg_sock_port"]
+				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
+			return True
+		ssh.close()
 	raise TA_error.Assert_Error("VM (name : %s) is not login in backupOS" % parser["vm_name"])	
 
 
@@ -308,6 +322,20 @@ def vm_is_login_in_slaveOS(parser):
 				  , parser["TA_msg_sock_port"]
 				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
 		return True
+	else:
+		ssh = shell_server.get_ssh(parser["GuestOS_ip"]
+                              , parser["GuestOS_usr"]
+                              , parser["GuestOS_pwd"]) #獲得ssh
+		
+		cmd = "sudo /etc/profile.d/HAagent.sh"
+		#print cmd
+		s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+		if FTVM.is_login(parser["vm_name"]
+				  , parser["TA_ip"]
+				  , parser["TA_msg_sock_port"]
+				  , int(parser["ast_vm_login_wait_time"])): #若回傳VM登入完成，則test oracle通過，否則raise exception
+			return True
+		ssh.close()
 	raise TA_error.Assert_Error("VM (name : %s) is not login in backupOS" % parser["vm_name"])	
 
 def vm_running_in_backupOS(parser):
@@ -1057,12 +1085,33 @@ if __name__ == '__main__':
 	parser["vm_name"] = "test-daemon12"
 	parser["PrimaryOS_pwd"] = "root"
 	parser["PrimaryOS_name"] = "primary"
+	parser["GuestOS_ip"] = "192.168.1.10"
+	parser["GuestOS_usr"] = "test-daemon12"
+	parser["GuestOS_pwd"] = "root"
+	parser["TA_ip"] = "192.168.1.102"
+	parser["TA_msg_sock_port"] = "20000"
+	parser["ast_vm_login_wait_time"] = "10"
 	
-	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
-                              , parser["PrimaryOS_usr"]
-                              , parser["PrimaryOS_pwd"]) #獲得ssh
-	FTVM.ftstart(parser["PrimaryOS_name"], parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+	#ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+    #                         , parser["PrimaryOS_usr"]
+    #                          , parser["PrimaryOS_pwd"]) #獲得ssh
+	#FTVM.ftstart(parser["PrimaryOS_name"], parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 	#print out
 	#print backupOS_role_is_Master_on_BackupOS(parser)
+	
+	ssh = shell_server.get_ssh(parser["GuestOS_ip"]
+                              , parser["GuestOS_usr"]
+                              , parser["GuestOS_pwd"]) #獲得ssh
+		
+	cmd = "sudo /etc/profile.d/HAagent.sh"
+	#print cmd
+	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+	if FTVM.is_login(parser["vm_name"]
+			, parser["TA_ip"]
+			, parser["TA_msg_sock_port"]
+			, int(parser["ast_vm_login_wait_time"])):
+		 #若回傳VM登入完成，則test oracle通過，否則raise exception
+		print " lasdasdasd"
+		return True
 
 	
