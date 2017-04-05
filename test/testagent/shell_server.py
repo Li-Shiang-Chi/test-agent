@@ -5,7 +5,7 @@ import socket
 import TA_error
 
 
-def get_ssh(ip, usr, pwd, t_out=5):
+def get_ssh(ip, usr, pwd, t_out=10):
 	"""
 	get ssh object
 
