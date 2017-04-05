@@ -342,8 +342,9 @@ def postprocess_hostOS_vm_shutdown(parser):
 	times = 0
 	while times < 30:
 		print "check primary os vm status"
-		if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 			print "destroy primary os vm "
+			FTVM.destroy(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
 			break;
 		time.sleep(float(1))
 		times += 1
@@ -418,6 +419,7 @@ def postprocess_backupOS_vm_shutdown(parser):
 		print "check backupos vm status"
 		if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
 			print "destroy backup os vm "
+			FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 			break;
 		time.sleep(float(1))
 		times += 1
@@ -639,8 +641,9 @@ def postprocess_slaveOS_vm_shutdown(parser):
     times = 0
     while times < 30:
 		print "check slave os vm status"
-		if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
+		if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"], ssh):
 			print "destroy slave os vm "
+			FTVM.destroy(parser["vm_name"], parser["SlaveOS_ip"],ssh)
 			break;
 		time.sleep(float(1))
 		times += 1
