@@ -266,7 +266,7 @@ def kill_master_monitor_process(parser):
 	#subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() #執行指令
 	ssh.close()
 
-def exec_vm_guestOS_crasher(parser):
+def exec_primary_vm_guestOS_crasher(parser):
 	"""
 	execute level 1 crasher in vm 
 	kill init process
@@ -276,7 +276,43 @@ def exec_vm_guestOS_crasher(parser):
 	if "pro_wait_time_exe_L1_crasher" in parser.keys(): #若pro_wait_time_exe_L1_crasher存在於parser
 		time.sleep(int(parser["pro_wait_time_exe_L1_crasher"]))
 	
-	ssh = shell_server.get_ssh(parser["GuestOS_ip"]
+	ssh = shell_server.get_ssh(parser["GuestOS_ip_P"]
+                              , parser["GuestOS_usr"]
+                              , parser["GuestOS_pwd"]) #獲得ssh
+	cmd = "sudo "+cmd_kill.kill_cmd(1,11) #獲得kill -SIGSEGV 1之指令字串
+	#print cmd
+	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+	ssh.close()
+
+def exec_backup_vm_guestOS_crasher(parser):
+	"""
+	execute level 1 crasher in vm 
+	kill init process
+
+	:param parser: is a dict, get from Test config file
+	"""
+	if "pro_wait_time_exe_L1_crasher" in parser.keys(): #若pro_wait_time_exe_L1_crasher存在於parser
+		time.sleep(int(parser["pro_wait_time_exe_L1_crasher"]))
+	
+	ssh = shell_server.get_ssh(parser["GuestOS_ip_B"]
+                              , parser["GuestOS_usr"]
+                              , parser["GuestOS_pwd"]) #獲得ssh
+	cmd = "sudo "+cmd_kill.kill_cmd(1,11) #獲得kill -SIGSEGV 1之指令字串
+	#print cmd
+	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+	ssh.close()
+	
+def exec_slave_vm_guestOS_crasher(parser):
+	"""
+	execute level 1 crasher in vm 
+	kill init process
+
+	:param parser: is a dict, get from Test config file
+	"""
+	if "pro_wait_time_exe_L1_crasher" in parser.keys(): #若pro_wait_time_exe_L1_crasher存在於parser
+		time.sleep(int(parser["pro_wait_time_exe_L1_crasher"]))
+	
+	ssh = shell_server.get_ssh(parser["GuestOS_ip_S"]
                               , parser["GuestOS_usr"]
                               , parser["GuestOS_pwd"]) #獲得ssh
 	cmd = "sudo "+cmd_kill.kill_cmd(1,11) #獲得kill -SIGSEGV 1之指令字串

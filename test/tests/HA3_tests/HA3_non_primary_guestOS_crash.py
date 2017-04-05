@@ -7,7 +7,7 @@ def run_HA3_non_primary_guestOS_crash(parser):
     
     preprocess.run_preprocess(parser)
     print 110
-    process.exec_vm_guestOS_crasher(parser)
+    process.exec_backup_vm_guestOS_crasher(parser)
     print 111
     Assert.vm_recover_in_backupOS(parser)
     print 115

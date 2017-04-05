@@ -7,7 +7,7 @@ def run_HA3_primary_guestOS_crash(parser):
     
     preprocess.run_preprocess(parser)
     print 110
-    process.exec_vm_guestOS_crasher(parser)
+    process.exec_primary_vm_guestOS_crasher(parser)
     print 111
     Assert.vm_running_in_hostOS(parser)
     print 112
