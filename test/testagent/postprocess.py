@@ -346,6 +346,7 @@ def postprocess_hostOS_vm_shutdown(parser):
 			print "destroy primary os vm "
 			break;
 		time.sleep(float(1))
+		times += 1
 
 	if not FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		ssh.close()
@@ -419,6 +420,7 @@ def postprocess_backupOS_vm_shutdown(parser):
 			print "destroy backup os vm "
 			break;
 		time.sleep(float(1))
+		times += 1
 
 	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"], ssh):
 		ssh.close()
@@ -641,6 +643,7 @@ def postprocess_slaveOS_vm_shutdown(parser):
 			print "destroy slave os vm "
 			break;
 		time.sleep(float(1))
+		times += 1
   
   if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"],ssh):
     ssh.close()
