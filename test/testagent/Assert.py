@@ -665,6 +665,8 @@ def detect_backup_vm_guestOS_hang_info(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲取ssh
 	
+	time.sleep(float(5))
+	
 	fail = HAagent_info.get_vm_infofail(parser["BackupOS_name"],parser["vm_name"], parser, ssh)
 	expected = HAagent_terminal.Vm_lastfail_messages[2][0] # guestOS hang and reboot success
 	
