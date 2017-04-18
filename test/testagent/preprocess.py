@@ -50,7 +50,7 @@ def preprocess_Host(parser):
     :param parser : is a dict , get from test config file
     """
     
-    #preprocess_host_OS(parser)
+    preprocess_host_OS(parser)
     preprocess_hostOS_Mount(parser)
     preprocess_hostOS_HAagent(parser)
     preprocess_hostOS_vm(parser)
@@ -61,7 +61,7 @@ def preprocess_Backup(parser):
     when test case start backup node do some preprocess
     :param parser : is a dict , get from test config file
     """
-    #preprocess_backup_OS(parser) 
+    preprocess_backup_OS(parser) 
     preprocess_backupOS_Mount(parser)
     preprocess_backupOS_HAagent(parser)
     preprocess_backupOS_vm(parser)
@@ -79,8 +79,7 @@ def preprocess_Slave(parser):
     preprocess_slaveOS_FTsystem(parser)
 
 def preprocess_NFS(parser):
-    #preprocess_NFS_OS(parser)
-    pass
+    preprocess_NFS_OS(parser)
 
 def preprocess_host_OS(parser):
     """
