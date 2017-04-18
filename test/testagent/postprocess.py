@@ -127,7 +127,8 @@ def postprocess_NFS_OS(parser):
 	postprocess_NFS_reset(parser)
 	
 	if parser["pos_NFSOS_restart"] == "yes":
-		postprocess_NFS_OS_reboot(parser)
+		#postprocess_NFS_OS_reboot(parser)
+		pass
 	
 def postprocess_Host_OS_reboot(parser):
 	"""
@@ -174,7 +175,7 @@ def postprocess_NFS_OS_reboot(parser):
 	ssh = shell_server.get_ssh(parser["NFS_ip"]
                               , parser["NFS_usr"]
                               , parser["NFS_pwd"]) #獲得ssh
-	if FTOS.is_running(parser["NFS_name"]):
+	if FTOS.OS_is_running(parser["NFS_ip"], parser):
 		FTOS.reboot(ssh)
      
 def postprocess_NFS_reset(parser):
