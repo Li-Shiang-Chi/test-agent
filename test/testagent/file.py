@@ -42,13 +42,14 @@ output :(String) file content
        (boolean) False , file not found
 """
 def get_file_content (path , ssh = None) :
-    if( if_file_exists(path) ) :
-        if ssh:
+    if ssh:
             return get_remote_file_content(path, ssh)
-        f = open(path , 'r')
-        return f.read()
     else:
-        return False
+        if( if_file_exists(path) ) :
+            f = open(path , 'r')
+            return f.read()
+        else:
+            return False
 """
 get remote file content(String) in specific path
 input :(String) path : file path
