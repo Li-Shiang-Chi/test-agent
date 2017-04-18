@@ -23,8 +23,8 @@ def run_postprocess(parser):
 	postprocess_nodes(parser)
 	postprocess_Host(parser)
 	postprocess_Backup(parser)
-	postprocess_NFS(parser)
 	postprocess_Slave(parser)
+	postprocess_NFS(parser)
 
 
 def postprocess_nodes(parser):
