@@ -72,6 +72,7 @@ def is_cluster_exist(cluster_name , parser):
     
     #overview = s_stdout.read()
     cluster_file_content = file.get_file_content(parser["cluster_file_path"] , ssh)
+    print cluster_file_content
     
     ssh.close()
 
