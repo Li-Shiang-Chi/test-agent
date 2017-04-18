@@ -64,13 +64,9 @@ def postprocess_Slave(parser):
 	when test done , Slave postprocess
 	:param parser: is a dict, get from Test config file
 	""" 
-	print "aa"
 	postprocess_slaveOS_vm(parser)
-	print "bb"
 	postprocess_slaveOS_FTsystem(parser)
-	print "cc"
 	postprocess_Slave_OS(parser)
-	print "dd"
 
 def postprocess_NFS(parser):
 	"""
@@ -409,7 +405,6 @@ def postprocess_backupOS_vm_shutdown(parser):
     						, parser["BackupOS_pwd"]) #獲得ssh
 
 	if FTVM.is_running(parser["vm_name"], parser["BackupOS_ip"], ssh):
-		print "123"
 		time.sleep(float(parser["pos_backupOS_wait_VM_enable_shutdown_time"]))
 		FTVM.destroy(parser["vm_name"], parser["BackupOS_ip"], ssh)
 	elif FTVM.is_paused(parser["vm_name"], parser["BackupOS_ip"], ssh):
@@ -625,7 +620,6 @@ def postprocess_slaveOS_vm_shutdown(parser):
 	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                             , parser["SlaveOS_usr"]
                             , parser["SlaveOS_pwd"]) #獲得ssh
-	print "ff"
 	if FTVM.is_running(parser["vm_name"], parser["SlaveOS_ip"],ssh):
 		FTVM.destroy(parser["vm_name"], parser["SlaveOS_ip"],ssh)
 		time.sleep(float(parser["pos_slaveOS_VM_shutdown_time"]))
@@ -633,7 +627,6 @@ def postprocess_slaveOS_vm_shutdown(parser):
 		FTVM.resume(parser["vm_name"], parser["SlaveOS_ip"],ssh)
 		FTVM.destroy(parser["vm_name"], parser["SlaveOS_ip"],ssh)
 		time.sleep(float(parser["pos_slaveOS_VM_shutdown_time"]))
-	print "qq"	
 	times = 0	
 	while times < 30:	
 		print "check slave os vm status"
@@ -667,7 +660,6 @@ def postprocess_slaveOS_FTsystem(parser):
 		ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
                               , parser["SlaveOS_usr"]
                               , parser["SlaveOS_pwd"]) #獲得ssh
-		print "qweqe"
 		status = FTsystem.get_status(ssh)
 		if status == "not running" and parser["pos_slaveOS_FTsystem_start"] == "yes": #若狀態不為running且根據參數必需是running則進入
 			FTsystem.start(ssh) #透過ssh開啟libvirt
@@ -680,7 +672,6 @@ def postprocess_slaveOS_FTsystem(parser):
 			time.sleep(float(parser["pos_slaveOS_FTsystem_start_time"]))
 			if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
 				ssh.close()
-				print "czxczxc"
 				raise TA_error.Postprocess_Error("slaveOS FTsystem can not stop")
 		ssh.close()
 
