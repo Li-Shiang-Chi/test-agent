@@ -645,7 +645,7 @@ def postprocess_slaveOS_vm_shutdown(parser):
 		times += 1
 	if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"],ssh):
 		ssh.close()
-	raise TA_error.Postprocess_Error("SlaveOS %s can not shutdown" % parser["vm_name"])
+		raise TA_error.Postprocess_Error("SlaveOS %s can not shutdown" % parser["vm_name"])
 	ssh.close()
 			
 
