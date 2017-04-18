@@ -25,7 +25,8 @@ def run_preprocess(parser):
     preprocess_Host(parser)
     print "backup"
     preprocess_Backup(parser)
-    #preprocess_Slave(parser)
+    print "slave"
+    preprocess_Slave(parser)
     print "nfs"
     preprocess_NFS(parser)
 
@@ -39,7 +40,7 @@ def preprocess_nodes(parser):
     print "backup node" 
     preprocess_backup_OS(parser)
     print "slave node" 
-    #preprocess_slave_OS(parser)
+    preprocess_slave_OS(parser)
     print "nfs node"
     preprocess_NFS_OS(parser)
     
@@ -71,7 +72,7 @@ def preprocess_Slave(parser):
     when test case start slave node do some preprocess
     :param parser : is a dict , get from test config file
     """
-    #preprocess_slave_OS(parser)
+    preprocess_slave_OS(parser)
     preprocess_slaveOS_Mount(parser)
     preprocess_slaveOS_HAagent(parser)
     preprocess_slaveOS_vm(parser)
