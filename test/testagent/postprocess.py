@@ -296,7 +296,7 @@ def postprocess_hostOS_HAAgent(parser):
 		HAagent.exit(parser, ssh)
 		if HAagent.is_running(ssh, parser):
 			ssh.close()
-			raise TA_error.Postprocess_Error("Primary OS cannot shutdown")
+			raise TA_error.Postprocess_Error("Primary HAAgent cannot shutdown")
 	else:
 		pass
 
@@ -489,7 +489,7 @@ def postprocess_backupOS_HAAgent(parser):
 		HAagent.exit(parser, ssh)
 		if HAagent.is_running(ssh, parser):
 			ssh.close()
-			raise TA_error.Postprocess_Error("Backup OS cannot shutdown")
+			raise TA_error.Postprocess_Error("Backup HAAgent cannot shutdown")
 	else:
 		pass
 
@@ -715,7 +715,7 @@ def postprocess_slaveOS_HAAgent(parser):
 		HAagent.exit(parser, ssh)
 		if HAagent.is_running(ssh, parser):
 			ssh.close()
-			raise TA_error.Postprocess_Error("Slave OS cannot shutdown")
+			raise TA_error.Postprocess_Error("Slave HAAgent cannot shutdown")
 	else:
 		pass
 
@@ -735,9 +735,11 @@ if __name__ == '__main__':
 	parser["NFS_pwd"] = "00000000"
 	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
 	parser["node_files_folder_path"] = "/var/ha/images/nodeFileFolder/"
-	ssh = shell_server.get_ssh(parser["NFS_ip"]
-                              , parser["NFS_usr"]
-                              , parser["NFS_pwd"]) #獲得ssh
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh
 	
-	NFS.reset(parser, ssh)
+	#NFS.reset(parser, ssh)
 	#postProcessPrimaryOSReboot(parser)
+	postprocess_hostOS_HAAgent(parser)
+	print HAagent.is_running(ssh, parser)
