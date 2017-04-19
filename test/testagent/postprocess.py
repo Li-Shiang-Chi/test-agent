@@ -294,9 +294,9 @@ def postprocess_hostOS_HAAgent(parser):
                               , parser["PrimaryOS_pwd"]) #獲得ssh 
 	if HAagent.is_running(ssh, parser):
 		HAagent.exit(parser, ssh)
-		if HAagent.is_running(ssh, parser):
-			ssh.close()
-			raise TA_error.Postprocess_Error("Primary HAAgent cannot shutdown")
+		#if HAagent.is_running(ssh, parser):
+			#ssh.close()
+			#raise TA_error.Postprocess_Error("Primary HAAgent cannot shutdown")
 	else:
 		pass
 
@@ -487,9 +487,9 @@ def postprocess_backupOS_HAAgent(parser):
                               , parser["BackupOS_pwd"]) #獲得ssh 
 	if HAagent.is_running(ssh, parser):
 		HAagent.exit(parser, ssh)
-		if HAagent.is_running(ssh, parser):
-			ssh.close()
-			raise TA_error.Postprocess_Error("Backup HAAgent cannot shutdown")
+		#if HAagent.is_running(ssh, parser):
+		#	ssh.close()
+		#	raise TA_error.Postprocess_Error("Backup HAAgent cannot shutdown")
 	else:
 		pass
 
@@ -713,9 +713,9 @@ def postprocess_slaveOS_HAAgent(parser):
                               , parser["SlaveOS_pwd"]) #獲得ssh 
 	if HAagent.is_running(ssh, parser):
 		HAagent.exit(parser, ssh)
-		if HAagent.is_running(ssh, parser):
-			ssh.close()
-			raise TA_error.Postprocess_Error("Slave HAAgent cannot shutdown")
+		#if HAagent.is_running(ssh, parser):
+		#	ssh.close()
+		#	raise TA_error.Postprocess_Error("Slave HAAgent cannot shutdown")
 	else:
 		pass
 

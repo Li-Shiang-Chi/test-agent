@@ -27,9 +27,6 @@ def remove_ftvm_cmd(vm_name):
 def overview_cmd():
     return "mmsh overview"
 
-def get_pid_cmd():
-    return "ps -ef | grep HAAgent.py | awk '{if(NR==1) print $2}'"
-
 def exit_cmd():
     return "mmsh exit"
 
