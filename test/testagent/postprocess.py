@@ -97,7 +97,8 @@ def postprocess_Host_OS_reboot(parser):
 	FTOS.reset_pid("primary" , parser)
 	print "primary pid reset"
 	if parser["pos_hostOS_restart"] == "yes":
-		postprocess_Host_OS_reboot(parser)
+		if FTOS.OS_is_running(parser["PrimaryOS_ip"], parser):
+			FTOS.reboot(ssh)
 	
 def postprocess_Backup_OS_reboot(parser):
 	"""
@@ -114,7 +115,8 @@ def postprocess_Backup_OS_reboot(parser):
 	FTOS.reset_pid("backup" , parser)
 	print "backup pid reset"
 	if parser["pos_backupOS_restart"] == "yes":
-		postprocess_Backup_OS_reboot(parser)
+		if FTOS.OS_is_running(parser["BackupOS_ip"], parser):
+			FTOS.reboot(ssh)
 	
 def postprocess_Slave_OS_reboot(parser):
 	"""
@@ -131,7 +133,8 @@ def postprocess_Slave_OS_reboot(parser):
 	FTOS.reset_pid("slave" , parser)
 	print "slave pid reset"
 	if parser["pos_slaveOS_restart"] == "yes":
-		postprocess_Slave_OS_reboot(parser)
+		if FTOS.OS_is_running(parser["SlaveOS_ip"], parser):
+			FTOS.reboot(ssh)
 	
 def postprocess_NFS_OS(parser):
 	"""
