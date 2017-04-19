@@ -986,7 +986,7 @@ def detect_add_node(parser):
 
 	primary_success = HAagent_info.is_add_primary_success(parser)
 	backup_success = HAagent_info.is_add_backup_success(parser)
-	#slave_success = HAagent_info.is_add_slave_success(parser)
+	slave_success = HAagent_info.is_add_slave_success(parser)
 	
 	ssh.close()
 	
@@ -994,8 +994,8 @@ def detect_add_node(parser):
 		raise TA_error.Assert_Error("primary add node fail")
 	if not backup_success:
 		raise TA_error.Assert_Error("backup add node fail")
-	#if not slave_success:
-	#	raise TA_error.Assert_Error("slave add node fail")
+	if not slave_success:
+		raise TA_error.Assert_Error("slave add node fail")
 	return True
 
 def detect_add_duplicate_node(parser):
