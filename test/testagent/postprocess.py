@@ -144,42 +144,7 @@ def postprocess_NFS_OS(parser):
 	if parser["pos_NFSOS_restart"] == "yes":
 		postprocess_NFS_OS_reboot(parser)
 	
-def postprocess_Host_OS_reboot(parser):
-	"""
-	when test case done , Host OS reboot
-	:param parser: is a dict, get from Test config file
-	"""
-	
-	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
-                              , parser["PrimaryOS_usr"]
-                              , parser["PrimaryOS_pwd"]) #獲得ssh 
-	if FTOS.OS_is_running(parser["PrimaryOS_ip"], parser):
-		FTOS.reboot(ssh)
-	
-def postprocess_Backup_OS_reboot(parser):
-	"""
-	when test case done , Host OS reboot
-	:param parser: is a dict, get from Test config file
-	"""
-	
-	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
-                              , parser["BackupOS_usr"]
-                              , parser["BackupOS_pwd"]) #獲得ssh 
-	
-	if FTOS.OS_is_running(parser["BackupOS_ip"], parser):
-		FTOS.reboot(ssh)
-	
-def postprocess_Slave_OS_reboot(parser):
-	"""
-	when test case done , Host OS reboot
-	:param parser: is a dict, get from Test config file
-	"""
-	
-	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
-                              , parser["SlaveOS_usr"]
-                              , parser["SlaveOS_pwd"]) #獲得ssh 
-	if FTOS.OS_is_running(parser["SlaveOS_ip"], parser):
-		FTOS.reboot(ssh)
+
 def postprocess_NFS_OS_reboot(parser):
 	"""
 	when test case done , Host OS reboot
