@@ -12,6 +12,7 @@ import TA_error
 import mmsh
 import NFS
 import shell_server
+import HAagent
 
 
 def run_postprocess(parser):
@@ -21,14 +22,14 @@ def run_postprocess(parser):
 	""" 
 	postprocess_nodes(parser)
 	print "pos nodes"
-	postprocess_NFS(parser)
-	print "pos nfs"
 	postprocess_Host(parser)
 	print "pos host"
 	postprocess_Backup(parser)
 	print "pos backup"
 	postprocess_Slave(parser)
 	print "pos slave"
+	postprocess_NFS(parser)
+	print "pos nfs"
 
 
 def postprocess_nodes(parser):
@@ -48,6 +49,7 @@ def postprocess_Host(parser):
 	""" 
 	postprocess_hostOS_vm(parser)
 	postprocess_hostOS_FTsystem(parser)
+	postprocess_hostOS_HAAgent(parser)
 	postprocess_Host_OS(parser)
 
 def postprocess_Backup(parser):
@@ -57,6 +59,7 @@ def postprocess_Backup(parser):
 	""" 
 	postprocess_backupOS_vm(parser)
 	postprocess_backupOS_FTsystem(parser)
+	postprocess_backupOS_HAAgent(parser)
 	postprocess_Backup_OS(parser)
 
 def postprocess_Slave(parser):
@@ -66,6 +69,7 @@ def postprocess_Slave(parser):
 	""" 
 	postprocess_slaveOS_vm(parser)
 	postprocess_slaveOS_FTsystem(parser)
+	postprocess_slaveOS_HAAgent(parser)
 	postprocess_Slave_OS(parser)
 
 def postprocess_NFS(parser):
@@ -280,7 +284,17 @@ def postprocess_hostOS_FTsystem(parser):
 				ssh.close()
 				raise TA_error.Postprocess_Error("PrimaryOS FTsystem can not stop")
 		ssh.close()
-
+def postprocess_hostOS_HAAgent(parser):
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+                              , parser["PrimaryOS_usr"]
+                              , parser["PrimaryOS_pwd"]) #獲得ssh 
+	if HAagent.is_running(ssh, parser):
+		HAagent.exit(parser, ssh)
+		if HAagent.is_running(ssh, parser):
+			ssh.close()
+			raise TA_error("Primary OS cannot shutdown")
+	else:
+		pass
 
 def postprocess_hostOS_vm(parser):
 	"""
@@ -461,6 +475,19 @@ def postprocess_backupOS_FTsystem(parser):
 				ssh.close()
 				raise TA_error.Postprocess_Error("backupOS FTsystem can not stop")
 		ssh.close()
+		
+		
+def postprocess_backupOS_HAAgent(parser):
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh 
+	if HAagent.is_running(ssh, parser):
+		HAagent.exit(parser, ssh)
+		if HAagent.is_running(ssh, parser):
+			ssh.close()
+			raise TA_error("Backup OS cannot shutdown")
+	else:
+		pass
 
 def postprocess_primaryOS_running(parser):
 	"""
@@ -674,6 +701,19 @@ def postprocess_slaveOS_FTsystem(parser):
 				ssh.close()
 				raise TA_error.Postprocess_Error("slaveOS FTsystem can not stop")
 		ssh.close()
+		
+		
+def postprocess_slaveOS_HAAgent(parser):
+	ssh = shell_server.get_ssh(parser["SlaveOS_ip"]
+                              , parser["SlaveOS_usr"]
+                              , parser["SlaveOS_pwd"]) #獲得ssh 
+	if HAagent.is_running(ssh, parser):
+		HAagent.exit(parser, ssh)
+		if HAagent.is_running(ssh, parser):
+			ssh.close()
+			raise TA_error("Slave OS cannot shutdown")
+	else:
+		pass
 
 if __name__ == '__main__':
 	#parser = {}
