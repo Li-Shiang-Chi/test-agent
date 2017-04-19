@@ -11,6 +11,7 @@ import master_monitor
 import time
 import HAagent
 import TA_error
+import os
 
 def exec_L1_backupOS_network_isolation(parser):
 
@@ -576,6 +577,9 @@ def exec_add_duplicate_node(parser):
 	
 	input , out , err = ssh.exec_command("ls /var/ha/images/")
 	print out.read()
+	
+	print os.path.isfile("/var/ha/images/clusterFile.txt")
+	
 	
 	HAagent.create_cluster(parser["Cluster_name"], parser["PrimaryOS_name"], parser["PrimaryOS_ipmb"], parser["Shelf_ip"], parser, ssh) 
 	ssh.close()
