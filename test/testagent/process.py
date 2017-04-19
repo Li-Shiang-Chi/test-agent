@@ -541,8 +541,8 @@ def exec_add_node(parser):
 	time.sleep(float(parser["pro_wait_add_node_time"]))
 	HAagent.add_backup_node(parser, ssh)
 	time.sleep(float(parser["pro_wait_add_node_time"]))
-	#HAagent.add_slave_node(parser, ssh)
-	#time.sleep(float(parser["pro_wait_add_node_time"]))
+	HAagent.add_slave_node(parser, ssh)
+	time.sleep(float(parser["pro_wait_add_node_time"]))
 	
 	ssh.close()
 
