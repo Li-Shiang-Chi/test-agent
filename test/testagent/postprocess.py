@@ -95,6 +95,7 @@ def postprocess_Host_OS_reboot(parser):
 	if not FTVM.is_shutoff(parser["vm_name"], parser["PrimaryOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in PrimaryOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("primary" , parser)
+	print "primary pid reset"
 	if parser["pos_hostOS_restart"] == "yes":
 		postprocess_Host_OS_reboot(parser)
 	
@@ -111,6 +112,7 @@ def postprocess_Backup_OS_reboot(parser):
 	if not FTVM.is_shutoff(parser["vm_name"], parser["BackupOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in BackupOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("backup" , parser)
+	print "backup pid reset"
 	if parser["pos_backupOS_restart"] == "yes":
 		postprocess_Backup_OS_reboot(parser)
 	
@@ -127,6 +129,7 @@ def postprocess_Slave_OS_reboot(parser):
 	if not FTVM.is_shutoff(parser["vm_name"], parser["SlaveOS_ip"] , ssh):
 		raise TA_error.Postprocess_Error("vm %s in SlaveOS cannot shutdown " % parser["vm_name"])
 	FTOS.reset_pid("slave" , parser)
+	print "slave pid reset"
 	if parser["pos_slaveOS_restart"] == "yes":
 		postprocess_Slave_OS_reboot(parser)
 	
