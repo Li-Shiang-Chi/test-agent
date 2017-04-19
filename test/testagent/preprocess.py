@@ -173,7 +173,6 @@ def preprocess_NFS_OS(parser):
     ssh = shell_server.get_ssh(parser["NFS_ip"]
                                   , parser["NFS_usr"]
                                   , parser["NFS_pwd"]) #獲得ssh 
-    NFS.reset(parser, ssh)
     
 def preprocess_OS_Mount_NFS(parser , ssh = None):
     cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
