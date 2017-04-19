@@ -21,14 +21,14 @@ def run_postprocess(parser):
 	""" 
 	postprocess_nodes(parser)
 	print "pos nodes"
+	postprocess_NFS(parser)
+	print "pos nfs"
 	postprocess_Host(parser)
 	print "pos host"
 	postprocess_Backup(parser)
 	print "pos backup"
 	postprocess_Slave(parser)
 	print "pos slave"
-	postprocess_NFS(parser)
-	print "pos nfs"
 
 
 def postprocess_nodes(parser):
