@@ -175,9 +175,6 @@ def preprocess_NFS_OS(parser):
                                   , parser["NFS_pwd"]) #獲得ssh 
     NFS.reset(parser, ssh)
     
-    input , out , err = ssh.exec_command("ls /var/ha/images/")
-    print out.read()
-    
 def preprocess_OS_Mount_NFS(parser , ssh = None):
     cmd = "mount -t nfs %s:%s %s" % (parser["NFS_ip"],parser["NFS_share_folder"],parser["NFS_local_path"])
     s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
