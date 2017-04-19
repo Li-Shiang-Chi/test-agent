@@ -13,6 +13,7 @@ import cmd
 import time
 import cmd_service
 import cmd_kill
+from testagent import HAagent_terminal
 
 
 """
@@ -106,14 +107,14 @@ def overview(parser=None , ssh=None):
     """
     
 def is_running(ssh , parser=None):
-    cmd = cmd_egrep.get_process_id("HAAgent.py")
-    t_start = time.time()
-    while((time.time() - t_start) < float(10)):
-        pid = remote_exec(cmd, ssh)
-        print pid
-        if pid != "":
-            return True
-    return False
+    cmd = cmd_HAagent.overview_cmd()
+    out = remote_exec(cmd, ssh)
+    error = HAagent_terminal.Socket_connect_error
+    
+    if error in out:
+        return False
+    return True 
+    
 
     
 def exit(parser=None , ssh=None):
