@@ -30,6 +30,8 @@ def run_postprocess(parser):
 	print "pos slave"
 	postprocess_NFS(parser)
 	print "pos nfs"
+	postprocess_node_reboot(parser)
+	print "post nodes reboot"
 
 
 def postprocess_nodes(parser):
@@ -50,7 +52,6 @@ def postprocess_Host(parser):
 	postprocess_hostOS_vm(parser)
 	postprocess_hostOS_FTsystem(parser)
 	postprocess_hostOS_HAAgent(parser)
-	postprocess_Host_OS(parser)
 
 def postprocess_Backup(parser):
 	"""
@@ -60,7 +61,6 @@ def postprocess_Backup(parser):
 	postprocess_backupOS_vm(parser)
 	postprocess_backupOS_FTsystem(parser)
 	postprocess_backupOS_HAAgent(parser)
-	postprocess_Backup_OS(parser)
 
 def postprocess_Slave(parser):
 	"""
@@ -70,7 +70,6 @@ def postprocess_Slave(parser):
 	postprocess_slaveOS_vm(parser)
 	postprocess_slaveOS_FTsystem(parser)
 	postprocess_slaveOS_HAAgent(parser)
-	postprocess_Slave_OS(parser)
 
 def postprocess_NFS(parser):
 	"""
@@ -78,8 +77,13 @@ def postprocess_NFS(parser):
 	:param parser: is a dict, get from Test config file
 	""" 
 	postprocess_NFS_OS(parser)
+
+def postprocess_node_reboot(parser):
+	postprocess_Host_OS_reboot(parser)
+	postprocess_Backup_OS_reboot(parser)
+	postprocess_Slave_OS_reboot(parser)
 	
-def postprocess_Host_OS(parser):
+def postprocess_Host_OS_reboot(parser):
 	"""
 	post process host os part
 	:param parser: is a dict, get from Test config file
@@ -94,7 +98,7 @@ def postprocess_Host_OS(parser):
 	if parser["pos_hostOS_restart"] == "yes":
 		postprocess_Host_OS_reboot(parser)
 	
-def postprocess_Backup_OS(parser):
+def postprocess_Backup_OS_reboot(parser):
 	"""
 	post process backup os part
 	:param parser: is a dict, get from Test config file
@@ -110,7 +114,7 @@ def postprocess_Backup_OS(parser):
 	if parser["pos_backupOS_restart"] == "yes":
 		postprocess_Backup_OS_reboot(parser)
 	
-def postprocess_Slave_OS(parser):
+def postprocess_Slave_OS_reboot(parser):
 	"""
 	post process slave os part
 	:param parser: is a dict, get from Test config file
