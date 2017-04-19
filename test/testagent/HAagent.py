@@ -12,7 +12,7 @@ import subprocess
 import cmd
 import time
 import cmd_service
-from testagent import cmd_kill
+import cmd_kill
 
 
 """
