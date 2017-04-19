@@ -433,9 +433,9 @@ def preprocess_backupOS_FTsystem(parser):
         if status == "running" and parser["pre_backupOS_FTsystem_start"] == "no": #若狀態為running且根據參數必需不是running則進入
             FTsystem.stop(ssh)
             time.sleep(float(parser["pre_backupOS_FTsystem_start_time"]))
-        if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
-            ssh.close()
-            raise TA_error.Preprocess_Error("backupOS FTsystem can not stop")
+            if FTsystem.get_status(ssh) == "running": #若狀態為running則raise exception
+                ssh.close()
+                raise TA_error.Preprocess_Error("backupOS FTsystem can not stop")
     ssh.close()
   
 
