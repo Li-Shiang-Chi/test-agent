@@ -292,7 +292,7 @@ def postprocess_hostOS_HAAgent(parser):
 		HAagent.exit(parser, ssh)
 		if HAagent.is_running(ssh, parser):
 			ssh.close()
-			raise TA_error("Primary OS cannot shutdown")
+			raise TA_error.Postprocess_Error("Primary OS cannot shutdown")
 	else:
 		pass
 
@@ -485,7 +485,7 @@ def postprocess_backupOS_HAAgent(parser):
 		HAagent.exit(parser, ssh)
 		if HAagent.is_running(ssh, parser):
 			ssh.close()
-			raise TA_error("Backup OS cannot shutdown")
+			raise TA_error.Postprocess_Error("Backup OS cannot shutdown")
 	else:
 		pass
 
@@ -711,7 +711,7 @@ def postprocess_slaveOS_HAAgent(parser):
 		HAagent.exit(parser, ssh)
 		if HAagent.is_running(ssh, parser):
 			ssh.close()
-			raise TA_error("Slave OS cannot shutdown")
+			raise TA_error.Postprocess_Error("Slave OS cannot shutdown")
 	else:
 		pass
 
