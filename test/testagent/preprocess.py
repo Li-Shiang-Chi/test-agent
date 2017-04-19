@@ -193,7 +193,9 @@ def preprocess_hostOS_HAagent(parser):
                                   , parser["PrimaryOS_usr"]
                                   , parser["PrimaryOS_pwd"]) #獲得ssh 
     if HAagent.is_running(ssh, parser):
+        ssh.close()
         return True
+    ssh.close()
     raise TA_error.Preprocess_Error("Host OS HAAgent process not ready")
 
 def preprocess_backupOS_HAagent(parser):
@@ -201,7 +203,9 @@ def preprocess_backupOS_HAagent(parser):
                                   , parser["BackupOS_usr"]
                                   , parser["BackupOS_pwd"]) #獲得ssh 
     if HAagent.is_running(ssh, parser):
+        ssh.close()
         return True
+    ssh.close()
     raise TA_error.Preprocess_Error("Backup OS HAAgent process not ready")
 
 def preprocess_slaveOS_HAagent(parser):
@@ -209,7 +213,9 @@ def preprocess_slaveOS_HAagent(parser):
                                   , parser["SlaveOS_usr"]
                                   , parser["SlaveOS_pwd"]) #獲得ssh 
     if HAagent.is_running(ssh, parser):
+        ssh.close()
         return True
+    ssh.close()
     raise TA_error.Preprocess_Error("Slave OS HAAgent process not ready")
     
 def preprocess(parser):
@@ -534,6 +540,7 @@ def prepocess_hostOS_vm_restart(parser):
         FTVM.restart(parser["vm_name"], parser["PrimaryOS_ip"],ssh)
     else:
         FTVM.ftrestart(parser["vm_name"], parser["PrimaryOS_ip"], ssh)
+    ssh.close()
 
 def preprocess_hostOS_vm_shutdown(parser):
     """
