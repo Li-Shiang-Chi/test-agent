@@ -686,9 +686,9 @@ if __name__ == '__main__':
 	parser["PrimaryOS_ip"] = "192.168.1.100"
 	parser["PrimaryOS_usr"] = "primary"
 	parser["PrimaryOS_pwd"] = "root"
-	parser["NFS_ip"] = "192.168.1.102"
-	parser["NFS_usr"] = "slave"
-	parser["NFS_pwd"] = "root"
+	parser["NFS_ip"] = "192.168.1.29"
+	parser["NFS_usr"] = "share"
+	parser["NFS_pwd"] = "00000000"
 	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
 	parser["node_files_folder_path"] = "/var/ha/images/nodeFileFolder/"
 	ssh = shell_server.get_ssh(parser["NFS_ip"]
