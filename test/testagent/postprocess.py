@@ -11,7 +11,7 @@ import FTOS
 import TA_error
 import mmsh
 import NFS
-from testagent import shell_server
+import shell_server
 
 
 def run_postprocess(parser):
