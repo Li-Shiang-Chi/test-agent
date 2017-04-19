@@ -1,9 +1,9 @@
 #HAagent sprint1 unit test
 !3
-HA3_create_cluster
-HA3_create_duplicate_cluster
-HA3_de_cluster
-HA3_de_outer_cluster
+#HA3_create_cluster
+#HA3_create_duplicate_cluster
+#HA3_de_cluster
+#HA3_de_outer_cluster
 HA3_add_node
 HA3_add_duplicate_node
 HA3_add_outer_node

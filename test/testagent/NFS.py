@@ -44,7 +44,10 @@ def reset(parser , ssh = None):
         raise TA_error.Shell_server_Error("not getting ssh")
     clear_cluster_file(parser, ssh)
     clear_node_files(parser, ssh)
-
+    input , out , err = ssh.exec_command("ls /var/ha/images/")
+    print out.read()
+    
+    
 def local_exec(cmd , parser):
     p = sub_process.get_sub_process(parser)
     cmd = cmd[len('mmsh'):] # remove mmsh string from cmd  
