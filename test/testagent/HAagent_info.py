@@ -168,9 +168,18 @@ def role_parse(role):
         return "role not found"
     
 if  __name__ == '__main__':
-    cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")
-    jsonString = json.loads(cluster_file_content)
-    print jsonString["nodes"]["n1"]["role"]
-    print jsonString["nodes"]["n1"]["role"] == 0
+    #cluster_file_content = file.get_file_content("/var/ha/images/clusterFile.txt")
+    #jsonString = json.loads(cluster_file_content)
+    #print jsonString["nodes"]["n1"]["role"]
+    #print jsonString["nodes"]["n1"]["role"] == 0
+    
+    parser["NFS_ip"] = "192.168.1.106"
+    parser["NFS_usr"] = "testagent"
+    parser["NFS_pwd"] = "root"
+    
+    ssh = shell_server.get_ssh(parser["NFS_ip"],
+                               parser["NFS_usr"], 
+                               parser["NFS_pwd"])
+    cluster_file_content = file.get_remote_file_content(parser["cluster_file_path"] ,ssh) # get cluster file content in nfs
      
     

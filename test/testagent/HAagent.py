@@ -118,7 +118,7 @@ def is_running(ssh , parser=None):
 
     
 def exit(parser=None , ssh=None):
-    cmd = cmd_egrep.get_process_id("python HAAgent.py")
+    cmd = cmd_egrep.get_process_id("HAAgent.py")
     pid = remote_exec(cmd, ssh)    
     
     kill_cmd = cmd_kill.kill_cmd(pid, 9)

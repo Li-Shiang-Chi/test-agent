@@ -575,12 +575,6 @@ def exec_add_duplicate_node(parser):
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
 	
-	input , out , err = ssh.exec_command("ls /var/ha/images/")
-	print out.read()
-	
-	print os.path.isfile("/var/ha/images/clusterFile.txt")
-	
-	
 	HAagent.create_cluster(parser["Cluster_name"], parser["PrimaryOS_name"], parser["PrimaryOS_ipmb"], parser["Shelf_ip"], parser, ssh) 
 	ssh.close()
 	
