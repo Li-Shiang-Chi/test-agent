@@ -13,10 +13,10 @@ def run_HA3_primaryOS_crash(parser):
     process.exec_primaryOS_shutdown(parser)
     print 117
     #assert
-    Assert.vm_recover_in_slaveOS(parser)
+    Assert.vm_recover_in_backup_or_slave(parser)
     print 119
     #Assert.detect_primaryOS_crash(parser)
-    Assert.detect_primaryOS_crash_info(parser)
+    #Assert.detect_primaryOS_crash_info(parser)
     print 110
     Assert.primaryOS_role_is_slave(parser)
     print 111
