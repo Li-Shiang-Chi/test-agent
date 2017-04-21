@@ -196,10 +196,9 @@ def vm_recover_in_slaveOS(parser):
 	
 def vm_recover_in_backup_or_slave(parser):
 	try:
-		vm_recover_in_backupOS(parser)
-	except TA_error.Assert_Error:
 		vm_recover_in_slaveOS(parser)
-
+	except TA_error.Assert_Error:
+		vm_recover_in_backupOS(parser)
 def vm_running_in_hostOS(parser):
 	"""
 	vm is running in hostOS or not
