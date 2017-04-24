@@ -1101,6 +1101,10 @@ if __name__ == '__main__':
 	parser["BackupOS_pwd"] = "000000"
 	parser["BackupOS_name"] = "h2"
 	
+	parser["NFS_ip"] = "192.168.1.106"
+	parser["NFS_usr"] = "testagent"
+	parser["NFS_pwd"] = "root"
+	
 	parser["PrimaryOS_ip"] = "192.168.1.100"
 	parser["PrimaryOS_usr"] = "primary"
 	parser["cluster_file_path"] = "/var/ha/images/clusterFile.txt"
@@ -1122,6 +1126,10 @@ if __name__ == '__main__':
 	#print out
 	#print backupOS_role_is_Master_on_BackupOS(parser)
 	
+	
+	detect_primary_vm_crash_info(parser)
+	
+	"""
 	ssh = shell_server.get_ssh(parser["GuestOS_ip"]
                               , parser["GuestOS_usr"]
                               , parser["GuestOS_pwd"]) #獲得ssh
@@ -1136,4 +1144,4 @@ if __name__ == '__main__':
 		
 		 #若回傳VM登入完成，則test oracle通過，否則raise exception
 		print " lasdasdasd"
-	
+	"""
