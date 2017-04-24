@@ -117,6 +117,7 @@ def get_vm_infofail(node_name , vm_name , parser ,ssh=None):
     
 def __get_vm_fail(node_name ,vm_name , parser ,ssh=None):
     cluster_file_content = file.get_file_content(parser["cluster_file_path"], ssh) # get cluster file content
+    print cluster_file_content
     res = json.loads(cluster_file_content)["nodes"][node_name]["vms"][vm_name]["last_fail"] # get json information
     return __vm_fail_parse(res)
 
