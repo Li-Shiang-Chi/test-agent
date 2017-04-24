@@ -118,12 +118,8 @@ def is_running(ssh , parser=None):
 
     
 def exit(parser=None , ssh=None):
-    cmd = cmd_egrep.get_process_id("HAAgent.py")
-    pid = remote_exec(cmd, ssh)    
-    
-    kill_cmd = cmd_kill.kill_cmd(pid, 9)
-    print "kill HAAgent pid %s . Command : %s " % (pid , kill_cmd)
-    return remote_exec(kill_cmd, ssh) if ssh else local_exec(kill_cmd, parser)
+    cmd = cmd_HAagent.exit_cmd()
+    return remote_exec(cmd, ssh) if ssh else local_exec(cmd, parser)
 
     """
     local side execute using subprocess module

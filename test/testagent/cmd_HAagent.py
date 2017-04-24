@@ -28,7 +28,7 @@ def overview_cmd():
     return "mmsh overview"
 
 def exit_cmd():
-    return "mmsh exit"
+    return "sudo systemctl stop HAAgent"
 
 if __name__ == "__main__":
     print create_cluster_cmd("123", "234")
