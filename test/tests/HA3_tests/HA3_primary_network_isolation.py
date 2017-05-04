@@ -14,12 +14,13 @@ def run_HA3_primary_network_isolation(parser):
     process.exec_primaryOS_network_isolation(parser)
     print 402
     #assert
-    Assert.vm_recover_in_backupOS(parser)
+    #Assert.vm_recover_in_backupOS(parser)
+    Assert.vm_recover_in_backup_or_slave(parser)
     print 404
-    Assert.detect_primary_network_isolation_info(parser)
+    #Assert.detect_primary_network_isolation_info(parser)
     print 405
     Assert.primaryOS_role_is_slave(parser)
     print 406
     Assert.backupOS_role_is_primary(parser)
     print 407
-    
+    Assert.slaveOS_role_is_backup(parser)

@@ -1,9 +1,5 @@
-#combination test
-!0
-vm_start
-!1
-L1_ft_vm_crash
-!2
-L2_ft_vm_crash
-!co
-test2
+#HAagent sprint3
+!3
+!m
+HA3_primary_network_isolation
+!m!
