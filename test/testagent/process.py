@@ -22,7 +22,7 @@ def exec_L1_backupOS_network_isolation(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh
 
-	cmd = "sudo ifdown %s && sudo sleep 150s && sudo ifup %s" % (parser["BackupOS_network_interface"], parser["BackupOS_network_interface"] )
+	cmd = "sudo ifconfig %s down" % (parser["BackupOS_network_interface"])
 	print cmd 
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	#print "stdout",s_stdout.read()
@@ -38,7 +38,7 @@ def exec_primaryOS_network_isolation(parser):
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
 
-	cmd = "sudo ifdown %s && sudo sleep 180s && sudo ifup %s" % (parser["PrimaryOS_network_interface"], parser["PrimaryOS_network_interface"] )
+	cmd = "sudo ifconfig %s down" % (parser["PrimaryOS_network_interface"])
 	print cmd 
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	#print "stdout",s_stdout.read()
