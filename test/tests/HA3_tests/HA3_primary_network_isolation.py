@@ -20,7 +20,7 @@ def run_HA3_primary_network_isolation(parser):
     print 404
     #Assert.detect_primary_network_isolation_info(parser)
     print 405
-    time.sleep(30)
+    time.sleep(60)
     Assert.primaryOS_role_is_slave(parser)
     print 406
     Assert.backupOS_role_is_primary(parser)
