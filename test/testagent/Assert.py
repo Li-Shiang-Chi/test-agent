@@ -457,7 +457,7 @@ def vm_duplicate_start(parser):
 	if FTVM.is_running(parser["vm_name"], parser["PrimaryOS_ip"], ssh):
 		
 		out = FTVM.duplicate_ftstart(parser["PrimaryOS_name"], parser["vm_name"], parser["PrimaryOS_ip"], ssh)
-		expected = HAagent_terminal.Checking_vm_running_failed % (parser["PrimaryOS_name"] , HAagent_terminal.Vm_is_running)
+		expected = HAagent_terminal.Startvm_addVM_failed % (HAagent_terminal.Vm_has_exist)
 		success = ( out == expected )
 		
 		if success :
@@ -553,7 +553,7 @@ def libvirt_stop_start_ftvm(parser):
 	cmd = cmd_HAagent.start_ftvm_cmd(parser["PrimaryOS_name"], parser["vm_name"])
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd)
 	out = s_stdout.read()
-	expected = HAagent_terminal.Checking_vm_running_failed % (parser["PrimaryOS_name"] , HAagent_terminal.Libvirt_connection_failed % HAagent_terminal.Libvirt_self_connection)+"\n"
+	expected = HAagent_terminal.Startvm_create_vm_failed % ( HAagent_terminal.Libvirt_connection_failed % HAagent_terminal.Libvirt_self_connection)+"\n"
 	
 	
 	success = (out == expected)
