@@ -41,8 +41,15 @@ def exec_primaryOS_network_isolation(parser):
 	cmd = "sudo ifconfig %s down" % (parser["PrimaryOS_network_interface"])
 	
 	print cmd
-	ssh.exec_command("sudo chmod -R 777 /var/ha/images/")
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+	
+	ssh.close()
+	
+	ssh = shell_server.get_ssh(parser["BackupOS_ip"]
+                              , parser["BackupOS_usr"]
+                              , parser["BackupOS_pwd"]) #獲得ssh
+	
+	ssh.exec_command("sudo chmod -R 777 /var/ha/images/")
 	#print "stdout",s_stdout.read()
 	#print "stderr",s_stderr.read()
 	ssh.close()
