@@ -34,20 +34,18 @@ def exec_primaryOS_network_isolation(parser):
 	if "pro_wait_time_exe_L1_crasher" in parser.keys(): #若pro_wait_time_exe_L1_crasher存在於parser
 		time.sleep(int(parser["pro_wait_time_exe_L1_crasher"]))
 	
-	"""ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
+	ssh = shell_server.get_ssh(parser["PrimaryOS_ip"]
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
 
-	cmd = "sudo ifconfig %s down" % (parser["PrimaryOS_network_interface"])"""
+	cmd = "sudo ifconfig %s down" % (parser["PrimaryOS_network_interface"])
 	
-	#print cmd
-	cmd = "bash network_isolation.sh"
-	status, error = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE).communicate() 
+	print cmd
     
-	#s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
+	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	#print "stdout",s_stdout.read()
 	#print "stderr",s_stderr.read()
-	#ssh.close()
+	ssh.close()
 
 
 def exec_L1_slaveOS_shutdown(parser):
