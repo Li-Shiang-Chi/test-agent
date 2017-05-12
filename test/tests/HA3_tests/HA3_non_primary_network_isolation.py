@@ -16,9 +16,9 @@ def run_L3_non_primary_network_isolation(parser):
     #assert
     Assert.vm_recover_in_slaveOS(parser)
     print 404
-    Assert.detect_backupOS_network_isolation_info(parser)
+    #Assert.detect_backupOS_network_isolation_info(parser)
     print 405
-    Assert.primaryOS_role_is_slave(parser)
+    Assert.primaryOS_role_is_primary(parser)
     print 406
     Assert.backupOS_role_is_slave(parser)
     print 407
