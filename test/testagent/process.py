@@ -155,7 +155,7 @@ def exec_backupOS_shutdown(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh
 	print 78
-	cmd = "sudo poweroff -f" 
+	cmd = "sudo shutdown -h now" 
 	print cmd 
 	s_stdin, s_stdout, s_stderr = ssh.exec_command(cmd) #透過ssh執行指令
 	#print "stdout",s_stdout.read()
