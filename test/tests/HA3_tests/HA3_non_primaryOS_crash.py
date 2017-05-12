@@ -16,7 +16,7 @@ def run_HA3_non_primaryOS_crash(parser):
     Assert.vm_recover_in_slaveOS(parser)
     print 119
     #Assert.detect_primaryOS_crash(parser)
-    Assert.detect_backupOS_crash_info(parser)
+    #Assert.detect_backupOS_crash_info(parser)
     print 110
     Assert.primaryOS_role_is_primary(parser)
     print 111
