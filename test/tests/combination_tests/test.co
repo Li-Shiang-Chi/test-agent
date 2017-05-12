@@ -1,5 +1,4 @@
 #HAagent sprint3
 !3
-!m
 HA3_primary_network_isolation
-!m!
+HA3_non_primary_network_isolation
