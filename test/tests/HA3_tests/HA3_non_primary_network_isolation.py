@@ -8,7 +8,7 @@ def run_HA3_non_primary_network_isolation(parser):
     general architecture hostOS crash
     """
     #preprocess
-    preprocess.preprocess(parser)
+    preprocess.run_preprocess(parser)
     print 401
     #process
     process.exec_L1_backupOS_network_isolation(parser)
