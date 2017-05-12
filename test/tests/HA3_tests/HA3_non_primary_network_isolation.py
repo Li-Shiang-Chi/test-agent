@@ -3,7 +3,7 @@ from testagent import process
 from testagent import Assert
 from testagent import postprocess
 
-def run_L3_non_primary_network_isolation(parser):
+def run_HA3_non_primary_network_isolation(parser):
     """
     general architecture hostOS crash
     """
