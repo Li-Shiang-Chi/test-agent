@@ -230,6 +230,7 @@ def kill_backup_vm_process(parser):
                               , parser["BackupOS_pwd"]) #獲得ssh
 	pid = FTVM.get_pid(parser["vm_name"], parser["BackupOS_ip"], ssh) #獲得VM之pid
 	cmd = cmd_kill.kill_cmd(pid, 9) #獲得kill vm process之指令字串
+	print cmd
 	s_stdin, s_stdout, s_stderr = ssh.exec_command("sudo "+cmd) #透過ssh執行指令
 	ssh.close()
 	
