@@ -189,7 +189,7 @@ def L1_boot(Network_adaptor_phy_address):
 	#print error
 	
 def IPMI_boot(ipmb , ssh):
-	cmd = "ipmitool -t 0x%s picmg policy set 0 1 0" % ipmb
+	cmd = "sudo ipmitool -t 0x%s picmg policy set 0 1 0" % ipmb
 	print cmd
 	ssh.exec_command(cmd)
 	ssh.close()
