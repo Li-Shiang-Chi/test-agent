@@ -32,8 +32,6 @@ def exec_L1_backupOS_network_isolation(parser):
                               , parser["PrimaryOS_usr"]
                               , parser["PrimaryOS_pwd"]) #獲得ssh
 	
-	#ssh.exec_command("sudo chmod -R 777 /var/ha/images/")
-	
 	
 	#print "stdout",s_stdout.read()
 	#print "stderr",s_stderr.read()
@@ -59,7 +57,6 @@ def exec_primaryOS_network_isolation(parser):
                               , parser["BackupOS_usr"]
                               , parser["BackupOS_pwd"]) #獲得ssh
 	
-	#ssh.exec_command("sudo chmod -R 777 /home/backup-node/Desktop/ha/images/")
 	#print "stdout",s_stdout.read()
 	#print "stderr",s_stderr.read()
 	ssh.close()
