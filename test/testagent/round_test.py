@@ -512,18 +512,19 @@ def set_tests_list(options):
   return tests_list
 
 def check_test_exist(test):
-  """
-  check test exist or not
+    
+    """
+    check test exist or not
   
-  :return: true/false
-  """
+    :return: true/false
+    """
   
-  print test["test_dir"]
+    print test["test_dir"]
   
-  for f in os.listdir(test["test_dir"]):
-    if f.endswith(".py") and (f == test["test_name"]+".py"):
-      return True
-  return False
+    for f in os.listdir(test["test_dir"]):
+        if f.endswith(".py") and (f == test["test_name"]+".py"):
+            return True
+    return False
 
 def create_round_log_dir():
   """
