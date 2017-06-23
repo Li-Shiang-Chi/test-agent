@@ -518,9 +518,7 @@ def check_test_exist(test):
   
     :return: true/false
     """
-    print 123123123
-    print test["test_dir"]
-  
+
     for f in os.listdir(test["test_dir"]):
         if f.endswith(".py") and (f == test["test_name"]+".py"):
             return True
